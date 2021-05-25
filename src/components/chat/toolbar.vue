@@ -12,15 +12,15 @@
       <div class="topBtnBar">
         
         <el-tooltip class="item" effect="dark" content="用户列表" placement="right">
-        <el-button @click="chooseChatList('私聊')" class="toolBtn" size="small"><i class="fa fa-address-book-o fa-2x" aria-hidden="true"></i></el-button>
+        <el-button @click="chooseChatList('私聊')" class="toolBtn" size="small"><i class="fa fa-address-book-o fa-2x" aria-hidden="false"></i></el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="联系客服" placement="right">
-          <el-button @click="chooseChatList('客服')" class="toolBtn" size="small"><i class="fa fa-android fa-2x" aria-hidden="true"></i></el-button>
+          <el-button @click="chooseChatList('客服')" class="toolBtn" size="small"><i class="fa fa-android fa-2x" aria-hidden="false"></i></el-button>
         </el-tooltip>
       </div>
       <div class="bottomBtnBar">
         <el-tooltip class="item" effect="dark" content="退出" placement="right">
-        <el-button @click="exitSystem" class="toolBtn" size="small"><i class="fa fa-sign-out fa-2x" aria-hidden="true"></i></el-button>
+        <el-button @click="exitSystem" class="toolBtn" size="small"><i class="fa fa-sign-out fa-2x" aria-hidden="false"></i></el-button>
         </el-tooltip>
       </div>
     </div>
@@ -155,8 +155,8 @@
    // margin: 0px;
     margin-left: 10px;
     padding: 0px;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    // overflow-x: hidden;
+    // overflow-y: hidden;
     background-color:#2e3238;
     border:none;
   }
