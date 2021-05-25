@@ -60,11 +60,11 @@
 </script>
 
 <style lang="scss" scoped>
-  #app {
+  #chatroom {
     margin: 20px auto;
     width: 900px;
     height: 650px;
-    overflow: hidden;
+    // overflow: hidden;
     border-radius: 10px;
     .sidebar, .main ,.toolbar{
       height: 100%;
@@ -83,7 +83,7 @@
     }
     .main {
       position: relative;
-      overflow: hidden;
+      // overflow: hidden;
       background-color: rgb(214, 236, 243);
     }
   }

@@ -78,31 +78,31 @@ export default new Router({
 							path: 'chatroom',
 							component: chatRoom
 							// hidden:true
-						},
-						{
-							path:'card',
-							component: card
-						},
-						{
-							path:'chattitle',
-							component: chattitle
-						},
-						{
-							path:'list',
-							component: list
-						},
-						{
-							path:'message',
-							component: message
-						},
-						{
-							path:'toolbar',
-							component: toolbar
-						},
-						{
-							path:'usertext',
-							component: usertext
 						}
+						// {
+						// 	path:'card',
+						// 	component: card
+						// },
+						// {
+						// 	path:'chattitle',
+						// 	component: chattitle
+						// },
+						// {
+						// 	path:'list',
+						// 	component: list
+						// },
+						// {
+						// 	path:'message',
+						// 	component: message
+						// },
+						// {
+						// 	path:'toolbar',
+						// 	component: toolbar
+						// },
+						// {
+						// 	path:'usertext',
+						// 	component: usertext
+						// }
 					]
 				}
 			]

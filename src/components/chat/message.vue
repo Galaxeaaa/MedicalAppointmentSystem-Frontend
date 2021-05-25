@@ -117,7 +117,7 @@ export default {
 	height: 60%;
   max-height: 63%;
   overflow-y: scroll;
-	overflow-x: hidden;
+	// overflow-x: hidden;
   ul {
   	list-style-type: none;
 		padding-left: 0px;
