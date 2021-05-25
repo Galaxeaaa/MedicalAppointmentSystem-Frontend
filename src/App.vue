@@ -5,11 +5,13 @@
 </template>
 
 <script>
+import Login from './components/login'
 import Doctor from "./components/doctorSystem.vue";
 
 export default {
   name: "App",
   components: {
+	Login,
     Doctor,
   },
 };

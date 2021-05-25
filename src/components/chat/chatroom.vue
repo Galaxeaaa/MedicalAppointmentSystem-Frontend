@@ -60,7 +60,7 @@
 </script>
 
 <style lang="scss" scoped>
-  #app {
+  #chatroom{
     margin: 20px auto;
     width: 900px;
     height: 650px;

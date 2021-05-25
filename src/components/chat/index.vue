@@ -7,7 +7,6 @@
   </div>
 </template>
 <script>
-
 export default {
   data() {
     return {};
@@ -16,7 +15,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-#personal {
+#chat {
   display: flex;
   flex-direction: column;
   height: 100%;

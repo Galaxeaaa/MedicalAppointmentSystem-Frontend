@@ -28,32 +28,43 @@
       </el-form-item>
     </el-form>
 
-    <el-table :data="tables" style="width: 100%">
-      <el-table-column prop="checkId" label="序号" width="60">
-      </el-table-column>
-      <el-table-column prop="conName" label="姓名" width="70">
-      </el-table-column>
-      <el-table-column label="性别" width="60">
+    <el-table :data="reportData" style="width: 100%">
+      <el-table-column prop="id" label="序号" width="60"></el-table-column>
+      <el-table-column prop="usr" label="姓名" width="70"></el-table-column>
+      <el-table-column prop="doctor" label="主治医师"> </el-table-column>
+      <el-table-column prop="department" label="就诊科室"> </el-table-column>
+      <el-table-column prop="disease" label="诊断结果"> </el-table-column>
+      <el-table-column prop="rep_time" label="检查时间" width="180"></el-table-column>
+      <el-table-column prop="reg_state" label="预约状态"> </el-table-column>
+      <!-- <el-table-column label="性别" width="60">
         <template slot-scope="scope">
           <span>{{ scope.row.gender == 1 ? "男" : "女" }}</span>
         </template>
-      </el-table-column>
-      <el-table-column prop="age" label="年龄" width="60"> </el-table-column>
-      <el-table-column prop="deName" label="就诊科室"> </el-table-column>
-      <el-table-column prop="diType" label="诊断类型">
+      </el-table-column> -->
+      <!-- <el-table-column prop="age" label="年龄" width="60"> </el-table-column> -->
+      <!-- <el-table-column prop="diType" label="诊断类型">
         <template slot-scope="scope">
           <span>{{ scope.row.diType == 1 ? "初诊" : "复诊" }}</span>
         </template>
+      </el-table-column> -->
+      <!-- <el-table-column prop="rep_time" label="检查时间" width="180">
       </el-table-column>
-      <el-table-column prop="seektime" label="检查时间" width="180">
-      </el-table-column>
-      <el-table-column prop="insp" label="检查项目" width="220">
-      </el-table-column>
+
       <el-table-column prop="done" label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="$router.push({path:'/doctor/report/detail',query:{id:scope.row.checkId}})">查看详情</el-button>
+          <el-button
+            size="mini"
+            type="primary"
+            @click="
+              $router.push({
+                path: '/doctor/report/detail',
+                query: { id: scope.row.checkId },
+              })
+            "
+            >查看详情</el-button
+          >
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     <!-- 使用element-ui里的表格展示请求到的数据 -->
 
@@ -81,7 +92,7 @@ export default {
         date: "",
       },
       //定义查询的表单元素
-      reportData: [],
+	  reportData: [],
       //报告列表数据
 
       currentPage: 1,
@@ -90,8 +101,9 @@ export default {
       //每页展示数目
     };
   },
-  mounted() {
+  created:function() {
     this.getReportList();
+
   },
   //进入页面请求报告列表数据
   methods: {
@@ -100,29 +112,41 @@ export default {
     },
     handleCurrentChange(val) {
       this.currentPage = val;
-       this.getReportList();
-    },//点击分页时改变当前页码，重新请求数据
+      this.getReportList();
+    }, //点击分页时改变当前页码，重新请求数据
     getReportList() {
-      this.$http("/ds1/checkreport/getCheckReportList", "post", {
-        pageNo: this.currentPage,
-        pageSize: 10,
-      }).then((res) => {
-        this.reportData = res.result;
-      });
+      this.$axios.get(
+        "/do/report/getreports?usr=" + "008" + "&role=doctor"
+      )
+        .then((res) => {
+          this.reportData = res.data;
+          console.log(this.reportData);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
+    // getReportList() {
+    //   this.$http("/ds1/checkreport/getCheckReportList", "post", {
+    //     pageNo: this.currentPage,
+    //     pageSize: 10,
+    //   }).then((res) => {
+    //     this.reportData = res.result;
+    //   });
+    // },
     //请求报告列表数据
   },
   computed: {
     tables() {
-      return this.reportData.filter((item) => {
-        return (
-          item.conName.includes(this.formInline.userName) &&
-          item.insp.includes(this.formInline.item) &&
-          item.seektime.includes(
-            this.formInline.date == null ? "" : this.formInline.date
-          )
-        );
-      });
+      return this.reportData
+	//   .filter((item) => {
+    //     return 
+        //   item.conName.includes(this.formInline.userName) &&
+        //   item.insp.includes(this.formInline.item) &&
+        //   item.seektime.includes(
+        //     this.formInline.date == null ? "" : this.formInline.date
+        //   )
+    //   });
     },
     //根据查询条件过滤报告列表数据
   },
@@ -135,10 +159,10 @@ export default {
     border-radius: 20px;
   }
   .page {
-    position: absolute;
+    position: relative;
     left: 50%;
     transform: translateX(-50%);
-    bottom: 20px;
+    bottom: -20px;
   }
 }
 </style>

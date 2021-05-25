@@ -72,7 +72,9 @@
 export default {
   data() {
     this.$router.push("/person");
-    return {};
+    return {
+		user_name: ""
+	};
   },
   methods: {
     exitLogin() {
