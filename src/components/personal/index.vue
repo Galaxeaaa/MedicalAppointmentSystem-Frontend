@@ -1,7 +1,7 @@
 <template>
   <div id="personal">
     <div class="nav">
-      <span class="check_tab">个人信息</span>
+      <el-button @click="check" class="check_tab"> 个人信息</el-button>
     </div>
     <router-view class="content"> </router-view>
   </div>
@@ -25,23 +25,23 @@ export default {
   .tab {
     color: #333;
     background: url(../../assets/img/title_bg.png) 0 -55px no-repeat;
-    display: inline-block;
+    // display: inline-block;
     width: 150px;
     height: 42px;
-    line-height: 42px;
+    // line-height: 42px;
     text-align: center;
   }
   .check_tab {
     color: #fff;
     background: url(../../assets/img/title_bg.png) 0 -8px no-repeat;
-    display: inline-block;
+    // display: inline-block;
     width: 150px;
     height: 42px;
-    line-height: 42px;
+    // line-height: 40px;
     text-align: center;
   }
   .content {
-    // width: 100%;
+    width: 100%;
     flex: 1;
     background: rgba(255, 255, 255, 0.7);
     padding: 30px;

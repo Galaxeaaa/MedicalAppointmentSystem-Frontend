@@ -1,12 +1,12 @@
 <template>
   <div id="checkReport">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
-      <el-form-item>
+      <!-- <el-form-item>
         <el-input
           v-model="formInline.userName"
           placeholder="请输入患者姓名"
         ></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-date-picker
           v-model="formInline.date"
@@ -68,7 +68,7 @@
     </el-table>
     <!-- 使用element-ui里的表格展示请求到的数据 -->
 
-    <el-pagination
+    <!-- <el-pagination
       class="page"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -78,7 +78,7 @@
       layout="prev, pager, next, jumper"
       :total="100"
     >
-    </el-pagination>
+    </el-pagination> -->
     <!-- 分页效果 -->
   </div>
 </template>
@@ -155,6 +155,7 @@ export default {
 <style lang="scss">
 #checkReport {
   position: relative;
+  top: 20px;
   .el-input__inner {
     border-radius: 20px;
   }

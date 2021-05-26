@@ -147,6 +147,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 #add_report {
+  position: relative;
+  top: 20px;
   .detail {
     height: 100%;
   }

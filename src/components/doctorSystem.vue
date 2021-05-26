@@ -5,7 +5,7 @@
         <el-col :span="4" class="menu">
           <!-- <div class="menu"> -->
           <el-row class="tac">
-            <h5 class="menu_tit">YOUR LOGO</h5>
+            <h5 class="menu_tit">个人中心</h5>
             <el-col :span="18" :offset="3">
               <el-menu
                 class="el-menu-vertical-demo"
@@ -55,8 +55,8 @@
     <div id="doc_bot">
       <el-row>
         <el-col :span="4" class="exit">
-          <i class="el-icon-switch-button"></i>
-          <em @click="exitLogin">退出登录</em>
+          <!-- <i class="el-icon-switch-button"></i> -->
+            <el-button @click="exitLogin">退出登录</el-button>
         </el-col>
         <el-col :span="4" :offset="16" class="setup">
           <i class="el-icon-moon"></i>
@@ -73,20 +73,21 @@ export default {
   data() {
     this.$router.push("/person");
     return {
-		user_name: ""
-	};
+      user_name: "",
+    };
   },
   methods: {
     exitLogin() {
-      this.$http("/shiro/logout", "post").then((res) => {
-        //  console.log(res)
-        if (res.msg == "ok") {
-          this.$store.commit("setLogin", false);
-          //把本地存储里的login变为false
-          this.$router.push({ path: "/login" });
-          //  退出登录成功后跳转到登录页面
-        }
-      });
+    //   this.$http("/shiro/logout", "post").then((res) => {
+    //     //  console.log(res)
+    //     if (res.msg == "ok") {
+    //       this.$store.commit("setLogin", false);
+    //       //把本地存储里的login变为false
+    //       this.$router.push({ path: "/login" });
+    //       //  退出登录成功后跳转到登录页面
+    //     }
+    //   });
+	  this.$router.push({path: '/'});
     },
     //  退出登录方法
   },
@@ -106,15 +107,16 @@ export default {
 #doctor {
   width: 100%;
   height: 100%;
-  min-height: 800px;
+  min-height: 920px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   #doc_main {
     width: 100%;
-    //  height: 90%;
-    background: url(../assets/img/bg.jpg) center center;
+    height: 100%;
+    background: url(../assets/img/bg.jpg);
+    background-size: cover, cover;
     flex: 1;
   }
 
@@ -123,12 +125,13 @@ export default {
   }
   .menu {
     height: 100%;
+    min-height: 900px;
     background: rgba($color: #fdfdfe, $alpha: 0.7);
     position: relative;
 
     .menu_tit {
       height: 120px;
-      font-size: 26px;
+      font-size: 50px;
       color: #88e8dd;
       display: flex;
       justify-content: center;
@@ -158,7 +161,8 @@ export default {
     }
   }
   #doc_bot {
-    height: 60px;
+    bottom: 10px;
+    height: 10px;
     width: 100%;
     .exit {
       display: flex;

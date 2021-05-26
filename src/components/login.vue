@@ -18,7 +18,7 @@
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <router-link to="/person">
+            <router-link to="/login_success">
               <el-button @click="clickLogin" class="el-button--primary is-round"
                 >登录</el-button
               >

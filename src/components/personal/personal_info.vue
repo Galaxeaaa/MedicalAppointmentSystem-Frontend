@@ -3,7 +3,7 @@
     <el-container>
       <el-header class="header">
         <h1>我的信息</h1>
-        <p v-if="!revamp" style="color:red;" @click="revamp = true">
+        <p v-if="!revamp" style="color: red" @click="revamp = true">
           <i class="el-icon-edit"></i>
           修改信息
         </p>
@@ -37,20 +37,20 @@
                   <el-date-picker
                     type="year"
                     placeholder="选择年份"
-                    style="width: 100%;"
+                    style="width: 100%"
                   ></el-date-picker>
                 </el-col>
-                <el-col :span="2" style="text-align:center;"
+                <el-col :span="2" style="text-align: center"
                   >&nbsp;&nbsp;年</el-col
                 >
                 <el-col :span="10">
                   <el-date-picker
                     placeholder="选择月份"
-                    style="width: 100%;"
+                    style="width: 100%"
                     type="month"
                   ></el-date-picker>
                 </el-col>
-                <el-col :span="2" style="text-align:center;">&nbsp;月</el-col>
+                <el-col :span="2" style="text-align: center">&nbsp;月</el-col>
               </el-form-item>
               <el-form-item label="联系电话" prop="name">
                 <el-input v-model="detailForm.name"></el-input>
@@ -89,18 +89,18 @@
                   <el-date-picker
                     type="year"
                     placeholder="选择年份"
-                    style="width: 100%;"
+                    style="width: 100%"
                   ></el-date-picker>
                 </el-col>
-                <el-col :span="2" style="text-align:center;">省</el-col>
+                <el-col :span="2" style="text-align: center">省</el-col>
                 <el-col :span="10">
                   <el-date-picker
                     placeholder="选择月份"
-                    style="width: 100%;"
+                    style="width: 100%"
                     type="month"
                   ></el-date-picker>
                 </el-col>
-                <el-col :span="2" style="text-align:center;">市</el-col>
+                <el-col :span="2" style="text-align: center">市</el-col>
               </el-form-item>
               <el-form-item label="所属科室" prop="name">
                 <el-input v-model="detailForm.name"></el-input>
@@ -168,6 +168,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 #doctorInfo {
+  position: relative;
+  top: 20px;
   .header {
     h1 {
       font-weight: normal;
