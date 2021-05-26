@@ -24,6 +24,12 @@ import message from "./components/chat/message.vue";
 import toolbar from "./components/chat/toolbar.vue";
 import usertext from "./components/chat/usertext.vue";
 
+import Hospitalization from "./components/order/index.vue";
+import hospitalizationList from "./components/order/hospitalization_list.vue";
+import hospitalizationDetail from "./components/order/hospitalization_detail.vue";
+import hospitalizationAdd from "./components/order/hospitalization_add.vue";
+// 引入住院管理组件
+
 Vue.use(Router)
 
 export default new Router({
@@ -110,7 +116,25 @@ export default new Router({
 						// 	component: usertext
 						// }
 					]
-				}
+				},
+                {
+                path: "doctor",
+                component: Hospitalization,
+                redirect: "/person/doctor/list",
+                children: [{
+                        path: "list",
+                        component: hospitalizationList,
+                    },
+                    {
+                        path: "add",
+                        component: hospitalizationAdd,
+                    },
+                    {
+                        path: "detail",
+                        component: hospitalizationDetail,
+                    },
+                ],
+            }
 			]
 		},
 

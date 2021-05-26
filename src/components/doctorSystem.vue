@@ -7,29 +7,31 @@
           <el-row class="tac">
             <h5 class="menu_tit">个人中心</h5>
             <el-col :span="18" :offset="3">
-              <el-menu
-                class="el-menu-vertical-demo"
-                background-color="rgba(0,0,0,0)"
-                text-color="#797979"
-                active-text-color="#ffd04b"
-                :router="true"
-                :default-active="defaultActive"
-              >
-                <!-- 使用 vue-router 的模式，启用该模式会在激活导航时以 index 作为 path 进行路由跳转 -->
-                <!-- 当前激活的菜单选项是当前的路径，保证刷新的时候激活样式不掉 -->
-                <el-menu-item index="/person/personal">
-                  <i class="el-icon-s-custom"></i>
-                  <span slot="title">个人信息</span>
-                </el-menu-item>
-                <el-menu-item index="/person/report">
-                  <i class="el-icon-s-order"></i>
-                  <span slot="title">电子病历</span>
-                </el-menu-item>
-                <el-menu-item index="/person/chat">
-                  <i class="el-icon-s-ticket"></i>
-                  <span slot="title">聊天</span>
-                </el-menu-item>
-              </el-menu>
+                <el-menu class="el-menu-vertical-demo"
+                         background-color="rgba(0,0,0,0)"
+                         text-color="#797979"
+                         active-text-color="#ffd04b"
+                         :router="true"
+                         :default-active="defaultActive">
+                    <!-- 使用 vue-router 的模式，启用该模式会在激活导航时以 index 作为 path 进行路由跳转 -->
+                    <!-- 当前激活的菜单选项是当前的路径，保证刷新的时候激活样式不掉 -->
+                    <el-menu-item index="/person/personal">
+                        <i class="el-icon-s-custom"></i>
+                        <span slot="title">个人信息</span>
+                    </el-menu-item>
+                    <el-menu-item index="/person/report">
+                        <i class="el-icon-s-order"></i>
+                        <span slot="title">电子病历</span>
+                    </el-menu-item>
+                    <el-menu-item index="/person/chat">
+                        <i class="el-icon-s-ticket"></i>
+                        <span slot="title">聊天</span>
+                    </el-menu-item>
+                    <el-menu-item index="/person/doctor">
+                        <i class="el-icon-s-order"></i>
+                        <span slot="title">医生搜索</span>
+                    </el-menu-item>
+                </el-menu>
             </el-col>
             <div class="user">
               <!-- <div> -->
