@@ -34,7 +34,11 @@
       <el-table-column prop="doctor" label="主治医师"> </el-table-column>
       <el-table-column prop="department" label="就诊科室"> </el-table-column>
       <el-table-column prop="disease" label="诊断结果"> </el-table-column>
-      <el-table-column prop="rep_time" label="检查时间" width="180"></el-table-column>
+      <el-table-column
+        prop="rep_time"
+        label="检查时间"
+        width="180"
+      ></el-table-column>
       <el-table-column prop="reg_state" label="预约状态"> </el-table-column>
       <!-- <el-table-column label="性别" width="60">
         <template slot-scope="scope">
@@ -48,23 +52,24 @@
         </template>
       </el-table-column> -->
       <!-- <el-table-column prop="rep_time" label="检查时间" width="180">
-      </el-table-column>
+      </el-table-column> -->
 
-      <el-table-column prop="done" label="操作">
+      <el-table-column prop="done" label="操作" fixed="right">
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="primary"
             @click="
               $router.push({
-                path: '/doctor/report/detail',
+                path: '/person/report/detail',
                 query: { id: scope.row.checkId },
               })
             "
-            >查看详情</el-button
           >
+            查看详情
+          </el-button>
         </template>
-      </el-table-column> -->
+      </el-table-column>
     </el-table>
     <!-- 使用element-ui里的表格展示请求到的数据 -->
 
@@ -92,7 +97,7 @@ export default {
         date: "",
       },
       //定义查询的表单元素
-	  reportData: [],
+      reportData: [],
       //报告列表数据
 
       currentPage: 1,
@@ -101,9 +106,8 @@ export default {
       //每页展示数目
     };
   },
-  created:function() {
+  created: function () {
     this.getReportList();
-
   },
   //进入页面请求报告列表数据
   methods: {
@@ -115,9 +119,8 @@ export default {
       this.getReportList();
     }, //点击分页时改变当前页码，重新请求数据
     getReportList() {
-      this.$axios.get(
-        "/do/report/getreports?usr=" + "008" + "&role=doctor"
-      )
+      this.$axios
+        .get("/do/report/getreports?usr=" + "008" + "&role=doctor")
         .then((res) => {
           this.reportData = res.data;
           console.log(this.reportData);
@@ -138,15 +141,15 @@ export default {
   },
   computed: {
     tables() {
-      return this.reportData
-	//   .filter((item) => {
-    //     return 
-        //   item.conName.includes(this.formInline.userName) &&
-        //   item.insp.includes(this.formInline.item) &&
-        //   item.seektime.includes(
-        //     this.formInline.date == null ? "" : this.formInline.date
-        //   )
-    //   });
+      return this.reportData;
+      //   .filter((item) => {
+      //     return
+      //   item.conName.includes(this.formInline.userName) &&
+      //   item.insp.includes(this.formInline.item) &&
+      //   item.seektime.includes(
+      //     this.formInline.date == null ? "" : this.formInline.date
+      //   )
+      //   });
     },
     //根据查询条件过滤报告列表数据
   },

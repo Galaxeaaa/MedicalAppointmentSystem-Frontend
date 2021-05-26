@@ -6,26 +6,79 @@
           <el-form-item label="姓名">
             <el-input v-model="addReport.name" placeholder="请输入"></el-input>
           </el-form-item>
-          <el-form-item label="就诊科室">
-            <el-input v-model="addReport.room" placeholder="请输入"></el-input>
+          <el-form-item label="性别">
+            <el-select v-model="addReport.sex" placeholder="请选择">
+              <el-option label="男" value="男"></el-option>
+              <el-option label="女" value="女"></el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="检查时间">
-            <el-input v-model="addReport.time" placeholder="请输入"></el-input>
+          <el-form-item label="年龄">
+            <el-input v-model="addReport.age" placeholder="请输入"></el-input>
           </el-form-item>
-          <el-form-item label="预约状态">
-            <el-select v-model="addReport.stat" placeholder="请选择">
-              <el-option label="已预约" value="已预约"></el-option>
-              <el-option label="未预约" value="未预约"></el-option>
+          <el-form-item label="科别">
+            <el-select v-model="addReport.region" placeholder="请选择">
+              <el-option label="复诊" value="复诊"></el-option>
+              <el-option label="初诊" value="初诊"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
       </header>
       <el-main class="main">
         <div>
-          <span> 诊断结果：</span>
+          <span> 临床诊断：</span>
           <el-input
             type="textarea"
-            :rows="3"
+            :rows="2"
+            placeholder="请输入内容"
+            v-model="addReport.symptom"
+            class="revise_con"
+            resize="none"
+          >
+          </el-input>
+
+          <!-- 当点击修改时，展示input框，其他时候显示p标签 -->
+        </div>
+        <div>
+          <span> 大体检查：</span>
+          <el-input
+            type="textarea"
+            :rows="2"
+            placeholder="请输入内容"
+            v-model="addReport.dtjc"
+            class="revise_con"
+            resize="none"
+          >
+          </el-input>
+        </div>
+        <div>
+          <span> 病理诊断：</span>
+          <el-input
+            type="textarea"
+            :rows="2"
+            placeholder="请输入内容"
+            v-model="addReport.blzd"
+            class="revise_con"
+            resize="none"
+          >
+          </el-input>
+        </div>
+        <div>
+          <span> 免疫/组化：</span>
+          <el-input
+            type="textarea"
+            :rows="2"
+            placeholder="请输入内容"
+            v-model="addReport.mianyi"
+            class="revise_con"
+            resize="none"
+          >
+          </el-input>
+        </div>
+        <div>
+          <span>结果：</span>
+          <el-input
+            type="textarea"
+            :rows="2"
             placeholder="请输入内容"
             v-model="addReport.result"
             class="revise_con"
@@ -34,12 +87,12 @@
           </el-input>
         </div>
         <div>
-          <span> 详情：</span>
+          <span> 备注：</span>
           <el-input
             type="textarea"
-            :rows="15"
+            :rows="2"
             placeholder="请输入内容"
-            v-model="addReport.details"
+            v-model="addReport.mark"
             class="revise_con"
             resize="none"
           >
@@ -69,11 +122,15 @@ export default {
     return {
       addReport : {
         name : '',
-        time : '',
-        room : '',
+        sex : null,
+        age : '',
+        region : null,
+        symptom : '',
+        dtjc : '',
+        blzd : '',
+        mianyi : '',
         result : '',
-        details : '',
-        stat : null,
+        mark : '',
       }
     };
   },
@@ -81,11 +138,15 @@ export default {
   methods: {
     clear_reload(){
       this.addReport.name=''
-      this.addReport.time=''
-      this.addReport.details=''
-      this.addReport.room=''
+      this.addReport.sex =null
+      this.addReport.age=''
+      this.addReport.region = null
+      this.addReport.symptom=''
+      this.addReport.dtjc=''
+      this.addReport.blzd=''
+      this.addReport.mianyi=''
       this.addReport.result=''
-      this.addReport.stat=null
+      this.addReport.mark=''
       this.$router.push('/person/report/add')
     },
     clickSave(){
@@ -105,10 +166,6 @@ export default {
           this.clear_reload()
         }else{
           console.log('failed')
-          this.$message({
-            message: "保存失败",
-            type: "error",
-          })
         }
       });
       
@@ -132,7 +189,6 @@ export default {
     justify-content: space-between;
     font-size: 12px;
     height: 30px;
-    margin-left: 80px;
     .el-input__inner {
       height: 25px;
     }
@@ -164,9 +220,6 @@ export default {
       }
       .revise_con {
         flex: 1;
-      }
-      .bigtext {
-        height: 100px;
       }
     }
   }

@@ -26,7 +26,7 @@
           诊断类型：
           <span>{{ item.diType == 1 ? "初诊" : "复诊" }}</span>
         </p>
-        <p v-if="!revise" style="color:red;" @click="edit">
+        <p v-if="!revise" style="color: red" @click="edit">
           <i class="el-icon-edit"></i>
           修改信息
         </p>
@@ -155,6 +155,15 @@ export default {
 
   methods: {
     getReportMessage() {
+      this.$axios
+        .get("/do/report/getreports?usr=" + "008" + "&role=doctor")
+        .then((res) => {
+          this.reportData = res.data;
+          console.log(this.reportData);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
       this.$http("/ds1/checkreport/getCheckDetailById", "post", {
         checkId: this.checkId,
       }).then((res) => {
@@ -210,6 +219,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 #detail_report {
+  position: relative;
+  top: 20px;
   .detail {
     height: 100%;
   }
