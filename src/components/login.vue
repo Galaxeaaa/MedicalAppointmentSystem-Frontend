@@ -127,6 +127,7 @@ export default {
           if (response.data == true) {
             alert(response.data);
             obj.$router.push('/login_success')
+			obj.$store.commit('setUsername', this.loginForm.username)
           }
         })
     },
