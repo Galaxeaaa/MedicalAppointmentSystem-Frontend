@@ -3,68 +3,54 @@
     <el-container>
       <el-header class="header">
         <h1>我的信息</h1>
-        <p v-if="!revamp" style="color: red" @click="revamp = true">
+        <!-- <p v-if="!revamp" style="color: red" @click="revamp = true">
           <i class="el-icon-edit"></i>
           修改信息
-        </p>
+        </p> -->
       </el-header>
       <el-divider></el-divider>
-      <el-main>
+
+      <el-main v-if="isdoctor">
         <el-row>
           <el-col :span="7">
-            <el-form
-              :model="detailForm"
-              ref="ruleForm"
-              label-width="100px"
-              class="demo-ruleForm"
-            >
-              <el-form-item label="医生名称" prop="name">
-                <el-input v-model="detailForm.name"></el-input>
+            <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="姓名">
+                <el-input v-model="info.name"></el-input>
               </el-form-item>
-              <el-row class="formInline">
-                <el-col :span="11">
-                  <el-form-item label="性别" prop="sex">
-                    <el-select v-model="detailForm.sex" placeholder="性别">
-                      <el-option label="男" value="男"></el-option>
-                      <el-option label="女" value="女"></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-
-              <el-form-item label="出生日期">
-                <el-col :span="10">
-                  <el-date-picker
-                    type="year"
-                    placeholder="选择年份"
-                    style="width: 100%"
-                  ></el-date-picker>
-                </el-col>
-                <el-col :span="2" style="text-align: center"
-                  >&nbsp;&nbsp;年</el-col
-                >
-                <el-col :span="10">
-                  <el-date-picker
-                    placeholder="选择月份"
-                    style="width: 100%"
-                    type="month"
-                  ></el-date-picker>
-                </el-col>
-                <el-col :span="2" style="text-align: center">&nbsp;月</el-col>
+            </el-form>
+            <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="职称">
+                <el-input v-model="info.title"></el-input>
               </el-form-item>
-              <el-form-item label="联系电话" prop="name">
-                <el-input v-model="detailForm.name"></el-input>
+            </el-form>
+            <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="所属科室">
+                <el-input v-model="info.department"></el-input>
               </el-form-item>
-              <el-form-item label="地址" prop="name">
-                <el-input v-model="detailForm.name"></el-input>
+            </el-form>
+            <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="所属单位">
+                <el-input v-model="info.hospital"></el-input>
+              </el-form-item>
+            </el-form>
+            <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="擅长科目">
+                <el-input v-model="info.medicine"></el-input>
               </el-form-item>
             </el-form>
           </el-col>
           <el-col :span="1" class="divider">
             <el-divider direction="vertical"></el-divider>
           </el-col>
+          <el-col :span="15">
+            <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="个人简介">
+                <el-input v-model="info.introduction"></el-input>
+              </el-form-item>
+            </el-form>
+          </el-col>
 
-          <el-col :span="7">
+          <!-- <el-col :span="7">
             <el-form
               :model="detailForm"
               ref="ruleForm"
@@ -141,13 +127,39 @@
                 ></el-input>
               </el-form-item>
             </el-form>
+          </el-col> -->
+        </el-row>
+      </el-main>
+
+      <el-main v-if="!isdoctor">
+        <el-row>
+          <el-col :span="7">
+            <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="照片" prop="graph">
+                <img
+                  style="width: 300px; height: 300px"
+                  src="https://t12.baidu.com/it/u=433141544,21339958&fm=58"
+                />
+              </el-form-item>
+            </el-form>
+          </el-col>
+          <el-col :span="1" class="divider">
+            <el-divider direction="vertical"></el-divider>
+          </el-col>
+          <el-col :span=7>
+            <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="姓名" prop="name">
+                <el-input v-model="info.name"></el-input>
+              </el-form-item>
+            </el-form>
           </el-col>
         </el-row>
       </el-main>
-      <div class="footer" v-if="revamp">
+
+      <!-- <div class="footer" v-if="revamp">
         <p class="bg16d" plain>保存</p>
         <p>取消</p>
-      </div>
+      </div> -->
     </el-container>
   </div>
 </template>
@@ -155,28 +167,40 @@
 export default {
   data() {
     return {
-      detailForm: {
-        name: "",
-        sex: "",
-        age: "",
-      },
       revamp: false,
-      tmp: [],
-      //   是否修改数据
+      isdoctor: true,
+      info: "",
     };
   },
   methods: {
     getPersonalInfo() {
-      this.$axios
-        .get("/do/getinfo/usr?name=" + this.$store.state.username)
-        .then((res) => {
-          this.tmp = res;
-          //   console.log("Current username: " + this.$store.state.username);
-          console.log(this.tmp);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      //   this.isdoctor = this.$store.state.isdoctor;
+      console.log(this.isdoctor);
+      if (!this.isdoctor)
+        this.$axios
+          // .get("/do/getinfo/usr?name=" + this.$store.state.username)
+          .get("/do/getinfo/usr?name=123")
+          .then((res) => {
+            this.info = res[0];
+            //   console.log("Current username: " + this.$store.state.username);
+            console.log(this.info);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      else {
+        this.$axios
+          // .get("/do/getinfo/doctor?id=" + this.$store.state.username)
+          .get("/do/getinfo/doctor?id=008")
+          .then((res) => {
+            this.info = res[0];
+            //   console.log("Current username: " + this.$store.state.username);
+            console.log(this.info);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
     },
   },
   created: function () {

@@ -12,6 +12,7 @@ const now = new Date();
 const store = new Vuex.Store({
 	state: sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getItem('state')) : {
 		username: '',
+		isdoctor: false,
 		routes: [],
 		sessions: {},//聊天记录
 		users: [],//用户列表
@@ -27,6 +28,9 @@ const store = new Vuex.Store({
 	mutations: {
 		setUsername(state, name) {
 			state.username = name
+		},
+		setIsDoctor(state, is_doctor) {
+			state.is_doctor = isdoctor
 		},
 		initRoutes(state, data) {
 			state.routes = data;
