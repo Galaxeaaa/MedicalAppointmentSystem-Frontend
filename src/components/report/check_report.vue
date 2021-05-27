@@ -120,10 +120,15 @@ export default {
     }, //点击分页时改变当前页码，重新请求数据
     getReportList() {
       this.$axios
-        .get("/do/report/getreports?usr=" + "008" + "&role=doctor")
+        .get(
+          "/do/report/getreports?usr=" +
+            this.$store.state.username +
+            "&role=doctor"
+        )
         .then((res) => {
-          this.reportData = res.data;
-          console.log(this.reportData);
+          this.reportData = res;
+          console.log("Current username: " + this.$store.state.username);
+		//   console.log(this.reportData)
         })
         .catch(function (error) {
           console.log(error);
