@@ -86,7 +86,7 @@ export default {
     clickLogin () {
       axios({
         method: 'get',
-        url: 'http://localhost:8080/login?username=' + this.loginForm.username + '&password=' + this.loginForm.password
+        url: 'http://localhost:8080/login?name=' + this.loginForm.username + '&password=' + this.loginForm.password
       })
         .then(function (response) {
           alert(response.data)
@@ -99,7 +99,7 @@ export default {
       }
       axios({
         method: 'get',
-        url: 'http://localhost:8080/logon?username=' + this.logonForm.username + '&password=' + this.logonForm.password
+        url: 'http://localhost:8080/logon?name=' + this.logonForm.username + '&password=' + this.logonForm.password
       })
         .then(function (response) {
           alert(response.data)
