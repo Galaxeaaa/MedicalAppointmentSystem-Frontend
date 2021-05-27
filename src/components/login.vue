@@ -55,12 +55,10 @@
       </div>
       <div class="welcome_content">
         <h1>欢迎！请确认您的身份</h1>
-        <div class="welcome_btn_back">
-          <el-button type="primary" @click="showLogin = true">登录</el-button>
-          <el-button type="success" @click="showLogon = true">注册</el-button>
-          <el-button type="success" @click="$router.push('/login_success')"
-            >测试入口</el-button
-          >
+        <div class='welcome_btn_back'>
+          <el-button type="primary" @click='showLogin = true'>登录</el-button>
+          <el-button type="success" @click='showLogon = true'>注册</el-button>
+		      <el-button type="success" @click='$router.push("/login_success")'>测试入口</el-button>
         </div>
       </div>
     </div>
@@ -117,35 +115,39 @@ export default {
     };
   },
   methods: {
-    clickLogin() {
-      axios({
-        method: "get",
-        url:
-          "/login?name=" +
-          this.loginForm.username +
-          "&password=" +
-          this.loginForm.password,
-      }).then(function (response) {
-        alert(response);
-      });
-      console.log(this.loginForm.username);
-      this.$store.commit('setUsername', this.loginForm.username);
+    clickLogin () {
+      this._clickLogin(this)
     },
-    clickLogon() {
+    _clickLogin (obj) {
+      axios({
+        method: 'get',
+        url: '/login?name=' + this.loginForm.username + '&password=' + this.loginForm.password
+      })
+        .then(function (response) {
+          if (response.data == true) {
+            alert(response.data);
+            obj.$router.push('/login_success')
+          }
+        })
+    },
+    clickLogon () {
+      this._clickLogon(this)
+    },
+    _clickLogon (obj) {
       if (this.logonForm.password !== this.logonForm.confirmPassword) {
         alert("请确保两次输入的密码一致！");
         return;
       }
       axios({
-        method: "get",
-        url:
-          "http://localhost:8080/logon?name=" +
-          this.logonForm.username +
-          "&password=" +
-          this.logonForm.password,
-      }).then(function (response) {
-        alert(response.data);
-      });
+        method: 'get',
+        url: '/logon?name=' + this.logonForm.username + '&password=' + this.logonForm.password
+      })
+        .then(function (response) {
+          if (response.data == true) {
+            alert(response.data);
+            obj.$router.push('/login')
+          }
+        })
     },
     clear() {
       this.showLogin = false;
