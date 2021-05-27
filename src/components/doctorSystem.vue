@@ -73,7 +73,8 @@
 <script>
 export default {
   data() {
-    this.$router.push("/person");
+    // this.$router.push("/person");
+    // [d4]note: 去掉这一句，否则无法跳转到医生主页
     return {
       user_name: "",
     };
