@@ -30,6 +30,12 @@ import hospitalizationDetail from "./components/order/hospitalization_detail.vue
 import hospitalizationAdd from "./components/order/hospitalization_add.vue";
 // 引入住院管理组件
 
+// 医生、等主页
+import Homepage from './components/doctorSystem.vue'
+import DoctorHomepage from "./components/homepage/doctorHomepage.vue";
+import DepartmentHomepage from "./components/homepage/departmentHomepage.vue";
+import HospitalHomepage from "./components/homepage/hospitalHomepage.vue";
+
 Vue.use(Router)
 
 export default new Router({
@@ -138,5 +144,36 @@ export default new Router({
 			]
 		},
 
+		// group d4 part: Homepage of Doctor / Department / Hopital
+		// `hypelink` from other page is the only entrance to these homepages
+		// !NOTE:
+		// when a user clicks a hypelink to the homepage of a doctor (/department /hopital), 
+		// you must sent the name of the doctor (/department /hopital) as a parameter
+		
+		{
+			path: '/homepage',
+			name: 'DoctorHomepage',
+			component: Homepage,
+			children: [
+				{
+					path: '/homepage/doctor/:doctorName',
+					name: 'DoctorHomepage',
+					component: DoctorHomepage,
+					// redirect: '/homepage/doctor',
+				},
+				{
+					path: '/homepage/department/:departmentName',
+					name: 'DepartmentHomepage',
+					component: DepartmentHomepage,
+					// redirect: '/homepage/department',
+				},
+				{
+					path: '/homepage/hospital/:hospitalName',
+					name: 'HospitalHomepage',
+					component: HospitalHomepage,
+					// redirect: '/homepage/hospital',
+				},
+			]
+		},
 	]
 })
