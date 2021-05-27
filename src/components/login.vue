@@ -36,7 +36,7 @@
         <div class='welcome_btn_back'>
           <el-button type="primary" @click='showLogin = true'>登录</el-button>
           <el-button type="success" @click='showLogon = true'>注册</el-button>
-		  <el-button type="success" @click='$router.push("/login_success")'>测试入口</el-button>
+		      <el-button type="success" @click='$router.push("/login_success")'>测试入口</el-button>
         </div>
       </div>
     </div>
@@ -84,25 +84,37 @@ export default {
   },
   methods: {
     clickLogin () {
+      this._clickLogin(this)
+    },
+    _clickLogin (obj) {
       axios({
         method: 'get',
-        url: 'http://localhost:8080/login?name=' + this.loginForm.username + '&password=' + this.loginForm.password
+        url: '/login?name=' + this.loginForm.username + '&password=' + this.loginForm.password
       })
         .then(function (response) {
-          alert(response.data)
+          if (response.data == true) {
+            alert(response.data);
+            obj.$router.push('/login_success')
+          }
         })
     },
     clickLogon () {
+      this._clickLogon(this)
+    },
+    _clickLogon (obj) {
       if (this.logonForm.password !== this.logonForm.confirmPassword) {
         alert('请确保两次输入的密码一致！')
         return
       }
       axios({
         method: 'get',
-        url: 'http://localhost:8080/logon?name=' + this.logonForm.username + '&password=' + this.logonForm.password
+        url: '/logon?name=' + this.logonForm.username + '&password=' + this.logonForm.password
       })
         .then(function (response) {
-          alert(response.data)
+          if (response.data == true) {
+            alert(response.data);
+            obj.$router.push('/login')
+          }
         })
     },
     clear () {
