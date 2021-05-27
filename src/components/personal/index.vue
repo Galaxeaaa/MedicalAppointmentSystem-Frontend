@@ -1,7 +1,7 @@
 <template>
   <div id="personal">
     <div class="nav">
-      <el-button @click="check" class="check_tab"> 个人信息</el-button>
+      <el-button class="check_tab"> 个人信息</el-button>
     </div>
     <router-view class="content"> </router-view>
   </div>

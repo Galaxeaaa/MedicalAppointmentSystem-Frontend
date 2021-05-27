@@ -161,8 +161,26 @@ export default {
         age: "",
       },
       revamp: false,
+      tmp: [],
       //   是否修改数据
     };
+  },
+  methods: {
+    getPersonalInfo() {
+      this.$axios
+        .get("/do/getinfo/usr?name=" + this.$store.state.username)
+        .then((res) => {
+          this.tmp = res;
+          //   console.log("Current username: " + this.$store.state.username);
+          console.log(this.tmp);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+  },
+  created: function () {
+    this.getPersonalInfo();
   },
 };
 </script>
