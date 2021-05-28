@@ -11,6 +11,7 @@ const now = new Date();
 
 const store = new Vuex.Store({
 	state: sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getItem('state')) : {
+		userid: '',
 		username: '',
 		isdoctor: false,
 		role: '',
@@ -27,11 +28,14 @@ const store = new Vuex.Store({
 		shotHistory: {}//拍一拍的记录历史
 	},
 	mutations: {
+		setUserId(state, id) {
+			state.userid = id
+		},
 		setUsername(state, name) {
 			state.username = name
 		},
-		setIsDoctor(state, is_doctor) {
-			state.is_doctor = isdoctor
+		setIsDoctor(state, isdoctor) {
+			state.isdoctor = isdoctor
 			if (isdoctor)
 				role = 'doctor'
 			else

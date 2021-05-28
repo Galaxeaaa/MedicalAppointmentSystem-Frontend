@@ -29,11 +29,11 @@
     </el-form>
 
     <el-table :data="reportData" style="width: 100%">
-      <el-table-column prop="id" label="序号" width="60"></el-table-column>
-      <el-table-column prop="usr" label="姓名" width="70"></el-table-column>
-      <el-table-column prop="doctor" label="主治医师"> </el-table-column>
+      <el-table-column prop="usr_name" label="姓名" width="70"></el-table-column>
+      <el-table-column prop="doctor_name" label="主治医师" width="80"> </el-table-column>
       <el-table-column prop="department" label="就诊科室"> </el-table-column>
       <el-table-column prop="disease" label="诊断结果"> </el-table-column>
+      <el-table-column prop="disease_descr" label="诊断描述"> </el-table-column>
       <el-table-column
         prop="rep_time"
         label="检查时间"
@@ -54,7 +54,7 @@
       <!-- <el-table-column prop="rep_time" label="检查时间" width="180">
       </el-table-column> -->
 
-      <el-table-column prop="done" label="操作" fixed="right">
+      <!-- <el-table-column prop="done" label="操作" fixed="right">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -69,7 +69,7 @@
             查看详情
           </el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     <!-- 使用element-ui里的表格展示请求到的数据 -->
 
@@ -120,12 +120,12 @@ export default {
     }, //点击分页时改变当前页码，重新请求数据
     getReportList() {
       this.$axios
-        // .get("/do/report/getreports?usr=" + this.$store.state.username + "&role=doctor")
-        .get("/do/report/getreports?usr=008&role=doctor")
+        .get("/do/report/getreports?usr=" + this.$store.state.userid + "&role=" + this.$store.state.role)
+        // .get("/do/report/getreports?usr=008&role=doctor")
         .then((res) => {
           this.reportData = res;
-          console.log("Current username: " + this.$store.state.username);
-		//   console.log(this.reportData)
+          console.log("Current username: " + this.$store.state.userid);
+		  console.log(this.reportData)
         })
         .catch(function (error) {
           console.log(error);

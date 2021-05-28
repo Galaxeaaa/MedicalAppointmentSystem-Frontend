@@ -95,6 +95,7 @@ export default {
     //     }
     //   });
 	  this.$router.push({path: '/'});
+	  this.$store.state.username = ''
     },
     //  退出登录方法
   },

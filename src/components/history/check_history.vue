@@ -30,9 +30,9 @@
 
     <el-table :data="historyData" style="width: 100%">
       <el-table-column prop="doctor" label="主治医师"> </el-table-column>
-      <el-table-column prop="case" label="患病信息"> </el-table-column>
+      <el-table-column prop="case_name" label="患病信息"> </el-table-column>
       <el-table-column prop="advice" label="医嘱信息"> </el-table-column>
-      <el-table-column prop="check" label="检验结果核查"> </el-table-column>
+      <el-table-column prop="check_state" label="检验结果核查"> </el-table-column>
       <el-table-column prop="op_record" label="手术记录"> </el-table-column>
       <el-table-column prop="nur_record" label="护理记录"> </el-table-column>
     </el-table>
@@ -84,8 +84,8 @@ export default {
     }, //点击分页时改变当前页码，重新请求数据
     getReportList() {
       this.$axios
-        // .get("/do/report/getreports?usr=" + this.$store.state.username + "&role=" + this.$store.state.username)
-        .get("/do/history/gethistory?name=艾什")
+        .get("/do/history/gethistory?id=" + this.$store.state.userid)
+        // .get("/do/history/gethistory?id=123")
         .then((res) => {
           this.historyData = res;
           console.log("Current username: " + this.$store.state.username);
