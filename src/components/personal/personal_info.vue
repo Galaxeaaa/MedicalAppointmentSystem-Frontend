@@ -182,8 +182,8 @@ export default {
     clickSave(){
       console.log("save!")
       var str;
-      if(!this.isdoctor) str="/do/getinfo/add/usr";
-      else str="/do/getinfo/add/doctor";
+      if(!this.isdoctor) str="/do/addinfo/add/usr";
+      else str="/do/addinfo/doctor";
       this.$axios
       .post(str, this.info)
       .then((response) => {
