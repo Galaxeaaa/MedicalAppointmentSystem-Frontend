@@ -2,18 +2,21 @@
   <div id="add_report">
     <el-container class="detail">
       <header class="header">
-        <el-form :inline="true" :model="addReport" class="demo-form-inline">
-          <el-form-item label="姓名">
-            <el-input v-model="addReport.name" placeholder="请输入"></el-input>
+        <el-form :inline="true" :model="Report" class="demo-form-inline">
+          <el-form-item label="患者ID">
+            <el-input v-model="Report.usr_id" placeholder="请输入" ></el-input>
+          </el-form-item>
+          <el-form-item label="患者姓名">
+            <el-input v-model="Report.usr_name" placeholder="请输入"></el-input>
           </el-form-item>
           <el-form-item label="就诊科室">
-            <el-input v-model="addReport.room" placeholder="请输入"></el-input>
+            <el-input v-model="Report.department" placeholder="请输入"></el-input>
           </el-form-item>
-          <el-form-item label="检查时间">
-            <el-input v-model="addReport.time" placeholder="请输入"></el-input>
-          </el-form-item>
+          <!-- <el-form-item label="检查时间">
+            <el-input v-model="Report.rep_time" placeholder="请输入"></el-input>
+          </el-form-item> -->
           <el-form-item label="预约状态">
-            <el-select v-model="addReport.stat" placeholder="请选择">
+            <el-select v-model="Report.rep_state" placeholder="请选择">
               <el-option label="已预约" value="已预约"></el-option>
               <el-option label="未预约" value="未预约"></el-option>
             </el-select>
@@ -27,7 +30,7 @@
             type="textarea"
             :rows="3"
             placeholder="请输入内容"
-            v-model="addReport.result"
+            v-model="Report.disease"
             class="revise_con"
             resize="none"
           >
@@ -39,7 +42,7 @@
             type="textarea"
             :rows="15"
             placeholder="请输入内容"
-            v-model="addReport.details"
+            v-model="Report.disease_descr"
             class="revise_con"
             resize="none"
           >
@@ -59,33 +62,44 @@
 export default {
   data() {
     return {
-      addReport : {
-        name : '',
-        time : '',
-        room : '',
-        result : '',
-        details : '',
-        stat : null,
+      Report : {
+        usr_id : '',
+        usr_name : '',
+        doctor_id : '',
+        doctor_name : '',
+        department : '',
+        disease : '',
+        disease_descr : '',
+        rep_time : '',
+        reg_state : '',
       }
     };
   },
 
   methods: {
     clear_reload(){
-      this.addReport.name=''
-      this.addReport.time=''
-      this.addReport.details=''
-      this.addReport.room=''
-      this.addReport.result=''
-      this.addReport.stat=null
+      this.Report.usr_id='';
+      this.Report.usr_name='';
+      this.Report.doctor_id='';
+      this.Report.doctor_name='';
+      this.Report.department='';
+      this.Report.disease='';
+      this.Report.disease_descr='';
+      this.Report.rep_time='';
+      this.Report.reg_state='';
       this.$router.push('/person/report/add')
     },
     clickSave(){
       console.log("save!")
-      this.$axios.post('/do/report/addreport', this.addReport)
+      //get doc id name and time
+      this.Report.doctor_id=this.$store.state.userid
+      this.Report.doctor_name=this.$store.state.username
+      this.Report.rep_time=new Date().toLocaleString()
+      // console.log(this.Report.rep_time)
+      this.$axios.post('/do/report/addreport', this.Report)
       .then((response) => {
         // console.log(response)
-        status=response.status;
+        // status=response.status;
         // console.log(status)
         if(response.status === 200) {
           console.log('success')
@@ -123,19 +137,20 @@ export default {
     justify-content: space-between;
     font-size: 12px;
     height: 30px;
-    margin-left: 80px;
-    .el-input__inner {
-      height: 25px;
-    }
-    p {
-      color: #797979;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      span {
-        color: #333;
-      }
-    }
+    margin-left: 67px;
+    // .el-input__inner {
+    //   height: 25px;
+    //   width: 100px;
+    // }
+    // p {
+    //   color: #797979;
+    //   display: flex;
+    //   justify-content: center;
+    //   align-items: center;
+    //   span {
+    //     color: #333;
+    //   }
+    // }
   }
   .main {
     color: #333;
@@ -177,7 +192,7 @@ export default {
     width: auto !important;
   }
   //   注意 修改element-ui弹窗的样式不能在添加了scoped的style中修改，解决方法：另写一个style添加样式
-  .header .el-input__inner {
+  .header .el-input__inner{
     height: 30px;
   }
   .header .el-form-item__content {
