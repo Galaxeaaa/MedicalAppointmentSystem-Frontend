@@ -13,6 +13,7 @@ const store = new Vuex.Store({
 	state: sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getItem('state')) : {
 		username: '',
 		isdoctor: false,
+		role: '',
 		routes: [],
 		sessions: {},//聊天记录
 		users: [],//用户列表
@@ -31,6 +32,10 @@ const store = new Vuex.Store({
 		},
 		setIsDoctor(state, is_doctor) {
 			state.is_doctor = isdoctor
+			if (isdoctor)
+				role = 'doctor'
+			else
+				role = 'usr'
 		},
 		initRoutes(state, data) {
 			state.routes = data;

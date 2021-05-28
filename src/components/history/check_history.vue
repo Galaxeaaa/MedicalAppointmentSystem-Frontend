@@ -1,5 +1,5 @@
 <template>
-  <div id="checkReport">
+  <div id="checkHistory">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <!-- <el-form-item>
         <el-input
@@ -28,50 +28,14 @@
       </el-form-item>
     </el-form>
 
-    <el-table :data="reportData" style="width: 100%">
-      <el-table-column prop="id" label="序号" width="60"></el-table-column>
-      <el-table-column prop="usr" label="姓名" width="70"></el-table-column>
+    <el-table :data="historyData" style="width: 100%">
       <el-table-column prop="doctor" label="主治医师"> </el-table-column>
-      <el-table-column prop="department" label="就诊科室"> </el-table-column>
-      <el-table-column prop="disease" label="诊断结果"> </el-table-column>
-      <el-table-column
-        prop="rep_time"
-        label="检查时间"
-        width="180"
-      ></el-table-column>
-      <el-table-column prop="reg_state" label="预约状态"> </el-table-column>
-      <!-- <el-table-column label="性别" width="60">
-        <template slot-scope="scope">
-          <span>{{ scope.row.gender == 1 ? "男" : "女" }}</span>
-        </template>
-      </el-table-column> -->
-      <!-- <el-table-column prop="age" label="年龄" width="60"> </el-table-column> -->
-      <!-- <el-table-column prop="diType" label="诊断类型">
-        <template slot-scope="scope">
-          <span>{{ scope.row.diType == 1 ? "初诊" : "复诊" }}</span>
-        </template>
-      </el-table-column> -->
-      <!-- <el-table-column prop="rep_time" label="检查时间" width="180">
-      </el-table-column> -->
-
-      <el-table-column prop="done" label="操作" fixed="right">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="primary"
-            @click="
-              $router.push({
-                path: '/person/report/detail',
-                query: { id: scope.row.checkId },
-              })
-            "
-          >
-            查看详情
-          </el-button>
-        </template>
-      </el-table-column>
+      <el-table-column prop="case" label="患病信息"> </el-table-column>
+      <el-table-column prop="advice" label="医嘱信息"> </el-table-column>
+      <el-table-column prop="check" label="检验结果核查"> </el-table-column>
+      <el-table-column prop="op_record" label="手术记录"> </el-table-column>
+      <el-table-column prop="nur_record" label="护理记录"> </el-table-column>
     </el-table>
-    <!-- 使用element-ui里的表格展示请求到的数据 -->
 
     <!-- <el-pagination
       class="page"
@@ -97,7 +61,7 @@ export default {
         date: "",
       },
       //定义查询的表单元素
-      reportData: [],
+      historyData: [],
       //报告列表数据
 
       currentPage: 1,
@@ -120,12 +84,12 @@ export default {
     }, //点击分页时改变当前页码，重新请求数据
     getReportList() {
       this.$axios
-        // .get("/do/report/getreports?usr=" + this.$store.state.username + "&role=doctor")
-        .get("/do/report/getreports?usr=008&role=doctor")
+        // .get("/do/report/getreports?usr=" + this.$store.state.username + "&role=" + this.$store.state.username)
+        .get("/do/history/gethistory?name=艾什")
         .then((res) => {
-          this.reportData = res;
+          this.historyData = res;
           console.log("Current username: " + this.$store.state.username);
-		//   console.log(this.reportData)
+          //   console.log(this.historyData)
         })
         .catch(function (error) {
           console.log(error);
@@ -136,14 +100,14 @@ export default {
     //     pageNo: this.currentPage,
     //     pageSize: 10,
     //   }).then((res) => {
-    //     this.reportData = res.result;
+    //     this.historyData = res.result;
     //   });
     // },
     //请求报告列表数据
   },
   computed: {
     tables() {
-      return this.reportData;
+      return this.historyData;
       //   .filter((item) => {
       //     return
       //   item.conName.includes(this.formInline.userName) &&
@@ -158,7 +122,7 @@ export default {
 };
 </script>
 <style lang="scss">
-#checkReport {
+#checkHistory {
   position: relative;
   top: 20px;
   .el-input__inner {

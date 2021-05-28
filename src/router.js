@@ -15,6 +15,9 @@ import checkReport from "./components/report/check_report.vue";
 import addReport from "./components/report/add_report.vue";
 import detailReport from "./components/report/detail_report.vue";
 
+import History from "./components/history/index.vue"
+import checkHistory from "./components/history/check_history.vue";
+
 import Chat from "./components/chat/index.vue";
 import chatRoom from "./components/chat/chatroom.vue";
 import card from "./components/chat/card.vue";
@@ -85,6 +88,17 @@ export default new Router({
 							path: 'detail',
 							component: detailReport
 						}
+					]
+				},
+				{
+					path: 'history',
+					component: History,
+					redirect: '/person/history/check',
+					children: [
+						{
+							path: 'check',
+							component: checkHistory
+						},
 					]
 				},
 				{
