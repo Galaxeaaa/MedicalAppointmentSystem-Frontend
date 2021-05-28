@@ -45,20 +45,12 @@
           >
           </el-input>
         </div>
-        <!-- <div>
-          <span> 上传附件：</span>
-          <p>最多上传三个附件，每个大小不超过2m</p>
-        </div>
-        <div class="dis">
-          <span> 文件描述：</span>
-          <el-input placeholder=""></el-input>
-          <el-button size="mini">浏览</el-button>
-          <el-button size="mini" type="primary">上传</el-button>
-        </div> -->
       </el-main>
       <el-footer class="footer">
-        <el-button type="primary" @click="clickSave" >保存</el-button>
-        <el-button type="warning" @click="clickCancel">取消</el-button>
+        <div class="foodiv">
+          <el-button type="primary" @click="clickSave" >保存</el-button>
+          <el-button type="warning" @click="clickCancel">取消</el-button>
+        </div>
       </el-footer>
     </el-container>
   </div>
@@ -90,7 +82,6 @@ export default {
     },
     clickSave(){
       console.log("save!")
-      var status
       this.$axios.post('/do/report/addreport', this.addReport)
       .then((response) => {
         // console.log(response)
@@ -173,16 +164,9 @@ export default {
   .footer {
     height: 40px !important;
     display: flex;
-    p {
-      width: 100px;
-      height: 35px;
-      text-align: center;
-      line-height: 35px;
-      color: #fff;
-    }
-    p:nth-child(2) {
-      background: #ccc;
-      margin-left: 20px;
+    .foodiv{
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 }
