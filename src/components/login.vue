@@ -146,9 +146,9 @@ export default {
           this.loginForm.password,
       }).then(function (response) {
         if (response == true) {
-          obj.$router.push("/login_success");
           this.$store.commit("setUserId", this.loginForm.username);
           this.$store.commit("setIsDoctor", this.showDoctorLogin);
+          obj.$router.push("/login_success");
         } else {
           alert("登陆失败，账户名或密码有误！");
         }

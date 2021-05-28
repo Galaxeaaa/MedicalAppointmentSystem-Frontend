@@ -12,11 +12,8 @@
           <el-form-item label="就诊科室">
             <el-input v-model="Report.department" placeholder="请输入"></el-input>
           </el-form-item>
-          <!-- <el-form-item label="检查时间">
-            <el-input v-model="Report.rep_time" placeholder="请输入"></el-input>
-          </el-form-item> -->
           <el-form-item label="预约状态">
-            <el-select v-model="Report.rep_state" placeholder="请选择">
+            <el-select v-model="Report.reg_state" placeholder="请选择">
               <el-option label="已预约" value="已预约"></el-option>
               <el-option label="未预约" value="未预约"></el-option>
             </el-select>
@@ -95,18 +92,22 @@ export default {
       this.Report.doctor_id=this.$store.state.userid
       this.Report.doctor_name=this.$store.state.username
       this.Report.rep_time=new Date().toLocaleString()
-      // console.log(this.Report.rep_time)
+      var tmp = this.Report.reg_state;
+      if(this.Report.reg_state=="已预约") this.Report.reg_state="true"
+      else this.Report.reg_state="false"
+      console.log(this.Report)
       this.$axios.post('/do/report/addreport', this.Report)
       .then((response) => {
-        // console.log(response)
+        console.log(response)
         // status=response.status;
         // console.log(status)
-        if(response.status === 200) {
+        if(response) {
           console.log('success')
           this.$message({
             message: "保存成功",
             type: "success",
           })
+          this.Report.reg_state=tmp
           this.clear_reload()
         }else{
           console.log('failed')
@@ -114,9 +115,10 @@ export default {
             message: "保存失败",
             type: "error",
           })
+          this.Report.reg_state=tmp
         }
       });
-      
+      this.Report.reg_state=tmp
     },
     clickCancel(){
       console.log("cancel!")
