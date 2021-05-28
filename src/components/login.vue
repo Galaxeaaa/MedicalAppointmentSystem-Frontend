@@ -1,8 +1,8 @@
 <template>
   <div id="welcome">
     <div class="img">
-      <div class="mask" v-if="showLogin || showLogon" @click="clear"></div>
-      <div class="login_dialog" v-if="showLogin">
+      <div class="mask" v-if="showLogin || showLogon || showDoctorLogin" @click="clear"></div>
+      <div class="login_dialog" v-if="showLogin || showDoctorLogin">
         <el-form ref="loginForm" :model="loginForm">
           <el-form-item label="用户名">
             <el-input
@@ -56,8 +56,9 @@
       <div class="welcome_content">
         <h1>欢迎！请确认您的身份</h1>
         <div class='welcome_btn_back'>
-          <el-button type="primary" @click='showLogin = true'>登录</el-button>
-          <el-button type="success" @click='showLogon = true'>注册</el-button>
+          <el-button type="primary" @click='showLogin = true'>患者登录</el-button>
+          <el-button type="success" @click='showLogon = true'>患者注册</el-button>
+          <el-button type="primary" @click='showDoctorLogin = true'>医生登录</el-button>
 		      <el-button type="success" @click='$router.push("/login_success")'>测试入口</el-button>
         </div>
       </div>
@@ -79,6 +80,7 @@ export default {
     return {
       showLogin: false,
       showLogon: false,
+      showDoctorLogin: false,
       loginForm: {
         username: "",
         password: "",
@@ -124,10 +126,11 @@ export default {
         url: '/login?name=' + this.loginForm.username + '&password=' + this.loginForm.password
       })
         .then(function (response) {
-          if (response.data == true) {
-            alert(response.data);
+          if (response == true) {
+            alert('登录成功！');
             obj.$router.push('/login_success')
-			obj.$store.commit('setUsername', this.loginForm.username)
+			      obj.$store.commit('setUsername', this.loginForm.username)
+            obj.$store.commit('setIsDoctor', this.showDoctorLogin)
           }
         })
     },
@@ -141,18 +144,31 @@ export default {
       }
       axios({
         method: 'get',
-        url: '/logon?name=' + this.logonForm.username + '&password=' + this.logonForm.password
+        url: '/checkname?name=' + this.logonForm.username
       })
         .then(function (response) {
-          if (response.data == true) {
-            alert(response.data);
-            obj.$router.push('/login')
+          if (response == true) {
+            alert('用户名已被占用！');
+          }
+          else {
+            axios({
+              method: 'get',
+              url: '/register?name=' + this.logonForm.username + '&password=' + this.logonForm.password
+            })
+              .then(function (response) {
+                if (response == true) {
+                  alert('注册成功！');
+                  obj.$router.push('/login')
+                }
+              })
           }
         })
+      
     },
     clear() {
       this.showLogin = false;
       this.showLogon = false;
+      this.showDoctorLogin = false;
       this.loginForm.username = "";
       this.loginForm.password = "";
       this.logonForm.username = "";
