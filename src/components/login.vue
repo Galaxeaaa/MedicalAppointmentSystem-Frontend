@@ -144,26 +144,24 @@ export default {
       }
       axios({
         method: 'get',
-        url: '/checkname?name=' + this.logonForm.username
+        url: '/register/checkname?name=' + this.logonForm.username
       })
         .then(function (response) {
           if (response == true) {
             alert('用户名已被占用！');
-          }
-          else {
-            axios({
-              method: 'get',
-              url: '/register?name=' + this.logonForm.username + '&password=' + this.logonForm.password
-            })
-              .then(function (response) {
-                if (response == true) {
-                  alert('注册成功！');
-                  obj.$router.push('/login')
-                }
-              })
+            return
           }
         })
-      
+      axios({
+        method: 'get',
+        url: '/register?name=' + this.logonForm.username + '&password=' + this.logonForm.password
+      })
+        .then(function (response) {
+          if (response == true) {
+            alert('注册成功！');
+            obj.$router.push('/login')
+          }
+        })
     },
     clear() {
       this.showLogin = false;
