@@ -15,27 +15,27 @@
           <el-col :span="7">
             <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="姓名">
-                <el-input v-model="info.name"></el-input>
+                <el-input v-model="info.name" maxlength="20"></el-input>
               </el-form-item>
             </el-form>
             <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="职称">
-                <el-input v-model="info.title"></el-input>
+                <el-input v-model="info.title" maxlength="20"></el-input>
               </el-form-item>
             </el-form>
             <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="所属科室">
-                <el-input v-model="info.department"></el-input>
+                <el-input v-model="info.department" maxlength="20"></el-input>
               </el-form-item>
             </el-form>
             <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="所属单位">
-                <el-input v-model="info.hospital"></el-input>
+                <el-input v-model="info.hospital" maxlength="20"></el-input>
               </el-form-item>
             </el-form>
             <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="擅长科目">
-                <el-input v-model="info.medicine"></el-input>
+                <el-input v-model="info.medicine" maxlength="20"></el-input>
               </el-form-item>
             </el-form>
           </el-col>
@@ -49,6 +49,7 @@
                   :rows="18"
                   v-model="info.introduction"
                   type="textarea"
+                  maxlength="200"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -150,7 +151,7 @@
           <el-col :span="7">
             <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="姓名">
-                <el-input v-model="info.name"></el-input>
+                <el-input v-model="info.name" maxlength="20"></el-input>
               </el-form-item>
             </el-form>
           </el-col>
