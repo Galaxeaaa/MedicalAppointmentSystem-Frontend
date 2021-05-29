@@ -183,30 +183,35 @@ export default {
     clickSave() {
       console.log("save!");
       var str;
-      if (!this.isdoctor) {
-        var dt = new Date(this.info.birth_date)
-          .toISOString()
-          .substring(0, 19)
-          .replace("T", " ");
-        console.log(dt);
-        str =
-          "/do/addinfo/usr?" +
-          "id=" +
-          this.info.id +
-          "&name=" +
-          this.info.name +
-          "&graph=" +
-          this.info.graph +
-          "&birth_date=" +
-          dt +
-          "&gender=" +
-          this.info.gender +
-          "&tel=" +
-          this.info.tel +
-          "&address=" +
-          this.info.address;
-      } else {
-        str = "/do/addinfo/doctor?";
+      if(!this.isdoctor){
+        var dt=new Date(this.info.birth_date).toISOString().substring(0, 19).replace('T', ' ')
+        // console.log(dt)
+        str="/do/addinfo/usr?"+
+        "id=" + this.info.id +
+        "&name=" + this.info.name +
+        "&graph=" + this.info.graph +
+        "&birth_date=" + dt +
+        "&gender=" + this.info.gender +
+        "&tel=" + this.info.tel +
+        "&address=" + this.info.address
+      }else{
+        str="/do/addinfo/doctor?" +
+        "id=" + this.info.id +
+        "&name=" + this.info.name +
+        "&title=" + this.info.title +
+        "&department=" + this.info.department +
+        "&hospital=" + this.info.hospital +
+        "&medicine=" + this.info.medicine +
+        "&introduction=" + this.info.introduction +
+        "&project=" + this.info.project +
+        "&registerID=" + this.info.registerID +
+        "&registerSum=" + this.info.registerSum +
+        "&score=" + this.info.score +
+        "&evaluate=" + this.info.evaluate +
+        "&tel=" + this.info.tel +
+        "&vx=" + this.info.vx +
+        "&email=" + this.info.email +
+        "&registerTime=" + this.info.registerTime
       }
       console.log(this.info);
       this.$axios
