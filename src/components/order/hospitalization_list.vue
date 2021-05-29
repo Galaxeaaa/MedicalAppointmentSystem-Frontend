@@ -78,12 +78,18 @@
             </el-table-column>
             <el-table-column prop="done" label="在线问诊">
                 <template slot-scope="scope">
-                    <i class="el-icon-service"
+                  <div class="mask" v-if="showModal" @click="showModal=false"></div>
+                    <div class="pop" v-if="showModal">
+                        <img src="../../assets/img/qrcode.png"/>
+                        <button @click="showModal=false" class="btn">预约成功！</button>
+                    </div>
+                  <i class="el-icon-service" @click="showModal=true"></i>
+                    <!-- <i class="el-icon-service"
                        @click="
               $router.push({
                 path: '/person/doctor/detail', //跳转进入新的界面
               })
-            "></i>
+            "></i> -->
                 </template>
             </el-table-column>
         </el-table>
@@ -107,6 +113,7 @@
 <script>export default {
   data() {
     return {
+      showModal: false,
       formInline: {
         doctorname: "",
         departmentname: "",
@@ -209,6 +216,27 @@
 
     {
         border-radius: 20px;
+    }
+
+    .mask {
+      background-color: #000;
+      opacity: 0.3;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1
+    }
+    .pop {
+      background-color: #fff;
+
+      position: fixed;
+      top: 100px;
+      left:500px;
+      width: auto;
+      height:auto;
+      z-index: 2
     }
 
     .page {
