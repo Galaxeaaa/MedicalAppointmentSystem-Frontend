@@ -45,7 +45,7 @@
           <el-col :span="15">
             <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="个人简介">
-                <el-input v-model="info.introduction"></el-input>
+                <el-input :rows="18" v-model="info.introduction" type="textarea"></el-input>
               </el-form-item>
             </el-form>
           </el-col>
@@ -160,6 +160,12 @@
         <p class="bg16d" plain>保存</p>
         <p>取消</p>
       </div> -->
+      <el-footer class="footer">
+        <div class="foodiv">
+          <el-button type="primary" @click="clickSave" >保存</el-button>
+          <!-- <el-button type="warning" @click="clickCancel">取消</el-button> -->
+        </div>
+      </el-footer>
     </el-container>
   </div>
 </template>
@@ -173,6 +179,34 @@ export default {
     };
   },
   methods: {
+    clickSave(){
+      console.log("save!")
+      var str;
+      if(!this.isdoctor) str="/do/addinfo/add/usr";
+      else str="/do/addinfo/doctor";
+      this.$axios
+      .post(str, this.info)
+      .then((response) => {
+        // console.log(response)
+        if(response) {
+          console.log('success')
+          this.$message({
+            message: "保存成功",
+            type: "success",
+          })
+          // this.$router.push('/person/personal/info')
+        }else{
+          console.log('failed')
+          this.$message({
+            message: "保存失败",
+            type: "error",
+          })
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
     getPersonalInfo() {
       this.isdoctor = this.$store.state.isdoctor;
       console.log("isdoctor: " + this.isdoctor);
@@ -202,11 +236,11 @@ export default {
             console.log(error);
           });
       }
-    },
+    }
   },
   created: function () {
     this.getPersonalInfo();
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>
