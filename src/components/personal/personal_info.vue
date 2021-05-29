@@ -45,7 +45,11 @@
           <el-col :span="15">
             <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="个人简介">
-                <el-input :rows="18" v-model="info.introduction" type="textarea"></el-input>
+                <el-input
+                  :rows="18"
+                  v-model="info.introduction"
+                  type="textarea"
+                ></el-input>
               </el-form-item>
             </el-form>
           </el-col>
@@ -136,10 +140,7 @@
           <el-col :span="7">
             <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="照片" prop="graph">
-                <img
-                  style="width: 300px; height: 300px"
-                  :src="info.graph"
-                />
+                <img style="width: 300px; height: 300px" :src="info.graph" />
               </el-form-item>
             </el-form>
           </el-col>
@@ -162,7 +163,7 @@
       </div> -->
       <el-footer class="footer">
         <div class="foodiv">
-          <el-button type="primary" @click="clickSave" >保存</el-button>
+          <el-button type="primary" @click="clickSave">保存</el-button>
           <!-- <el-button type="warning" @click="clickCancel">取消</el-button> -->
         </div>
       </el-footer>
@@ -179,62 +180,72 @@ export default {
     };
   },
   methods: {
-    clickSave(){
-      console.log("save!")
+    clickSave() {
+      console.log("save!");
       var str;
-      if(!this.isdoctor){
-        var dt=new Date(this.info.birth_date).toISOString().substring(0, 19).replace('T', ' ')
-        console.log(dt)
-        str="/do/addinfo/usr?"+
-        "id=" + this.info.id +
-        "&name=" + this.info.name +
-        "&graph=" + this.info.graph +
-        "&birth_date=" + dt +
-        "&gender=" + this.info.gender +
-        "&tel=" + this.info.tel +
-        "&address=" + this.info.address
-      }else{
-        str="/do/addinfo/doctor?";
+      if (!this.isdoctor) {
+        var dt = new Date(this.info.birth_date)
+          .toISOString()
+          .substring(0, 19)
+          .replace("T", " ");
+        console.log(dt);
+        str =
+          "/do/addinfo/usr?" +
+          "id=" +
+          this.info.id +
+          "&name=" +
+          this.info.name +
+          "&graph=" +
+          this.info.graph +
+          "&birth_date=" +
+          dt +
+          "&gender=" +
+          this.info.gender +
+          "&tel=" +
+          this.info.tel +
+          "&address=" +
+          this.info.address;
+      } else {
+        str = "/do/addinfo/doctor?";
       }
-      console.log(this.info)
-      this.$axios.get(
-        str
-      ).then((response) => {
-        // console.log(response)
-        if(response) {
-          console.log('success')
-          this.$message({
-            message: "保存成功",
-            type: "success",
-          })
-          // this.$router.push('/person/personal/info')
-        }else{
-          console.log('failed')
-          this.$message({
-            message: "保存失败",
-            type: "error",
-          })
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      console.log(this.info);
+      this.$axios
+        .get(str)
+        .then((response) => {
+          // console.log(response)
+          if (response) {
+            console.log("success");
+            this.$message({
+              message: "保存成功",
+              type: "success",
+            });
+            // this.$router.push('/person/personal/info')
+          } else {
+            console.log("failed");
+            this.$message({
+              message: "保存失败",
+              type: "error",
+            });
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     getPersonalInfo() {
       this.isdoctor = this.$store.state.isdoctor;
       console.log("isdoctor: " + this.isdoctor);
       if (!this.isdoctor)
         this.$axios
-            .get("/do/getinfo/usr?id=" + this.$store.state.userid)
-        //   .get("/do/getinfo/usr?id=123")
+          .get("/do/getinfo/usr?id=" + this.$store.state.userid)
+          //   .get("/do/getinfo/usr?id=123")
           .then((res) => {
-            console.log(res);
             this.info = res[0];
-            //   console.log("Current username: " + this.$store.state.username);
-            // console.log("info=" + this.info);
+            this.$store.commit("setUsername", this.info.name);
+            console.log(this.$store.state.username);
           })
           .catch(function (error) {
-            // console.log(error);
+            console.log(error);
           });
       else {
         this.$axios
@@ -242,19 +253,18 @@ export default {
           //   .get("/do/getinfo/doctor?id=008")
           .then((res) => {
             this.info = res[0];
-            //   console.log("Current username: " + this.$store.state.username);
-            console.log(this.info);
+            this.$store.commit("setUsername", this.info.name);
+            console.log(this.$store.state.username);
           })
           .catch(function (error) {
             console.log(error);
           });
       }
-      this.$store.commit("setUsername", this.info.name)
-    }
+    },
   },
   created: function () {
     this.getPersonalInfo();
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>
