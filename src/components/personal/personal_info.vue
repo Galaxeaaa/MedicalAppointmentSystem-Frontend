@@ -138,7 +138,7 @@
               <el-form-item label="照片" prop="graph">
                 <img
                   style="width: 300px; height: 300px"
-                  src="https://t12.baidu.com/it/u=433141544,21339958&fm=58"
+                  :src="info.graph"
                 />
               </el-form-item>
             </el-form>
@@ -146,9 +146,9 @@
           <el-col :span="1" class="divider">
             <el-divider direction="vertical"></el-divider>
           </el-col>
-          <el-col :span=7>
+          <el-col :span="7">
             <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
-              <el-form-item label="姓名" prop="name">
+              <el-form-item label="姓名">
                 <el-input v-model="info.name"></el-input>
               </el-form-item>
             </el-form>
@@ -168,30 +168,31 @@ export default {
   data() {
     return {
       revamp: false,
-      isdoctor: true,
+      isdoctor: false,
       info: "",
     };
   },
   methods: {
     getPersonalInfo() {
-      //   this.isdoctor = this.$store.state.isdoctor;
-      console.log(this.isdoctor);
+      this.isdoctor = this.$store.state.isdoctor;
+      console.log("isdoctor: " + this.isdoctor);
       if (!this.isdoctor)
         this.$axios
-          // .get("/do/getinfo/usr?name=" + this.$store.state.username)
-          .get("/do/getinfo/usr?name=123")
+            .get("/do/getinfo/usr?id=" + this.$store.state.userid)
+        //   .get("/do/getinfo/usr?id=123")
           .then((res) => {
+            console.log(res);
             this.info = res[0];
             //   console.log("Current username: " + this.$store.state.username);
-            console.log(this.info);
+            // console.log("info=" + this.info);
           })
           .catch(function (error) {
-            console.log(error);
+            // console.log(error);
           });
       else {
         this.$axios
-          // .get("/do/getinfo/doctor?id=" + this.$store.state.username)
-          .get("/do/getinfo/doctor?id=008")
+          .get("/do/getinfo/doctor?id=" + this.$store.state.userid)
+          //   .get("/do/getinfo/doctor?id=008")
           .then((res) => {
             this.info = res[0];
             //   console.log("Current username: " + this.$store.state.username);

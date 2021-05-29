@@ -37,9 +37,9 @@ const store = new Vuex.Store({
 		setIsDoctor(state, isdoctor) {
 			state.isdoctor = isdoctor
 			if (isdoctor)
-				role = 'doctor'
+				state.role = 'doctor'
 			else
-				role = 'usr'
+				state.role = 'usr'
 		},
 		initRoutes(state, data) {
 			state.routes = data;
