@@ -60,6 +60,7 @@ export default {
   data() {
     return {
       Report : {
+        id : 123,
         usr_id : '',
         usr_name : '',
         doctor_id : '',
@@ -91,7 +92,7 @@ export default {
       //get doc id name and time
       this.Report.doctor_id=this.$store.state.userid
       this.Report.doctor_name=this.$store.state.username
-      this.Report.rep_time=new Date().toLocaleString()
+      this.Report.rep_time=new Date().toISOString()
       var tmp = this.Report.reg_state;
       if(this.Report.reg_state=="已预约") this.Report.reg_state="true"
       else this.Report.reg_state="false"

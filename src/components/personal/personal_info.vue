@@ -182,11 +182,24 @@ export default {
     clickSave(){
       console.log("save!")
       var str;
-      if(!this.isdoctor) str="/do/addinfo/add/usr";
-      else str="/do/addinfo/doctor";
-      this.$axios
-      .post(str, this.info)
-      .then((response) => {
+      if(!this.isdoctor){
+        var dt=new Date(this.info.birth_date).toISOString().substring(0, 19).replace('T', ' ')
+        console.log(dt)
+        str="/do/addinfo/usr?"+
+        "id=" + this.info.id +
+        "&name=" + this.info.name +
+        "&graph=" + this.info.graph +
+        "&birth_date=" + dt +
+        "&gender=" + this.info.gender +
+        "&tel=" + this.info.tel +
+        "&address=" + this.info.address
+      }else{
+        str="/do/addinfo/doctor?";
+      }
+      console.log(this.info)
+      this.$axios.get(
+        str
+      ).then((response) => {
         // console.log(response)
         if(response) {
           console.log('success')
@@ -236,6 +249,7 @@ export default {
             console.log(error);
           });
       }
+      this.$store.commit("setUsername", this.info.name)
     }
   },
   created: function () {

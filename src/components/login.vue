@@ -140,7 +140,8 @@ export default {
       axios({
         method: "get",
         url:
-          "/login?id=" +
+          (obj.showDoctorLogin?"/login_doc":"/login_usr")+
+          "?id=" +
           this.loginForm.username +
           "&password=" +
           this.loginForm.password,
