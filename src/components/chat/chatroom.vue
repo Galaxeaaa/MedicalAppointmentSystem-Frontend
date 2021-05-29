@@ -83,7 +83,7 @@
     }
     .main {
       position: relative;
-      // overflow: hidden;
+      overflow: hidden;
       background-color: rgb(214, 236, 243);
     }
   }
