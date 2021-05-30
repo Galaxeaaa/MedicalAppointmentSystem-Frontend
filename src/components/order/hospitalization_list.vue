@@ -32,17 +32,17 @@
             <el-table-column type="selection" width="55"> </el-table-column>
             <el-table-column label="医生姓名">
                 <template slot-scope="scope">
-                    <span>{{ scope.row.doctorname }}</span>
+                    <el-link type="primary" >{{ scope.row.doctorname }}</el-link>
                 </template>
             </el-table-column>
             <el-table-column label="科室">
                 <template slot-scope="scope">
-                    <span>{{ scope.row.departmentinfo.departmentname }}</span>
+                    <el-link type="primary" >{{ scope.row.departmentinfo.departmentname }}</el-link>
                 </template>
             </el-table-column>
             <el-table-column label="医院">
                 <template slot-scope="scope">
-                    <span>{{ scope.row.hospitalinfo.hospitalname }}</span>
+                    <el-link type="primary" >{{ scope.row.hospitalinfo.hospitalname }}</el-link>
                 </template>
             </el-table-column>
             <el-table-column prop="age" label="年龄">
@@ -99,7 +99,7 @@
                        :current-page.sync="currentPage"
                        :page-size="10"
                        layout="prev, pager, next, jumper"
-                       :total="100">
+                       :total="1">
         </el-pagination>
         <!-- 分页效果 -->
     </div>
@@ -164,6 +164,48 @@
           hospitalinfo:{
             id: 35,
             hospitalname: "杭州第一医院",
+            comment: null,
+          },
+        },
+        {
+          id: 1,
+          doctorname: "张医生",
+          heading: "主治医师",
+          birthday: "1986-05-23 00:00:00",
+          comment: null,
+          star: 4.5,
+          total: 5,
+          state: 2,
+          date: "2021-05-24 00:00:00",
+          departmentinfo:{
+            id: 34,
+            departmentname: "耳鼻喉科",
+            comment: null,
+          },
+          hospitalinfo:{
+            id: 35,
+            hospitalname: "浙大附属二院",
+            comment: null,
+          },
+        },
+        {
+          id: 1,
+          doctorname: "赵医生",
+          heading: "主治医师",
+          birthday: "1979-05-23 00:00:00",
+          comment: null,
+          star: 3.4,
+          total: 5,
+          state: 2,
+          date: "2021-05-24 00:00:00",
+          departmentinfo:{
+            id: 34,
+            departmentname: "心理卫生科",
+            comment: null,
+          },
+          hospitalinfo:{
+            id: 35,
+            hospitalname: "浙大附属一院",
             comment: null,
           },
         },
