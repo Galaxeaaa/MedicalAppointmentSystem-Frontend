@@ -7,13 +7,15 @@
       >
         报告查询
       </el-button>
+      <!-- <el-main v-if="isdoctor"> -->
       <el-button
-        v-if="!this.$store.state.isdoctor"
+        v-if="this.$store.state.isdoctor"
         @click="add"
         :class="['tab', flag == 'add' ? 'check_tab' : '']"
       >
         添加报告
       </el-button>
+      <!-- </el-main> -->
     </div>
     <router-view class="content"> </router-view>
     <!-- 定义报告查询入口组件，里面分为查询页面和添加页面，点击相应按钮执行路由的跳转 -->

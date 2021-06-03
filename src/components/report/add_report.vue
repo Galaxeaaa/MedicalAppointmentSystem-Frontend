@@ -4,13 +4,13 @@
       <header class="header">
         <el-form :inline="true" :model="Report" class="demo-form-inline">
           <el-form-item label="患者ID">
-            <el-input v-model="Report.usr_id" placeholder="请输入" ></el-input>
+            <el-input v-model="Report.usr_id" maxlength="20" placeholder="请输入" ></el-input>
           </el-form-item>
           <el-form-item label="患者姓名">
-            <el-input v-model="Report.usr_name" placeholder="请输入"></el-input>
+            <el-input v-model="Report.usr_name" maxlength="20" placeholder="请输入"></el-input>
           </el-form-item>
           <el-form-item label="就诊科室">
-            <el-input v-model="Report.department" placeholder="请输入"></el-input>
+            <el-input v-model="Report.department" maxlength="20" placeholder="请输入"></el-input>
           </el-form-item>
           <el-form-item label="预约状态">
             <el-select v-model="Report.reg_state" placeholder="请选择">
@@ -28,6 +28,7 @@
             :rows="3"
             placeholder="请输入内容"
             v-model="Report.disease"
+            maxlength="20"
             class="revise_con"
             resize="none"
           >
@@ -40,6 +41,7 @@
             :rows="15"
             placeholder="请输入内容"
             v-model="Report.disease_descr"
+            maxlength="200"
             class="revise_con"
             resize="none"
           >
@@ -60,6 +62,7 @@ export default {
   data() {
     return {
       Report : {
+        id : 123,
         usr_id : '',
         usr_name : '',
         doctor_id : '',
@@ -91,7 +94,7 @@ export default {
       //get doc id name and time
       this.Report.doctor_id=this.$store.state.userid
       this.Report.doctor_name=this.$store.state.username
-      this.Report.rep_time=new Date().toLocaleString()
+      this.Report.rep_time=new Date().toISOString()
       var tmp = this.Report.reg_state;
       if(this.Report.reg_state=="已预约") this.Report.reg_state="true"
       else this.Report.reg_state="false"

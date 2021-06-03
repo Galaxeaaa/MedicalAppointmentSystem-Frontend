@@ -34,6 +34,19 @@ module.exports = {
                 },
                 //重写路径  需要设置重写的话，要在后面的调用接口前加上/api 来代替target
             },
+            "/ws": {
+                ws:true,
+                target:"ws://localhost:8082"
+            },
+            
+            "/" : {
+                ws:false,
+                target:'http://localhost:8082',
+                changeOrigin: true,
+                pathRewrite:{
+                  '^/':''
+                }
+            }
         },
     },
 };

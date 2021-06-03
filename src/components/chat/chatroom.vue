@@ -12,6 +12,10 @@
       <message></message>
       <usertext></usertext>
     </div>
+    <div>
+      <el-button @click="loginForTest('d')" class="toolBtn" size="small">Doctor</el-button>
+      <el-button @click="loginForTest('p')" class="toolBtn" size="small">Patient</el-button>
+    </div>
   </div>
 </template>
 
@@ -27,15 +31,17 @@
     name: 'ChatRoom',
     data () {
       return {
-
+        isChatting:false,
+        timer:""
       }
     },
     mounted:function() {
       //初始化数据
-      this.$store.dispatch('initData');
+      //this.$store.dispatch('initData');
       //连接WebSocket服务
-      this.$store.dispatch('connect');
-
+      //this.$store.dispatch('connect');
+      this.chatConnect();
+      this.initUserList();
     },
     created () {
       // //在页面加载时读取sessionStorage里的状态信息
@@ -55,7 +61,70 @@
       message,
       usertext,
       chattitle
-    }
+    },
+    methods:{
+
+      chatConnect() {
+        this.$axios.post("/chat/connect?pid="+this.$store.state.currentUser.id+"&did="+this.$store.state.currentSession.id)
+        .then((res) => {
+          console.log("Connect success");
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+        this.timer = setInterval(this.Tick, 1000);
+      },
+
+      Tick(){
+        this.$axios.get("/chat/askMessage?id="+this.$store.state.currentUser.id).then((res) => {
+            res.forEach((msg,i) => {
+              console.log("@@@"+this.$store.state.currentUser.id + "#" + msg.src_id);
+              if(!this.$store.state.sessions[this.$store.state.currentUser.id + "#" + msg.src_id]){
+                Vue.set(this.$store.state.sessions, this.$store.state.currentUser.id + "#" + msg.src_id, []);
+              }
+              this.$store.state.sessions[this.$store.state.currentUser.id + "#" + msg.src_id].push({
+				        content: msg.content,
+				        date: msg.time,
+				        fromNickname: msg.name,
+				        messageTypeId: msg.type,
+				        self: false
+			        })
+            });
+        })
+      },
+
+      chatDisconnect(){
+        clearInterval(this.timer);
+      },
+
+      initUserList(){
+        if(this.$store.state.currentUser.who=='p'){
+          this.$axios.get("/chat/getdoctorlist?pid="+this.$store.state.currentUser.id).then((res) => {
+            this.$store.state.users = res;
+          })
+        }
+        else{
+          this.$axios.get("/chat/getpatientlist?did="+this.$store.state.currentUser.id).then((res) => {
+            this.$store.state.users = res;
+          })
+        }
+      },
+
+      loginForTest(who){
+        if(who=='d'){
+          this.$store.state.currentUser = {};
+          this.$store.state.currentUser.id = "001";     
+        }
+        else if(who=='p'){
+          this.$store.state.currentUser = {};
+          this.$store.state.currentUser.id = "10000"; 
+        }
+        this.$store.state.currentUser.who = who;
+        this.initUserList();
+      },
+
+    },
   }
 </script>
 
@@ -83,7 +152,7 @@
     }
     .main {
       position: relative;
-      // overflow: hidden;
+      overflow: hidden;
       background-color: rgb(214, 236, 243);
     }
   }

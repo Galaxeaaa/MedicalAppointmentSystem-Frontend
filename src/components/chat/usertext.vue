@@ -50,33 +50,47 @@ export default {
   ]),
   methods: {
     addMessageByClick(){
-      let msgObj=new Object();
-      msgObj.content=this.content;
-      msgObj.messageTypeId=1;
-      //发送群聊消息
-      if (this.currentSession.username=="群聊"){
-        console.log(this.content);
-        this.$store.state.stomp.send("/ws/groupChat",{},JSON.stringify(msgObj));
-      }
-      //给客服发送消息
-      if (this.currentSession.username=="客服"){
-        msgObj.fromNickname=this.$store.state.currentUser.nickname;
-        msgObj.to='客服';
-        this.$store.state.stomp.send("/ws/robotChat",{},JSON.stringify(msgObj));
-        //保存该条记录到session
-        this.$store.commit('addMessage',msgObj);
-      }
-      //发送私聊消息
-      else{
-        msgObj.from=this.$store.state.currentUser.username;
-        msgObj.fromNickname=this.$store.state.currentUser.nickname;
-        msgObj.to=this.currentSession.username;
-        this.$store.state.stomp.send("/ws/chat",{},JSON.stringify(msgObj));
-        //提交私聊消息记录
-        this.$store.commit('addMessage',msgObj);
-      }
+      this.$axios.post("/chat/sendMessage?from="+this.$store.state.currentUser.id+"&dest="+this.currentSession.id+"&content="+this.content+"&time="+new Date()+"&type=1")
+      .then((res) => {
+        if(!this.$store.state.sessions[this.$store.state.currentUser.id + "#" + this.$store.state.currentSession.id]){
+          Vue.set(this.$store.state.sessions, this.$store.state.currentUser.id + "#" + this.$store.state.currentSession.id, []);
+        }
+        console.log(this.$store.state.currentUser.id + "#" + this.$store.state.currentSession.id)
+        this.$store.state.sessions[this.$store.state.currentUser.id + "#" + this.$store.state.currentSession.id].push({
+				  content: this.content,
+				  date: new Date(),
+				  fromNickname: this.$store.state.currentUser.username,
+				  messageTypeId: 1,
+				  self: true
+			  })
+      })
+      // let msgObj=new Object();
+      // msgObj.content=this.content;
+      // msgObj.messageTypeId=1;
+      // //发送群聊消息
+      // if (this.currentSession.username=="群聊"){
+      //   console.log(this.content);
+      //   this.$store.state.stomp.send("/ws/groupChat",{},JSON.stringify(msgObj));
+      // }
+      // //给客服发送消息
+      // if (this.currentSession.username=="客服"){
+      //   msgObj.fromNickname=this.$store.state.currentUser.nickname;
+      //   msgObj.to='客服';
+      //   this.$store.state.stomp.send("/ws/robotChat",{},JSON.stringify(msgObj));
+      //   //保存该条记录到session
+      //   this.$store.commit('addMessage',msgObj);
+      // }
+      // //发送私聊消息
+      // else{
+      //   msgObj.from=this.$store.state.currentUser.username;
+      //   msgObj.fromNickname=this.$store.state.currentUser.nickname;
+      //   msgObj.to=this.currentSession.username;
+      //   this.$store.state.stomp.send("/ws/chat",{},JSON.stringify(msgObj));
+      //   //提交私聊消息记录
+      //   this.$store.commit('addMessage',msgObj);
+      // }
       //清空输入框
-      this.content='';
+      // this.content='';
     },
   	addMessage (e) {
   		if (e.ctrlKey && e.keyCode ===13 && this.content.length) {

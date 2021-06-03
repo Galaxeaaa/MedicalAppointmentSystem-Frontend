@@ -1,13 +1,18 @@
 <template>
   <div class="chatTitle">
     <span class="titleName">{{this.$store.state.currentSession.nickname?this.$store.state.currentSession.nickname:""}}</span>
-    <el-button class="moreBtn" size="small" icon="el-icon-more"></el-button>
+    <el-button class="exitBtn" @click="gotoComment" >结束问诊</el-button>
   </div>
 </template>
 
 <script>
   export default {
-    name: "chattitle"
+    name: "chattitle",
+    methods:{
+      gotoComment() {
+        this.$router.replace('./comment')
+      }
+    }
   }
 </script>
 
@@ -21,7 +26,10 @@
     border-bottom: 0.5px solid #b0c7e4;
   }
   .moreBtn{ 
+    margin-top: 5px;
+    margin-right: 10px;
     background-color: rgb(214, 236, 243);
+    color: #42557b;
     border: 0;
     height: 40px;
   }
