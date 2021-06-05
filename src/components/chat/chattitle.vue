@@ -1,6 +1,6 @@
 <template>
   <div class="chatTitle">
-    <span class="titleName">{{this.$store.state.currentSession.nickname?this.$store.state.currentSession.nickname:""}}</span>
+    <span class="titleName">{{this.$store.state.currentSession.name?this.$store.state.currentSession.name:""}}</span>
     <el-button class="exitBtn" @click="gotoComment" >结束问诊</el-button>
   </div>
 </template>
@@ -8,11 +8,11 @@
 <script>
   export default {
     name: "chattitle",
-    methods:{
-      gotoComment() {
-        this.$router.replace('./comment')
-      }
-    }
+    // methods:{
+    //   gotoComment() {
+    //     this.$router.replace('./comment')
+    //   }
+    // }
   }
 </script>
 

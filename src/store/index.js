@@ -19,8 +19,8 @@ const store = new Vuex.Store({
 		sessions: {},//聊天记录
 		users: [],//用户列表
 		currentUser: null,//当前登录用户
-		currentSession: { username: '群聊', nickname: '群聊' },//当前选中的用户，默认为群聊
-		currentList: '群聊',//当前聊天窗口列表
+		currentSession: { username: '私聊', nickname: '私聊' },//当前选中的用户，默认为群聊
+		currentList: '私聊',//当前聊天窗口列表
 		filterKey: '',
 		stomp: null,
 		isDot: {},//两用户之间是否有未读信息
