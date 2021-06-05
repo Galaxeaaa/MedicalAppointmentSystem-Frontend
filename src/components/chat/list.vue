@@ -24,7 +24,7 @@
       :native="false"
     >
       <ul v-if="currentList == '私聊'">
-        <p style="padding: 2px 4px; height: 20px">医生列表</p>
+        <p style="padding: 2px 4px; height: 20px">预约列表</p>
         <li
           v-for="item in users"
           :class="{

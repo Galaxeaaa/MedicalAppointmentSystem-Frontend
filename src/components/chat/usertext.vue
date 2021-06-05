@@ -1,12 +1,21 @@
 <template>
   <div id="uesrtext">
-    <div>
+    <div id="msgtype">
+      <!-- emoji表情气泡弹出框 -->
       <el-popover
         placement="top-start"
         width="400"
         trigger="click"
         class="emoBox"
       >
+        <el-button
+          id="emojiBtn"
+          class="emotionSelect"
+          slot="reference"
+        >
+          😀
+          <!-- <i class="fa fa-smile-o" aria-hidden="true"></i> -->
+        </el-button>
         <div class="emotionList">
           <a
             href="javascript:void(0);"
@@ -14,13 +23,10 @@
             v-for="(item, index) in faceList"
             :key="index"
             class="emotionItem"
-            >{{ item }}</a
-          >
+          >{{ item }}</a>
         </div>
-        <el-button id="emojiBtn" class="emotionSelect" slot="reference">
-          <i class="fa fa-smile-o" aria-hidden="true"></i>
-        </el-button>
       </el-popover>
+      <!-- 上传图片 -->
       <el-upload
         class="upload-btn"
         action="/file"
@@ -30,12 +36,31 @@
         :show-file-list="false"
         accept=".jpg,.jpeg,.png,.JPG,JPEG,.PNG,.gif,.GIF"
       >
-        <el-button id="uploadImgBtn" icon="el-icon-picture-outline"></el-button>
+        <el-button
+          id="uploadImgBtn"
+          icon="el-icon-picture-outline"
+        ></el-button>
       </el-upload>
+      <!-- 语音 -->
+      <i
+        class="el-icon-microphone"
+        @click="handleBtnClick"
+      ></i>
+      <!-- <audio controls autoplay id="audio"></audio> -->
+      <ButtonGroup
+        size="small"
+        v-show="news_img"
+      >
+        <!-- <Button @click="play_mp3">播放</Button> -->
+        <Button @click="send_voice">发送</Button>
+        <Button @click="cancel_mp3">停止</Button>
+        <!-- <Button @click="cancel">取消</Button> -->
+      </ButtonGroup>
     </div>
+    <!-- 按 Ctrl + Enter 发送 -->
     <textarea
       id="textarea"
-      placeholder="按 Ctrl + Enter 发送"
+      placeholder=""
       v-model="content"
       v-on:keyup="addMessage"
     >
@@ -45,8 +70,7 @@
       type="primary"
       size="mini"
       @click="addMessageByClick"
-      >发送(S)</el-button
-    >
+    >发送(S)</el-button>
   </div>
 </template>
 
@@ -231,6 +255,68 @@ export default {
       // console.log(this.faceList[index]);
       return;
     },
+    //录制语音
+    handleBtnClick: function () {
+      let that = this;
+      // that.news_img = !that.news_img
+      rc.start()
+        .then(() => {
+          that.news_img = !that.news_img;
+          console.log("start recording");
+        })
+        .catch((error) => {
+          alert("获取麦克风失败");
+          console.log("Recording failed.", error);
+        });
+    },
+    //暂停语音
+    cancel_mp3: function () {
+      rc.pause();
+    },
+    //取消语音
+    // cancel: function() {
+    //   rc.clear();
+
+    // },
+    //播放语音
+    // play_mp3:function(){
+    //   var wav = rc.getRecord({
+    //   encodeTo: ENCODE_TYPE.WAV,
+    //   compressible: true
+    // });
+    // document.getElementById('audio').src = URL.createObjectURL(wav);
+    // },
+    //发送语音
+    send_voice: function () {
+      let that = this;
+      var wav = rc.getRecord({
+        encodeTo: ENCODE_TYPE.WAV,
+        compressible: true,
+      });
+      var uuid = this.uuid;
+      if (this.chatList != "") {
+        var end_time = this.chatList[this.chatList.length - 1].addtime;
+      }
+      var formData = new FormData();
+      // formData.append('file',wav);
+      formData.append("topic_id", uuid);
+      formData.append("last_time", end_time);
+      formData.append("type", 4);
+      formData.append("file", wav, Date.parse(new Date()) + ".wav");
+      let headers = { headers: { "Content-Type": "multipart/form-data" } };
+
+      axios.defaults.withCredentials = true;
+      axios
+        .post(this.https + "/admin/api/send_reply", formData, headers)
+        .then((data) => {
+          that.news_img = !that.news_img;
+          // this.reload();
+          rc.clear();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
 };
 </script>
@@ -284,7 +370,7 @@ export default {
     margin-bottom: 0px;
   }
   #emojiBtn:hover {
-    background-color: white;
+    background-color: rgb(255, 255, 255);
   }
   .upload-btn {
     display: inline-block;

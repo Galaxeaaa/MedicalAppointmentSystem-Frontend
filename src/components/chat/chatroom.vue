@@ -163,7 +163,7 @@ export default {
   margin: 20px auto;
   width: 900px;
   height: 650px;
-  // overflow: hidden;
+  overflow: hidden;
   border-radius: 10px;
   .sidebar,
   .main,

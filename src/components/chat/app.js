@@ -1846,8 +1846,8 @@ var appData = __webpack_require__(/*! ../../utils/emoji.json */ "./src/utils/emo
       if (this.currentSession.username == "群聊") {
         this.$store.state.stomp.send("/ws/groupChat", {}, JSON.stringify(msgObj));
       } else {
-        msgObj.from = this.$store.state.currentUser.username;
-        msgObj.fromNickname = this.$store.state.currentUser.nickname;
+        msgObj.from = this.$store.state.currentUser.id;
+        msgObj.fromNickname = this.$store.state.currentUser.name;
         msgObj.to = this.currentSession.username;
         this.$store.state.stomp.send("/ws/chat", {}, JSON.stringify(msgObj)); //提交私聊消息记录
 

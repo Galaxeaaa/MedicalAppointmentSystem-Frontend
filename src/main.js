@@ -9,6 +9,10 @@ import "./assets/styles/reset.css";
 // 引入样式重置的css样式
 import axios from 'axios'
 import Axios from 'axios'
+//语音聊天
+import Recorderx, { ENCODE_TYPE } from "recorderx";
+const rc = new Recorderx();
+
 Vue.prototype.$ajax = axios
 Vue.prototype.$axios = Axios
 Axios.defaults.baseURL = '/api'
