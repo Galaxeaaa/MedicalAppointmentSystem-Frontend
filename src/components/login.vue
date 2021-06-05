@@ -51,9 +51,11 @@
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button @click="clickLogon" class="el-button--success is-round"
-              >注册</el-button
-            >
+            <el-checkbox label="我已阅读并同意协议内容" v-model="agree">
+            </el-checkbox>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="clickLogon" class="el-button--success is-round">注册</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -93,6 +95,7 @@ export default {
       showLogin: false,
       showLogon: false,
       showDoctorLogin: false,
+      agree: false,
       loginForm: {
         username: "",
         password: "",
@@ -159,13 +162,17 @@ export default {
       this._clickLogon(this);
     },
     _clickLogon(obj) {
+      if (!this.agree) {
+        alert("请先阅读并同意协议内容！")
+        return
+      }
       if (this.logonForm.password !== this.logonForm.confirmPassword) {
         alert("请确保两次输入的密码一致！");
         return;
       }
       axios({
         method: "get",
-        url: "/register/checkname?id=" + this.logonForm.username,
+        url: "/register/checkname?name=" + this.logonForm.username,
       }).then(function (response) {
         if (response == true) {
           alert("用户名已被占用！");
@@ -175,7 +182,7 @@ export default {
       axios({
         method: "get",
         url:
-          "/register?id=" +
+          "/register?name=" +
           this.logonForm.username +
           "&password=" +
           this.logonForm.password,
