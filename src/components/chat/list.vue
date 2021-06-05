@@ -97,11 +97,11 @@ export default {
       if(!this.$store.state.sessions[this.$store.state.currentUser.id + "#" + currentSession.id]){
         this.$axios.get("/chat/getHistoryMsg?selfid="+this.$store.state.currentUser.id+"&id="+currentSession.id).then((res) => {
               res.data.forEach((msg,i) => {
-              console.log("%%%"+this.$store.state.currentUser.id + "#" + msg, msg.msg_time);
-              if(!this.$store.state.sessions[this.$store.state.currentUser.id + "#" + msg.src]){
-                Vue.set(this.$store.state.sessions, this.$store.state.currentUser.id + "#" + msg.src, []);
-              }
               if(msg.src==this.$store.state.currentUser.id){
+                if(!this.$store.state.sessions[this.$store.state.currentUser.id + "#" + msg.dest]){
+                    Vue.set(this.$store.state.sessions, this.$store.state.currentUser.id + "#" + msg.dest, []);
+                }
+                console.log(this.$store.state.currentUser.id + "#" + msg.dest)
                 this.$store.state.sessions[this.$store.state.currentUser.id + "#" + msg.dest].push({
                   content: msg.content,
                   date: msg.msg_time,
@@ -111,6 +111,9 @@ export default {
                   })
               }
               else{
+                if(!this.$store.state.sessions[this.$store.state.currentUser.id + "#" + msg.src]){
+                    Vue.set(this.$store.state.sessions, this.$store.state.currentUser.id + "#" + msg.src, []);
+                }
                 this.$store.state.sessions[this.$store.state.currentUser.id + "#" + msg.src].push({
                   content: msg.content,
                   date: msg.msg_time,

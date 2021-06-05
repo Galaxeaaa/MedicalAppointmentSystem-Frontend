@@ -29,7 +29,7 @@
       <!-- 上传图片 -->
       <el-upload
         class="upload-btn"
-        action="/file"
+        action="/chat/file"
         :before-upload="beforeAvatarUpload"
         :on-success="imgSuccess"
         :on-error="imgError"
@@ -208,24 +208,40 @@ export default {
     },
     // 图片上传成功
     imgSuccess(response, file, fileList) {
-      console.log("图片url为：" + response);
-      let msgObj = new Object();
-      msgObj.content = response;
-      //设置消息类型为图片
-      msgObj.messageTypeId = 2;
-      if (this.currentSession.username == "群聊") {
-        this.$store.state.stomp.send(
-          "/ws/groupChat",
-          {},
-          JSON.stringify(msgObj)
-        );
-      } else {
-        msgObj.from = this.$store.state.currentUser.username;
-        msgObj.fromNickname = this.$store.state.currentUser.nickname;
-        msgObj.to = this.currentSession.username;
-        this.$store.state.stomp.send("/ws/chat", {}, JSON.stringify(msgObj));
-        //提交私聊消息记录
-        this.$store.commit("addMessage", msgObj);
+      console.log("FileName为："+response[0]);
+      console.log("图片url为："+response[1]);
+      // console.log("图片url为：" + response);
+      // let msgObj = new Object();
+      // msgObj.content = response;
+      // //设置消息类型为图片
+      // msgObj.messageTypeId = 2;
+      // if (this.currentSession.username == "群聊") {
+      //   this.$store.state.stomp.send(
+      //     "/ws/groupChat",
+      //     {},
+      //     JSON.stringify(msgObj)
+      //   );
+      // } else {
+      //   msgObj.from = this.$store.state.currentUser.username;
+      //   msgObj.fromNickname = this.$store.state.currentUser.nickname;
+      //   msgObj.to = this.currentSession.username;
+      //   this.$store.state.stomp.send("/ws/chat", {}, JSON.stringify(msgObj));
+      //   //提交私聊消息记录
+      //   this.$store.commit("addMessage", msgObj);
+      this.$axios.post("/chat/sendMessage?from="+this.$store.state.currentUser.id+"&name="+this.$store.state.currentUser.name+
+      "&dest="+this.currentSession.id+"&content="+response[0]+"&time="+new Date()+"&type=2")
+      .then((res) => {
+        if(!this.$store.state.sessions[this.$store.state.currentUser.id + "#" + this.$store.state.currentSession.id]){
+          Vue.set(this.$store.state.sessions, this.$store.state.currentUser.id + "#" + this.$store.state.currentSession.id, []);
+        }
+        this.$store.state.sessions[this.$store.state.currentUser.id + "#" + this.$store.state.currentSession.id].push({
+				  content: response[1],
+				  date: new Date(),
+				  fromNickname: this.$store.state.currentUser.name,
+				  messageTypeId: 2,
+				  self: true
+			  })
+      })
       }
     },
     // 图片上传失败
