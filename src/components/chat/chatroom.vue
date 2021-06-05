@@ -92,23 +92,23 @@ export default {
         .then((res) => {
           res.data.forEach((msg, i) => {
             console.log(
-              "@@@" + this.$store.state.currentUser.id + "#" + msg.src_id
+              "@@@" + this.$store.state.currentUser.id + "#" + msg.src
             );
             if (
               !this.$store.state.sessions[
-                this.$store.state.currentUser.id + "#" + msg.src_id
+                this.$store.state.currentUser.id + "#" + msg.src
               ]
             ) {
               Vue.set(
                 this.$store.state.sessions,
-                this.$store.state.currentUser.id + "#" + msg.src_id,
+                this.$store.state.currentUser.id + "#" + msg.src,
                 []
               );
             }
             console.log("resv date: " + msg.time);
             console.log(msg);
             this.$store.state.sessions[
-              this.$store.state.currentUser.id + "#" + msg.src_id
+              this.$store.state.currentUser.id + "#" + msg.src
             ].push({
               content: msg.content,
               date: msg.time,

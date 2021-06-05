@@ -94,6 +94,34 @@ export default {
       // );
       // //更新当前选中的用户
       // state.currentSession = currentSession;
+      if(!this.$store.state.sessions[this.$store.state.currentUser.id + "#" + currentSession.id]){
+        this.$axios.get("/chat/getHistoryMsg?selfid="+this.$store.state.currentUser.id+"&id="+currentSession.id).then((res) => {
+              res.data.forEach((msg,i) => {
+              console.log("%%%"+this.$store.state.currentUser.id + "#" + msg, msg.msg_time);
+              if(!this.$store.state.sessions[this.$store.state.currentUser.id + "#" + msg.src]){
+                Vue.set(this.$store.state.sessions, this.$store.state.currentUser.id + "#" + msg.src, []);
+              }
+              if(msg.src==this.$store.state.currentUser.id){
+                this.$store.state.sessions[this.$store.state.currentUser.id + "#" + msg.dest].push({
+                  content: msg.content,
+                  date: msg.msg_time,
+                  fromNickname: this.$store.state.currentUser.name,
+                  messageTypeId: msg.type,
+                  self: true
+                  })
+              }
+              else{
+                this.$store.state.sessions[this.$store.state.currentUser.id + "#" + msg.src].push({
+                  content: msg.content,
+                  date: msg.msg_time,
+                  fromNickname: msg.name,
+                  messageTypeId: msg.type,
+                  self: false
+                })
+              }
+              });
+        })
+      }
     },
   },
 };
