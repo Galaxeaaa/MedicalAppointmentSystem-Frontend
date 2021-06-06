@@ -246,7 +246,7 @@ export default {
           .get("/do/getinfo/usr?id=" + this.$store.state.userid)
           //   .get("/do/getinfo/usr?id=123")
           .then((res) => {
-            this.info = res[0];
+            this.info = res.data[0];
             this.$store.commit("setUsername", this.info.name);
             console.log(this.$store.state.username);
           })
@@ -258,7 +258,7 @@ export default {
           .get("/do/getinfo/doctor?id=" + this.$store.state.userid)
           //   .get("/do/getinfo/doctor?id=008")
           .then((res) => {
-            this.info = res[0];
+            this.info = res.data[0];
             this.$store.commit("setUsername", this.info.name);
             console.log(this.$store.state.username);
           })

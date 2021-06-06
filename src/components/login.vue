@@ -153,7 +153,6 @@ export default {
           "&password=" +
           obj.loginForm.password,
       }).then(function (response) {
-        alert(response.data)
         if (response.data == true) {
           obj.$store.commit("setUserId", obj.loginForm.username);
           obj.$store.commit("setIsDoctor", obj.showDoctorLogin);

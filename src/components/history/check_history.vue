@@ -1,12 +1,12 @@
 <template>
   <div id="checkHistory">
-    <el-form :inline="true" :model="formInline" class="demo-form-inline">
-      <!-- <el-form-item>
+    <!-- <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form-item>
         <el-input
           v-model="formInline.userName"
           placeholder="请输入患者姓名"
         ></el-input>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item>
         <el-date-picker
           v-model="formInline.date"
@@ -26,13 +26,14 @@
       <el-form-item>
         <el-button icon="el-icon-search" circle></el-button>
       </el-form-item>
-    </el-form>
+    </el-form> -->
 
     <el-table :data="historyData" style="width: 100%">
       <el-table-column prop="doctor" label="主治医师"> </el-table-column>
       <el-table-column prop="case_name" label="患病信息"> </el-table-column>
       <el-table-column prop="advice" label="医嘱信息"> </el-table-column>
-      <el-table-column prop="check_state" label="检验结果核查"> </el-table-column>
+      <el-table-column prop="check_state" label="检验结果核查">
+      </el-table-column>
       <el-table-column prop="op_record" label="手术记录"> </el-table-column>
       <el-table-column prop="nur_record" label="护理记录"> </el-table-column>
     </el-table>
@@ -87,7 +88,7 @@ export default {
         .get("/do/history/gethistory?id=" + this.$store.state.userid)
         // .get("/do/history/gethistory?id=123")
         .then((res) => {
-          this.historyData = res;
+          this.historyData = res.data;
           console.log("Current username: " + this.$store.state.username);
           //   console.log(this.historyData)
         })
@@ -107,15 +108,13 @@ export default {
   },
   computed: {
     tables() {
-      return this.historyData;
-      //   .filter((item) => {
-      //     return
-      //   item.conName.includes(this.formInline.userName) &&
-      //   item.insp.includes(this.formInline.item) &&
-      //   item.seektime.includes(
-      //     this.formInline.date == null ? "" : this.formInline.date
-      //   )
-      //   });
+      return this.historyData.filter((item) => {
+        return (
+          item.rep_time.includes(
+            this.formInline.date == null ? "" : this.formInline.date
+          )
+        );
+      });
     },
     //根据查询条件过滤报告列表数据
   },

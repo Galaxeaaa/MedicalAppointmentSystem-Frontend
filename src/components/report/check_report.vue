@@ -17,7 +17,7 @@
         >
         </el-date-picker>
       </el-form-item>
-      <el-form-item>
+      <!-- <el-form-item>
         <el-input
           v-model="formInline.item"
           placeholder="请输入检查项目"
@@ -25,12 +25,17 @@
       </el-form-item>
       <el-form-item>
         <el-button icon="el-icon-search" circle></el-button>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
 
-    <el-table :data="reportData" style="width: 100%">
-      <el-table-column prop="usr_name" label="姓名" width="70"></el-table-column>
-      <el-table-column prop="doctor_name" label="主治医师" width="80"> </el-table-column>
+    <el-table :data="tables" style="width: 100%">
+      <el-table-column
+        prop="usr_name"
+        label="姓名"
+        width="70"
+      ></el-table-column>
+      <el-table-column prop="doctor_name" label="主治医师" width="80">
+      </el-table-column>
       <el-table-column prop="department" label="就诊科室"> </el-table-column>
       <el-table-column prop="disease" label="诊断结果"> </el-table-column>
       <el-table-column prop="disease_descr" label="诊断描述"> </el-table-column>
@@ -39,7 +44,13 @@
         label="检查时间"
         width="180"
       ></el-table-column>
-      <el-table-column prop="reg_state" label="预约状态"> </el-table-column>
+      <el-table-column prop="reg_state" label="预约状态">
+        <template slot-scope="scope">
+          <span>{{
+            scope.row.reg_state == 1 ? "已预约" : "未预约"
+          }}</span></template
+        >
+      </el-table-column>
       <!-- <el-table-column label="性别" width="60">
         <template slot-scope="scope">
           <span>{{ scope.row.gender == 1 ? "男" : "女" }}</span>
@@ -120,12 +131,17 @@ export default {
     }, //点击分页时改变当前页码，重新请求数据
     getReportList() {
       this.$axios
-        .get("/do/report/getreports?usr=" + this.$store.state.userid + "&role=" + this.$store.state.role)
+        .get(
+          "/do/report/getreports?usr=" +
+            this.$store.state.userid +
+            "&role=" +
+            this.$store.state.role
+        )
         // .get("/do/report/getreports?usr=008&role=doctor")
         .then((res) => {
-          this.reportData = res;
+          this.reportData = res.data;
           console.log("Current username: " + this.$store.state.userid);
-		  console.log(this.reportData)
+          console.log(this.reportData);
         })
         .catch(function (error) {
           console.log(error);
@@ -143,15 +159,11 @@ export default {
   },
   computed: {
     tables() {
-      return this.reportData;
-      //   .filter((item) => {
-      //     return
-      //   item.conName.includes(this.formInline.userName) &&
-      //   item.insp.includes(this.formInline.item) &&
-      //   item.seektime.includes(
-      //     this.formInline.date == null ? "" : this.formInline.date
-      //   )
-      //   });
+      return this.reportData.filter((item) => {
+        return item.rep_time.includes(
+          this.formInline.date == null ? "" : this.formInline.date
+        );
+      });
     },
     //根据查询条件过滤报告列表数据
   },
