@@ -154,6 +154,26 @@
                 <el-input v-model="info.name" maxlength="20"></el-input>
               </el-form-item>
             </el-form>
+            <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="出生年月">
+                <el-input v-model="info.birth_date" maxlength="20"></el-input>
+              </el-form-item>
+            </el-form>
+            <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="性别">
+                <el-input v-model="info.gender" maxlength="20"></el-input>
+              </el-form-item>
+            </el-form>
+            <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="电话">
+                <el-input v-model="info.tel" maxlength="20"></el-input>
+              </el-form-item>
+            </el-form>
+            <el-form ref="ruleForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="住址">
+                <el-input v-model="info.address" maxlength="20"></el-input>
+              </el-form-item>
+            </el-form>
           </el-col>
         </el-row>
       </el-main>
