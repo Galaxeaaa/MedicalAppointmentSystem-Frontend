@@ -39,12 +39,12 @@ module.exports = {
             },
             "/ws": {
                 ws: true,
-                target: "ws://localhost:8082"
+                target: "ws://localhost:8080"
             },
 
             "/": {
                 ws: false,
-                target: 'http://localhost:8082',
+                target: 'http://localhost:8080',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/': ''

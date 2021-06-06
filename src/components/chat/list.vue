@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import Vue from "vue";
 import { mapState } from "vuex";
 
 export default {
@@ -93,7 +94,7 @@ export default {
       //   false
       // );
       // //更新当前选中的用户
-      // state.currentSession = currentSession;
+      //this.$store.state.currentSession = currentSession;
       if(!this.$store.state.sessions[this.$store.state.currentUser.id + "#" + currentSession.id]){
         this.$axios.get("/chat/getHistoryMsg?selfid="+this.$store.state.currentUser.id+"&id="+currentSession.id).then((res) => {
               res.data.forEach((msg,i) => {

@@ -111,7 +111,7 @@ export default {
               this.$store.state.currentUser.id + "#" + msg.src
             ].push({
               content: msg.content,
-              date: msg.time,
+              date: msg.msg_time,
               fromNickname: msg.name,
               messageTypeId: msg.type,
               self: false,

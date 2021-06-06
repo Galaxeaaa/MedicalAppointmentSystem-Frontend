@@ -41,19 +41,19 @@
           icon="el-icon-picture-outline"
         ></el-button>
       </el-upload>
-      <!-- 语音 -->
+      <!-- 语音
       <i
         class="el-icon-microphone"
         @click="handleBtnClick"
-      ></i>
+      ></i>-->
       <!-- <audio controls autoplay id="audio"></audio> -->
-      <ButtonGroup
+      <!--<ButtonGroup
         size="small"
         v-show="news_img"
-      >
+      >-->
         <!-- <Button @click="play_mp3">播放</Button> -->
-        <Button @click="send_voice">发送</Button>
-        <Button @click="cancel_mp3">停止</Button>
+        <!-- <Button @click="send_voice">发送</Button> -->
+        <!-- <Button @click="cancel_mp3">停止</Button> -->
         <!-- <Button @click="cancel">取消</Button> -->
       </ButtonGroup>
     </div>
@@ -170,7 +170,7 @@ export default {
       //   //提交私聊消息记录
       //   this.$store.commit('addMessage',msgObj);
       // }
-      清空输入框;
+      //清空输入框;
       this.content = "";
     },
     addMessage(e) {
@@ -242,7 +242,6 @@ export default {
 				  self: true
 			  })
       })
-      }
     },
     // 图片上传失败
     imgError(err, file, fileList) {
@@ -271,24 +270,24 @@ export default {
       // console.log(this.faceList[index]);
       return;
     },
-    //录制语音
-    handleBtnClick: function () {
-      let that = this;
-      // that.news_img = !that.news_img
-      rc.start()
-        .then(() => {
-          that.news_img = !that.news_img;
-          console.log("start recording");
-        })
-        .catch((error) => {
-          alert("获取麦克风失败");
-          console.log("Recording failed.", error);
-        });
-    },
-    //暂停语音
-    cancel_mp3: function () {
-      rc.pause();
-    },
+    // //录制语音
+    // handleBtnClick: function () {
+    //   let that = this;
+    //   // that.news_img = !that.news_img
+    //   rc.start()
+    //     .then(() => {
+    //       that.news_img = !that.news_img;
+    //       console.log("start recording");
+    //     })
+    //     .catch((error) => {
+    //       alert("获取麦克风失败");
+    //       console.log("Recording failed.", error);
+    //     });
+    // },
+    // //暂停语音
+    // cancel_mp3: function () {
+    //   rc.pause();
+    // },
     //取消语音
     // cancel: function() {
     //   rc.clear();
@@ -303,36 +302,36 @@ export default {
     // document.getElementById('audio').src = URL.createObjectURL(wav);
     // },
     //发送语音
-    send_voice: function () {
-      let that = this;
-      var wav = rc.getRecord({
-        encodeTo: ENCODE_TYPE.WAV,
-        compressible: true,
-      });
-      var uuid = this.uuid;
-      if (this.chatList != "") {
-        var end_time = this.chatList[this.chatList.length - 1].addtime;
-      }
-      var formData = new FormData();
-      // formData.append('file',wav);
-      formData.append("topic_id", uuid);
-      formData.append("last_time", end_time);
-      formData.append("type", 4);
-      formData.append("file", wav, Date.parse(new Date()) + ".wav");
-      let headers = { headers: { "Content-Type": "multipart/form-data" } };
+    // send_voice: function () {
+    //   let that = this;
+    //   var wav = rc.getRecord({
+    //     encodeTo: ENCODE_TYPE.WAV,
+    //     compressible: true,
+    //   });
+    //   var uuid = this.uuid;
+    //   if (this.chatList != "") {
+    //     var end_time = this.chatList[this.chatList.length - 1].addtime;
+    //   }
+    //   var formData = new FormData();
+    //   // formData.append('file',wav);
+    //   formData.append("topic_id", uuid);
+    //   formData.append("last_time", end_time);
+    //   formData.append("type", 4);
+    //   formData.append("file", wav, Date.parse(new Date()) + ".wav");
+    //   let headers = { headers: { "Content-Type": "multipart/form-data" } };
 
-      axios.defaults.withCredentials = true;
-      axios
-        .post(this.https + "/admin/api/send_reply", formData, headers)
-        .then((data) => {
-          that.news_img = !that.news_img;
-          // this.reload();
-          rc.clear();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
+    //   axios.defaults.withCredentials = true;
+    //   axios
+    //     .post(this.https + "/admin/api/send_reply", formData, headers)
+    //     .then((data) => {
+    //       that.news_img = !that.news_img;
+    //       // this.reload();
+    //       rc.clear();
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // },
   },
 };
 </script>
