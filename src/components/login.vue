@@ -3,7 +3,7 @@
     <div class="img">
       <div
         class="mask"
-        v-if="showLogin || showLogon || showDoctorLogin"
+        v-if="showLogin || showLogon || showDoctorLogin || showDoctorLogon"
         @click="clear"
       ></div>
       <div class="login_dialog" v-if="showLogin || showDoctorLogin">
@@ -28,7 +28,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="logon_dialog" v-if="showLogon">
+      <div class="logon_dialog" v-if="showLogon || showDoctorLogon">
         <el-form ref="logonForm" :model="logonForm" :rules="logonRules">
           <el-form-item label="用户名" prop="username">
             <el-input
@@ -68,6 +68,9 @@
           <el-button type="success" @click="showLogon = true"
             >患者注册</el-button
           >
+          <el-button type="success" @click="showDoctorLogon = true"
+            >医生注册</el-button
+          >
           <el-button type="primary" @click="showDoctorLogin = true"
             >医生登录</el-button
           >
@@ -95,6 +98,7 @@ export default {
       showLogin: false,
       showLogon: false,
       showDoctorLogin: false,
+      showDoctorLogon: false,
       agree: false,
       loginForm: {
         username: "",
@@ -145,11 +149,12 @@ export default {
         url:
           (obj.showDoctorLogin?"/login_doc":"/login_usr")+
           "?id=" +
-          this.loginForm.username +
+          obj.loginForm.username +
           "&password=" +
-          this.loginForm.password,
+          obj.loginForm.password,
       }).then(function (response) {
-        if (response == true) {
+        alert(response.data)
+        if (response.data == true) {
           obj.$store.commit("setUserId", obj.loginForm.username);
           obj.$store.commit("setIsDoctor", obj.showDoctorLogin);
           obj.$router.push("/login_success");
@@ -162,17 +167,17 @@ export default {
       this._clickLogon(this);
     },
     _clickLogon(obj) {
-      if (!this.agree) {
+      if (!obj.agree) {
         alert("请先阅读并同意协议内容！")
         return
       }
-      if (this.logonForm.password !== this.logonForm.confirmPassword) {
+      if (obj.logonForm.password !== obj.logonForm.confirmPassword) {
         alert("请确保两次输入的密码一致！");
         return;
       }
       axios({
         method: "get",
-        url: "/register/checkname?name=" + this.logonForm.username,
+        url: "/register_" + (obj.showDoctorLogon ? "doc" : "usr") + "/checkname?name=" + obj.logonForm.username,
       }).then(function (response) {
         if (response == true) {
           alert("用户名已被占用！");
@@ -182,10 +187,10 @@ export default {
       axios({
         method: "get",
         url:
-          "/register?name=" +
-          this.logonForm.username +
+          "/register_" + (obj.showDoctorLogon ? "doc" : "usr") + "?name=" +
+          obj.logonForm.username +
           "&password=" +
-          this.logonForm.password,
+          obj.logonForm.password,
       }).then(function (response) {
         if (response == true) {
           alert("注册成功！");
@@ -197,6 +202,7 @@ export default {
       this.showLogin = false;
       this.showLogon = false;
       this.showDoctorLogin = false;
+      this.showDoctorLogon = false;
       this.loginForm.username = "";
       this.loginForm.password = "";
       this.logonForm.username = "";
