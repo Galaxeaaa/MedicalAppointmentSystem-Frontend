@@ -29,8 +29,11 @@
     </el-form> -->
 
     <el-table :data="historyData" style="width: 100%">
+      <el-table-column prop="time" label="时间"> </el-table-column>
+      <el-table-column prop="department" label="科室"> </el-table-column>
       <el-table-column prop="doctor" label="主治医师"> </el-table-column>
       <el-table-column prop="case_name" label="患病信息"> </el-table-column>
+      <el-table-column prop="detail" label="详情"> </el-table-column>
       <el-table-column prop="advice" label="医嘱信息"> </el-table-column>
       <el-table-column prop="check_state" label="检验结果核查">
       </el-table-column>
@@ -109,10 +112,8 @@ export default {
   computed: {
     tables() {
       return this.historyData.filter((item) => {
-        return (
-          item.rep_time.includes(
-            this.formInline.date == null ? "" : this.formInline.date
-          )
+        return item.rep_time.includes(
+          this.formInline.date == null ? "" : this.formInline.date
         );
       });
     },

@@ -23,7 +23,7 @@
                         <i class="el-icon-s-order"></i>
                         <span slot="title">报告单</span>
                     </el-menu-item>
-                    <el-menu-item index="/person/history">
+                    <el-menu-item v-if="!this.$store.state.isdoctor" index="/person/history">
                         <i class="el-icon-s-order"></i>
                         <span slot="title">电子病历</span>
                     </el-menu-item>
@@ -37,14 +37,14 @@
                     </el-menu-item>
                 </el-menu>
             </el-col>
-            <div class="user">
-              <!-- <div> -->
+            <!-- <div class="user">
+              <div>
               <el-avatar
                 src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
               ></el-avatar>
               <em>姓名</em>
-              <!-- </div> -->
-            </div>
+              </div>
+            </div> -->
           </el-row>
           <!-- </div> -->
         </el-col>

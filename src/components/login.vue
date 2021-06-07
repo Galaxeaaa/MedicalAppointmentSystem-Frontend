@@ -55,7 +55,9 @@
             </el-checkbox>
           </el-form-item>
           <el-form-item>
-            <el-button @click="clickLogon" class="el-button--success is-round">注册</el-button>
+            <el-button @click="clickLogon" class="el-button--success is-round"
+              >注册</el-button
+            >
           </el-form-item>
         </el-form>
       </div>
@@ -68,11 +70,11 @@
           <el-button type="success" @click="showLogon = true"
             >患者注册</el-button
           >
-          <el-button type="success" @click="showDoctorLogon = true"
-            >医生注册</el-button
-          >
           <el-button type="primary" @click="showDoctorLogin = true"
             >医生登录</el-button
+          >
+          <el-button type="success" @click="showDoctorLogon = true"
+            >医生注册</el-button
           >
           <el-button type="success" @click="$router.push('/login_success')"
             >测试入口</el-button
@@ -147,7 +149,7 @@ export default {
       axios({
         method: "get",
         url:
-          (obj.showDoctorLogin?"/login_doc":"/login_usr")+
+          (obj.showDoctorLogin ? "/login_doc" : "/login_usr") +
           "?id=" +
           obj.loginForm.username +
           "&password=" +
@@ -167,8 +169,8 @@ export default {
     },
     _clickLogon(obj) {
       if (!obj.agree) {
-        alert("请先阅读并同意协议内容！")
-        return
+        alert("请先阅读并同意协议内容！");
+        return;
       }
       if (obj.logonForm.password !== obj.logonForm.confirmPassword) {
         alert("请确保两次输入的密码一致！");
@@ -176,9 +178,13 @@ export default {
       }
       axios({
         method: "get",
-        url: "/register_" + (obj.showDoctorLogon ? "doc" : "usr") + "/checkname?name=" + obj.logonForm.username,
+        url:
+          "/register_" +
+          (obj.showDoctorLogon ? "doc" : "usr") +
+          "/checkname?name=" +
+          obj.logonForm.username,
       }).then(function (response) {
-        if (response == true) {
+        if (response.data == true) {
           alert("用户名已被占用！");
           return;
         }
@@ -186,12 +192,14 @@ export default {
       axios({
         method: "get",
         url:
-          "/register_" + (obj.showDoctorLogon ? "doc" : "usr") + "?name=" +
+          "/register_" +
+          (obj.showDoctorLogon ? "doc" : "usr") +
+          "?name=" +
           obj.logonForm.username +
           "&password=" +
           obj.logonForm.password,
       }).then(function (response) {
-        if (response == true) {
+        if (response.data == true) {
           alert("注册成功！");
           obj.$router.push("/login");
         }

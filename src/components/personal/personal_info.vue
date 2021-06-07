@@ -210,7 +210,8 @@ export default {
         str="/do/addinfo/usr?"+
         "id=" + this.info.id +
         "&name=" + this.info.name +
-        "&graph=" + this.info.graph +
+        // "&graph=" + this.info.graph +
+        "&graph=" + "https://bkimg.cdn.bcebos.com/pic/8644ebf81a4c510fbcac0d126e59252dd42aa54a" +
         "&birth_date=" + dt +
         "&gender=" + this.info.gender +
         "&tel=" + this.info.tel +
