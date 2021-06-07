@@ -1,10 +1,13 @@
 <template>
     <div id="hospitalizationList">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
+
             <el-form-item>
-                <el-input v-model="formInline.doctorame"
+                <el-input v-model="formInline.doctorname"
                           placeholder="请输入医生姓名"></el-input>
             </el-form-item>
+
+<!--
             <el-form-item>
                 <el-date-picker v-model="formInline.date"
                                 type="date"
@@ -13,44 +16,64 @@
                                 value-format="yyyy-MM-dd">
                 </el-date-picker>
             </el-form-item>
+-->
+
             <el-form-item>
                 <el-input v-model="formInline.departmentname"
                           placeholder="请输入科室"></el-input>
             </el-form-item>
+
+
             <el-form-item>
                 <el-input v-model="formInline.hospitalname"
                           placeholder="请输入医院"></el-input>
             </el-form-item>
+
+
             <el-form-item>
                 <el-button icon="el-icon-search" circle></el-button>
             </el-form-item>
+
+            
         </el-form>
         <el-table :data="tables"
                   style="width: 100%"
                   @selection-change="handleSelectionChange"
                   ref="multipleTable">
             <el-table-column type="selection" width="55"> </el-table-column>
+
+
             <el-table-column label="医生姓名">
                 <template slot-scope="scope">
-                    <el-link type="primary" >{{ scope.row.doctorname }}</el-link>
+                    <el-link type="primary" @click="gotoDoctor(scope.row.doctorname)">
+                      {{ scope.row.doctorname }}
+                    </el-link>
                 </template>
             </el-table-column>
+
+
             <el-table-column label="科室">
                 <template slot-scope="scope">
-                    <el-link type="primary" >{{ scope.row.departmentinfo.departmentname }}</el-link>
+                    <el-link type="primary" @click="gotoDepartment(scope.row.departmentinfo.departmentname)">
+                      {{ scope.row.departmentinfo.departmentname }}
+                    </el-link>
                 </template>
             </el-table-column>
+
+
             <el-table-column label="医院">
                 <template slot-scope="scope">
-                    <el-link type="primary" >{{ scope.row.hospitalinfo.hospitalname }}</el-link>
+                    <el-link type="primary" @click="gotoHospital(scope.row.hospitalinfo.hospitalname)" >
+                      {{ scope.row.hospitalinfo.hospitalname }}
+                    </el-link>
                 </template>
             </el-table-column>
+
+
             <el-table-column prop="age" label="年龄">
                 <template slot-scope="scope">
                     <span>
-                        {{
-            new Date().getFullYear() - scope.row.birthday.split("-")[0]
-                        }}
+                        {{ new Date().getFullYear() - scope.row.birthday.split("-")[0]}}
                     </span>
                 </template>
             </el-table-column>
@@ -60,11 +83,15 @@
                     <span>{{ scope.row.star }}</span>
                 </template>
             </el-table-column>
+
+
             <el-table-column label="职称">
                 <template slot-scope="scope">
                     <span>{{ scope.row.heading }}</span>
                 </template>
             </el-table-column>
+
+
             <el-table-column prop="done" label="预约挂号">
                 <template slot-scope="scope">
                     <i class="el-icon-news"
@@ -86,6 +113,8 @@
             "></i>
                 </template>
             </el-table-column>
+
+
         </el-table>
         <!-- 使用element-ui里的表格展示请求到的数据 -->
         <br />
@@ -101,7 +130,7 @@
                        layout="prev, pager, next, jumper"
                        :total="1">
         </el-pagination>
-        <!-- 分页效果 -->
+        
     </div>
 </template>
 <script>export default {
@@ -142,6 +171,35 @@
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+    },
+
+// 20210607 点击跳转逻辑
+    gotoHospital(hp_name) {
+      console.log("goto hospital", hp_name);
+      this.$router.push({
+          name: 'HospitalHomepage',
+          params: {
+            hospitalName: hp_name,
+          }
+        })
+    },
+    gotoDepartment(dp_name) {
+      console.log("goto department", dp_name);
+      this.$router.push({
+          name: 'DepartmentHomepage',
+          params: {
+            departmentName: dp_name,
+          }
+        })
+    },
+    gotoDoctor(dt_name) {
+      console.log("goto doctor", dt_name);
+      this.$router.push({
+          name: 'DoctorHomepage',
+          params: {
+            doctorName: dt_name,
+          }
+        })
     },
 
     getHospitalList() {

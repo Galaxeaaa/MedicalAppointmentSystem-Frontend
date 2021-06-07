@@ -155,10 +155,34 @@ export default {
         })
     },
     getDetail() {
+      // doctorName是用户想要看的医生姓名
+      // 从route获取params之后，需要通过axios获取
       this.doctorName = this.$route.params.doctorName;
 
-      // TODO
+      
+      // ---- a test -----
       this.detailForm.name = this.doctorName;
+      // ---- a test -----
+
+
+      console.log("---a------------------")
+      
+      //////// TEST VERSION ///////
+      // 1. 获取医生基本信息
+      axios({
+        method: 'get',
+        url: 'http://localhost:8080/getDoctorInfo',
+        data: { doctorName : this.doctorName}
+      })
+      .then((res) => {
+        console.log("下面是从axios中获取的data:")
+        console.log(res.data)
+        alert(res.data)
+      })
+      console.log("---b------------------")
+
+
+      // TODO
       // 1.根据doctorName调用数据库接口获取detailForm
       // 2.根据doctorName调用数据库接口获取evalue
     }
