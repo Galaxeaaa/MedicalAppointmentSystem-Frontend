@@ -7,12 +7,12 @@
             <span>{{ entry.date | time }}</span>
           </p>
           <div class="main" :class="{ self: entry.self }">
-            <!-- <p class="username">{{ entry.fromNickname }}</p> -->
-            <img
+            <p class="username">{{ entry.fromNickname }}</p>
+            <!-- <img
               class="avatar"
               :src="entry.self ? user.userProfile : currentSession.userProfile"
               alt=""
-            />
+            /> -->
             <p v-if="entry.messageTypeId == 1" class="text">
               {{ entry.content }}
             </p>
