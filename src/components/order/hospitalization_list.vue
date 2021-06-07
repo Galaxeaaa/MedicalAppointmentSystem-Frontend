@@ -206,7 +206,7 @@
       this.hospitalList = [
         {
           id: 1,
-          doctorname: "王医生",
+          doctorname: "冯磊",
           heading: "主治医师",
           birthday: "1976-05-23 00:00:00",
           comment: null,
@@ -227,7 +227,7 @@
         },
         {
           id: 1,
-          doctorname: "张医生",
+          doctorname: "赵柏惠",
           heading: "主治医师",
           birthday: "1986-05-23 00:00:00",
           comment: null,
@@ -248,7 +248,7 @@
         },
         {
           id: 1,
-          doctorname: "赵医生",
+          doctorname: "章庆松",
           heading: "主治医师",
           birthday: "1979-05-23 00:00:00",
           comment: null,

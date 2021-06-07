@@ -85,6 +85,7 @@
 </template>
 
 <script>
+const axios = require('axios');
 export default {
   data() {
     return {
@@ -108,7 +109,16 @@ export default {
       //  2.11 evalue 患者评价
       // 3. evalue：患者的评价信息
       doctorName: "冯磊",   // 从上一个跳转界面获得的医生姓名
-      detailForm: {     // 从数据库API获得的医生信息
+
+      // 数据库数据
+      dbFrom: {
+        department: "002",
+        email: "tangzy@163.com"
+        graph: "",
+      }
+
+      // detailForm 前端数据
+      detailForm: {
         name: "冯磊",
         title: "主任医师",
         hospital: "浙江大学医学院附属妇产科医院",
@@ -157,34 +167,34 @@ export default {
     getDetail() {
       // doctorName是用户想要看的医生姓名
       // 从route获取params之后，需要通过axios获取
-      this.doctorName = this.$route.params.doctorName;
+      this.doctorName = this.$route.params.doctorName
 
-      
-      // ---- a test -----
-      this.detailForm.name = this.doctorName;
-      // ---- a test -----
 
+      // ---- a test -----
+      this.detailForm.name = this.doctorName
+
+    
 
       console.log("---a------------------")
       
       //////// TEST VERSION ///////
       // 1. 获取医生基本信息
       axios({
-        method: 'get',
-        url: 'http://localhost:8080/getDoctorInfo',
+        method: 'post',
+        url: 'http://localhost:8088/getDoctorInfo',
         data: { doctorName : this.doctorName}
       })
       .then((res) => {
         console.log("下面是从axios中获取的data:")
         console.log(res.data)
-        alert(res.data)
+        if(!res.data) {
+          console.log("结果为空！")
+          alert("抱歉，该医生不存在!")
+        } else {
+          this.dbFrom = res.data
+        }
       })
       console.log("---b------------------")
-
-
-      // TODO
-      // 1.根据doctorName调用数据库接口获取detailForm
-      // 2.根据doctorName调用数据库接口获取evalue
     }
   }
 };
