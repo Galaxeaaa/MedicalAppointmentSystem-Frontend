@@ -1,21 +1,34 @@
 <template>
-  <div id="personal">
+  <div id="report">
     <div class="nav">
-      <el-button class="check_tab"> 个人信息</el-button>
+        <el-button
+          @click="check"
+          :class="['tab', flag == 'check' ? 'check_tab' : '']"
+        >
+          病历查询
+        </el-button>
     </div>
     <router-view class="content"> </router-view>
+    <!-- 定义报告查询入口组件，里面分为查询页面和添加页面，点击相应按钮执行路由的跳转 -->
   </div>
 </template>
 <script>
 export default {
   data() {
-    return {};
+    return {
+      flag: "check",
+    };
   },
-  methods: {},
+  methods: {
+    check() {
+      this.$router.push({ path: "/person/history/check" });
+      this.flag = "check";
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
-#personal {
+#report {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -23,12 +36,12 @@ export default {
     height: 42px;
   }
   .tab {
-    color: #333;
+    color: #000;
     background: url(../../assets/img/title_bg.png) 0 -55px no-repeat;
     // display: inline-block;
     width: 150px;
     height: 42px;
-    // line-height: 42px;
+    // line-height: 40px;
     text-align: center;
   }
   .check_tab {

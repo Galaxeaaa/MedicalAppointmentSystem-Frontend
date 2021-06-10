@@ -21,6 +21,10 @@
                     </el-menu-item>
                     <el-menu-item index="/person/report">
                         <i class="el-icon-s-order"></i>
+                        <span slot="title">报告单</span>
+                    </el-menu-item>
+                    <el-menu-item index="/person/history">
+                        <i class="el-icon-s-order"></i>
                         <span slot="title">电子病历</span>
                     </el-menu-item>
                     <el-menu-item index="/person/chat">
@@ -91,6 +95,7 @@ export default {
     //     }
     //   });
 	  this.$router.push({path: '/'});
+	  this.$store.state.username = ''
     },
     //  退出登录方法
   },

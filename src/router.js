@@ -15,14 +15,18 @@ import checkReport from "./components/report/check_report.vue";
 import addReport from "./components/report/add_report.vue";
 import detailReport from "./components/report/detail_report.vue";
 
+import History from "./components/history/index.vue"
+import checkHistory from "./components/history/check_history.vue";
+
 import Chat from "./components/chat/index.vue";
 import chatRoom from "./components/chat/chatroom.vue";
-import card from "./components/chat/card.vue";
-import chattitle from "./components/chat/chattitle.vue";
-import list from "./components/chat/list.vue";
-import message from "./components/chat/message.vue";
-import toolbar from "./components/chat/toolbar.vue";
-import usertext from "./components/chat/usertext.vue";
+import comment from "./components/chat/comment";
+// import card from "./components/chat/card.vue";
+// import chattitle from "./components/chat/chattitle.vue";
+// import list from "./components/chat/list.vue";
+// import message from "./components/chat/message.vue";
+// import toolbar from "./components/chat/toolbar.vue";
+// import usertext from "./components/chat/usertext.vue";
 
 import Hospitalization from "./components/order/index.vue";
 import hospitalizationList from "./components/order/hospitalization_list.vue";
@@ -88,6 +92,17 @@ export default new Router({
 					]
 				},
 				{
+					path: 'history',
+					component: History,
+					redirect: '/person/history/check',
+					children: [
+						{
+							path: 'check',
+							component: checkHistory
+						},
+					]
+				},
+				{
 					path: 'chat',
 					component: Chat,
 					redirect: '/person/chat/chatroom',
@@ -96,6 +111,10 @@ export default new Router({
 							path: 'chatroom',
 							component: chatRoom
 							// hidden:true
+						},
+						{
+							path: 'comment',
+							component: comment
 						}
 						// {
 						// 	path:'card',

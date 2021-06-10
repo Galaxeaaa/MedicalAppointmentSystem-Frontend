@@ -149,27 +149,22 @@ export default {
     };
   },
 
-  mounted() {
+  created() {
     this.getReportMessage();
   },
 
   methods: {
     getReportMessage() {
       this.$axios
-        .get("/do/report/getreports?usr=" + "008" + "&role=doctor")
+        // .get("/do/report/getreports?usr=" + this.$store.state.username + "&role=doctor")
+        .get("/do/history/gethistory?name=123")
         .then((res) => {
-          this.reportData = res.data;
+          this.reportData = res;
           console.log(this.reportData);
         })
         .catch(function (error) {
           console.log(error);
         });
-      this.$http("/ds1/checkreport/getCheckDetailById", "post", {
-        checkId: this.checkId,
-      }).then((res) => {
-        console.log(res);
-        this.reportMessage = res.result;
-      });
     },
     //获取报告详情数据
 

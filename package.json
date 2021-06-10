@@ -7,11 +7,14 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/vue-fontawesome": "^2.0.2",
     "build": "^0.1.4",
     "core-js": "^3.6.4",
     "element-ui": "^2.15.1",
     "font-awesome": "^4.7.0",
     "node-gyp": "^8.0.0",
+    "recorderx": "^2.0.2",
     "serve": "^11.3.2",
     "vue": "^2.6.11",
     "vue-router": "^3.5.1",

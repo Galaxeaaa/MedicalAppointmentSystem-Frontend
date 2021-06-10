@@ -4,7 +4,10 @@ module.exports = {
     // 部署应用包时的基本 URL
     outputDir: "dist",
     //输出文件目录，当运行 vue-cli-service build 时生成的生产环境构建文件的目录
-
+    configureWebpack: {
+        devtool: 'source-map'
+    },
+    // cacheBusting: false,
     productionSourceMap: false,
     devServer: {
         // 配置webpack-dev-serve的行为 （webpack启动的本地服务器的行为）
@@ -34,6 +37,19 @@ module.exports = {
                 },
                 //重写路径  需要设置重写的话，要在后面的调用接口前加上/api 来代替target
             },
+            "/ws": {
+                ws: true,
+                target: "ws://localhost:8080"
+            },
+
+            "/": {
+                ws: false,
+                target: 'http://localhost:8080',
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/': ''
+                }
+            }
         },
     },
 };
