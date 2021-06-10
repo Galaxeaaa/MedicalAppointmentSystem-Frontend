@@ -8,10 +8,10 @@
       ></div>
       <div class="forgetpwd" v-if="showForgetpwd">
         <el-form ref="forgetPwdForm" :model="forgetPwdForm">
-          <el-form-item label="手机号">
+          <el-form-item label="用户名">
             <el-input
-              v-model="forgetPwdForm.phoneNumber"
-              placeholder="请输入您注册时使用的手机号"
+              v-model="forgetPwdForm.username"
+              placeholder="请输入您注册时的用户名"
             ></el-input>
           </el-form-item>
           <el-button @click="sendConfirmCode">发送验证码</el-button>
@@ -77,6 +77,19 @@
             <el-input
               v-model="logonForm.username"
               placeholder="用户名由英文、数字、下划线组成"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="手机号">
+            <el-input
+              v-model="logonForm.phoneNumber"
+              placeholder="请输入手机号"
+            ></el-input>
+          </el-form-item>
+          <el-button @click="sendConfirmCode">发送验证码</el-button>
+          <el-form-item label="验证码">
+            <el-input
+              v-model="logonForm.confirmCode"
+              placeholder="请输入收到的验证码"
             ></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
@@ -187,11 +200,13 @@ export default {
       },
       logonForm: {
         username: "",
+        phoneNumber: "",
+        confirmCode: "",
         password: "",
         confirmPassword: "",
       },
       forgetPwdForm: {
-        phoneNumber: "",
+        username: "",
         confirmCode: "",
         newPwd: "",
         confirmNewPwd: "",
@@ -205,6 +220,12 @@ export default {
             message: "长度在 3 到 16 个字符",
             trigger: "blur",
           },
+        ],
+        phoneNumber: [
+          { required: true, message: "请输入手机号", trigger: "blur" },
+        ],
+        confirmCode: [
+          { required: true, message: "请输入验证码", trigger: "blur" },
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
@@ -377,10 +398,10 @@ export default {
     padding-left: 100px;
     padding-right: 100px;
     position: fixed;
-    top: calc(50% - 250px);
+    top: calc(50% - 360px);
     left: calc(50% - 250px);
     width: 300px;
-    height: 500px;
+    height: 720px;
     z-index: 2;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
