@@ -79,7 +79,7 @@
         </el-row>
 
         <el-row :span="7">
-          <h3> 科室评价 </h3>
+          <h3 style="text-align: left;"> 科室评价 </h3>
           <el-table :data="evalue" border style="width: 100%">
             <el-table-column
               sortable
@@ -115,16 +115,10 @@ export default {
     return {
       hospitalUrl: "",
       departmentUrl: "",
-      picUrl: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-      // 这里是数据信息
-      // 需要
-      // 1. departmentName：科室名 (从上一个跳转入口进入，跳转入口将会提供科室名)
-      // 2. detaileForm：通过数据库接口获取的，该医生的详细信息，包括：
-      //  2.1 doctorName
-      //  2.4 hospital 所属医院
-      //  2.6 introduction 科室简介
-      //  2.10 score 科室评分
-      // 3. indoctors：科室包含的医生
+      picUrl: this.$route.params.departmentName=="特需营养咨询专家" ? "https://tva1.sinaimg.cn/large/008i3skNly1gr9py9ntpnj605003mmx202.jpg" :
+                (this.$route.params.departmentName=="产科专家" ?  "https://tva1.sinaimg.cn/large/008i3skNly1gr9py9ntpnj605003mmx202.jpg" : 
+                  "https://tva1.sinaimg.cn/large/008i3skNly1gr9py5xpdij305005n3yj.jpg"
+                ),
       departmentName: "特需营养咨询专家",   // 从上一个跳转界面获得的科室名
       detailForm: {     // 从数据库API获得的科室信息
         name: "特需营养咨询专家",

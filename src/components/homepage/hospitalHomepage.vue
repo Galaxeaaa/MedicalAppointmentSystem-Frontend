@@ -47,6 +47,15 @@
               <span> {{detailForm.introduction}} </span>
             </el-row>
 
+            <el-row :span="1">
+              <span style="font-size: 14px;"> 营业时间： </span>
+              <span> {{detailForm.timeperiod}} </span>
+            </el-row>
+
+            <el-row :span="1">
+              <span style="font-size: 14px;"> 注意事项： </span>
+              <span> {{detailForm.notice}} </span>
+            </el-row>
           </el-col>
         </el-row>
 
@@ -84,7 +93,38 @@
         </el-row>
 
         <el-row :span="7">
-          <h3> 医院评价 </h3>
+          <h3 style="text-align: left;"> 金牌医生 </h3>
+          <el-table :data="indoctors" border style="width: 100%">
+            <el-table-column
+              sortable
+              prop="doctorName"
+              label="医生姓名"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              sortable
+              prop="title"
+              label="医生职称"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              sortable
+              prop="medicine"
+              label="擅长项目"
+              width="400">
+            </el-table-column>
+            <el-table-column
+              label="操作"
+              width="100">
+              <template slot-scope="scope">
+                <el-button @click="gotoDoctor(scope.row.doctorName)" type="text" size="small">查看更多</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-row>
+
+        <el-row :span="7">
+          <h3 style="text-align: left;"> 医院评价 </h3>
           <el-table :data="evalue" border style="width: 100%">
             <el-table-column
               sortable
@@ -107,6 +147,26 @@
           </el-table>
         </el-row>
 
+
+        <el-row :span="7">
+          <h3 style="text-align: left;"> 公告栏 </h3>
+          <el-table :data="billboard" border style="width: 100%">
+            <el-table-column
+              sortable
+              prop="time"
+              label="公告时间"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              sortable
+              prop="content"
+              label="公告内容"
+              width="700">
+            </el-table-column>
+          </el-table>
+        </el-row>
+
+
       </el-col>
       </el-main>
 
@@ -120,19 +180,12 @@ export default {
     return {
       hospitalUrl: "",
       departmentUrl: "",
-      picUrl: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-      // 这里是数据信息
-      // 需要
-      // 1. hospitalName：医院的姓名 (从上一个跳转入口进入，跳转入口将会提供医院的姓名)
-      // 2. detaileForm：通过数据库接口获取的，该医院的详细信息，包括：
-      //  2.1 hospitalName
-      //  2.2 rank 等级
-      //  2.3 address 医院地址
-      //  2.4 contact 联系方式
-      //  2.5 score 评分
-      //  2.6 introduction 医院简介
-      // 3. evalue：患者的评价信息
-      // 4. indepartments：包含的科室信息
+      picUrl: this.$route.params.hospitalName=="浙江大学医学院附属妇产科医院" ? "https://tva1.sinaimg.cn/large/008i3skNly1gr9py9ntpnj605003mmx202.jpg" :
+                    (this.$route.params.hospitalName=="北京第一医院 " ? "https://tva1.sinaimg.cn/large/008i3skNly1gr9pycgkf1j305003rglh.jpg" : 
+                      (this.$route.params.hospitalName=="浙大附属二院" ?  "https://tva1.sinaimg.cn/large/008i3skNly1gr9py5xpdij305005n3yj.jpg" : 
+                        "https://tva1.sinaimg.cn/large/008i3skNly1gr9py5xpdij305005n3yj.jpg"
+                      )
+                    ),
       hospitalName: "浙江大学医学院附属妇产科医院",   // 从上一个跳转界面获得的医生姓名
       detailForm: {     // 从数据库API获得的医生信息
         name: "浙江大学医学院附属妇产科医院",
@@ -141,6 +194,8 @@ export default {
         contact: "0571-87061501",
         introduction: "浙江大学医学院附属妇产科医院（浙江省妇女保健院、浙江省妇女医院），是浙江省妇产科医疗、教学、科研及计划生育、妇女保健工作的指导中心。",
         score: 3.5,
+        timeperiod: "7:30 ~ 23:30(平时)\n9:00~22:00(假期)",
+        notice: "本医院医保覆盖。生化验血前请保持空腹。",
       },
       indepartments: [
         {
@@ -152,6 +207,25 @@ export default {
           departmentName: "特需营养咨询专家",
           introduction: "主要针对妊娠期糖尿病（GDM）、妊娠期肥胖以及妊娠期体重增加过快孕妇等进行一对一营养指导",
           score: 3.0,
+        },
+      ],
+
+      indoctors: [
+        {
+          doctorName: "冯磊",
+          title: "主任医师",
+          medicine: "代谢性疾病的健康评估、营养干预和健康管理",
+        },
+      ],
+
+      billboard: [
+        {
+          time: "2000-11-01",
+          content: "该医院————浙江大学医学院附属妇产科医院（浙江省妇女保健院、浙江省妇女医院），是浙江省妇产科医疗、教学、科研及计划生育、妇女保健工作的指导中心",
+        },
+        {
+          time: "2015-10-01",
+          content: "本医院国庆节休假三天",
         },
       ],
       evalue: [
@@ -180,6 +254,15 @@ export default {
           name: 'DepartmentHomepage',
           params: {
             departmentName: dp_name,
+          }
+        })
+    },
+    gotoDoctor(dt_name) {
+      console.log("goto doctor", dt_name);
+      this.$router.push({
+          name: 'DoctorHomepage',
+          params: {
+            doctorName: dt_name,
           }
         })
     },

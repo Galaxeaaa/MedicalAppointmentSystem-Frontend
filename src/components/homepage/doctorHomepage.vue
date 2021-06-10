@@ -38,6 +38,20 @@
               <el-link type="primary" @click="gotoDepartment(detailForm.department)">{{detailForm.department}}</el-link>
             </el-row>
 
+
+            <el-row :span="1">
+              <span style="font-size: 14px;"> 联系电话： </span>
+              <span> {{detailForm.tel}} </span>
+            </el-row>
+            <el-row :span="1">
+              <span style="font-size: 14px;"> 总预约量： </span>
+              <span> {{detailForm.registerSum}} </span>
+            </el-row>
+            <el-row :span="1">
+              <span style="font-size: 14px;"> 开展项目： </span>
+              <span> {{detailForm.project}} </span>
+            </el-row>
+
             <el-row :span="1">
               <span style="font-size: 14px;"> 擅长： </span>
               <span> {{detailForm.medicine}} </span>
@@ -77,6 +91,24 @@
           </el-table>
         </el-row>
 
+        <el-row :span="7">
+          <h3 style="text-align: left;"> 公告栏 </h3>
+          <el-table :data="billboard" border style="width: 100%">
+            <el-table-column
+              sortable
+              prop="time"
+              label="公告时间"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              sortable
+              prop="content"
+              label="公告内容"
+              width="500">
+            </el-table-column>
+          </el-table>
+        </el-row>
+
       </el-col>
       </el-main>
 
@@ -91,32 +123,13 @@ export default {
     return {
       hospitalUrl: "",
       departmentUrl: "",
-      picUrl: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-      // 这里是数据信息
-      // 需要
-      // 1. doctorName：医生的姓名 (从上一个跳转入口进入，跳转入口将会提供医生的姓名)
-      // 2. detailForm：通过数据库接口获取的，该医生的详细信息，包括：
-      //  2.1 doctorName
-      //  2.2 title 职称
-      //  2.3 dept 所属科室
-      //  2.4 hospital 所属医院
-      //  2.5 medicine 擅长科目
-      //  2.6 introduction 个人简介
-      //  2.7 project 开展项目
-      //  2.8 registID 挂号信息ID
-      //  2.9 registerSum
-      //  2.10 score 医生评分
-      //  2.11 evalue 患者评价
-      // 3. evalue：患者的评价信息
+      picUrl: this.$route.params.doctorName=="冯磊" ? "https://tva1.sinaimg.cn/large/008i3skNly1gr9pw3idhgj303w03wa9v.jpg" :
+                    (this.$route.params.doctorName=="赵柏惠" ? "https://tva1.sinaimg.cn/large/008i3skNly1gr9pvl4ie0j303w03wq2q.jpg" : 
+                      (this.$route.params.doctorName=="章庆松" ?  "https://tva1.sinaimg.cn/large/008i3skNly1gr9pw0jvn7j303w03wa9y.jpg" : 
+                        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+                      )
+                    ),
       doctorName: "冯磊",   // 从上一个跳转界面获得的医生姓名
-
-      // 数据库数据
-      dbFrom: {
-        department: "002",
-        email: "tangzy@163.com"
-        graph: "",
-      }
-
       // detailForm 前端数据
       detailForm: {
         name: "冯磊",
@@ -126,7 +139,24 @@ export default {
         medicine: "代谢性疾病 糖尿病 肥胖 营养 体重管理",
         introduction: "代谢性疾病的健康评估、营养干预和健康管理，尤其在糖尿病和肥胖人群的营养干预和体重管理方面造旨深厚。",
         score: 3.5,
+
+        // add
+        tel: "18811119999",
+        registerSum: 122, // 总预约量
+        project: "预约、挂号",
+
       },
+      // add
+      billboard: [
+        {
+          time: "2020-11-01",
+          content: "暂停预约。",
+        },
+        {
+          time: "2015-11-01",
+          content: "本人为特需营养咨询专家，欢迎咨询！",
+        },
+      ],
       evalue: [
         {
           userId: "用户1",
@@ -168,13 +198,9 @@ export default {
       // doctorName是用户想要看的医生姓名
       // 从route获取params之后，需要通过axios获取
       this.doctorName = this.$route.params.doctorName
-
-
+      
       // ---- a test -----
       this.detailForm.name = this.doctorName
-
-    
-
       console.log("---a------------------")
       
       //////// TEST VERSION ///////

@@ -5,7 +5,7 @@
         <el-col :span="4" class="menu">
           <!-- <div class="menu"> -->
           <el-row class="tac">
-            <h5 class="menu_tit">个人中心</h5>
+            <h5 class="menu_tit">医疗系统</h5>
             <el-col :span="18" :offset="3">
                 <el-menu class="el-menu-vertical-demo"
                          background-color="rgba(0,0,0,0)"
@@ -29,7 +29,7 @@
                     </el-menu-item>
                     <el-menu-item index="/person/doctor">
                         <i class="el-icon-s-order"></i>
-                        <span slot="title">医生搜索</span>
+                        <span slot="title">检索</span>
                     </el-menu-item>
                 </el-menu>
             </el-col>
