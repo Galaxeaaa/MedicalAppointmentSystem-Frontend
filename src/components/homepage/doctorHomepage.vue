@@ -207,15 +207,16 @@ export default {
       // 1. 获取医生基本信息
       axios({
         method: 'post',
-        url: 'http://localhost:8088/getDoctorInfo',
+        url: 'http://121.196.221.194:8088/getDoctorInfo',
         data: { doctorName : this.doctorName}
       })
       .then((res) => {
         console.log("下面是从axios中获取的data:")
         console.log(res.data)
-        if(!res.data) {
+        if(res.data.length==0) {
+          var error_info = "抱歉，该医生(" + this.doctorName + ")不存在!"
+          alert(error_info)
           console.log("结果为空！")
-          alert("抱歉，该医生不存在!")
         } else {
           this.dbFrom = res.data
         }
