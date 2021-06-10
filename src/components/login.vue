@@ -14,7 +14,7 @@
               placeholder="请输入您注册时的用户名"
             ></el-input>
           </el-form-item>
-          <el-button @click="sendConfirmCode">发送验证码</el-button>
+          <el-button @click="sendConfirmCodePwd">发送验证码</el-button>
           <el-form-item label="验证码">
             <el-input
               v-model="forgetPwdForm.confirmCode"
@@ -79,14 +79,14 @@
               placeholder="用户名由英文、数字、下划线组成"
             ></el-input>
           </el-form-item>
-          <el-form-item label="手机号">
+          <el-form-item label="手机号" prop="phoneNumber">
             <el-input
               v-model="logonForm.phoneNumber"
               placeholder="请输入手机号"
             ></el-input>
           </el-form-item>
           <el-button @click="sendConfirmCode">发送验证码</el-button>
-          <el-form-item label="验证码">
+          <el-form-item label="验证码" prop="confirmCode">
             <el-input
               v-model="logonForm.confirmCode"
               placeholder="请输入收到的验证码"
@@ -188,12 +188,21 @@ export default {
         callback();
       }
     };
+    var checkPhoneNumber = (rule, value, callback) => {
+      if(/\d{11}/.test(value)){
+        callback()
+      }else{
+        callback(new Error("请输入合法的中国大陆11位手机号！"))
+      }
+    }
     return {
       isDoctor: false,
       showForgetpwd: false,
       showLogin: false,
       showLogon: false,
       agree: false,
+      codesent:false,
+      realcode: "",
       loginForm: {
         username: "",
         password: "",
@@ -223,6 +232,13 @@ export default {
         ],
         phoneNumber: [
           { required: true, message: "请输入手机号", trigger: "blur" },
+          {
+            min: 11,
+            max: 11,
+            message: "11位中国大陆手机号",
+            trigger: "blur",
+          },
+          { validator: checkPhoneNumber, trigger: "blur" },
         ],
         confirmCode: [
           { required: true, message: "请输入验证码", trigger: "blur" },
@@ -261,15 +277,118 @@ export default {
       this.showForgetpwd = true;
       this.showLogin = false;
     },
+    sendConfirmCodePwd(){
+      if(this.forgetPwdForm.username == ""){
+        alert("请先输入用户名！")
+        return
+      }
+      var teltel
+      this.$axios
+          .get("/do/getinfo/"+(this.isDoctor?"doctor":"usr")+"?id=" + this.forgetPwdForm.username)
+          .then((res) => {
+            teltel=res.data[0].tel
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      
+      const Core = require('@alicloud/pop-core');
+
+      var client = new Core({
+        accessKeyId: '<accessKeyId>',
+        accessKeySecret: '<accessSecret>',
+        endpoint: 'https://dysmsapi.aliyuncs.com',
+        apiVersion: '2017-05-25'
+      });
+
+      var params = {
+        "PhoneNumbers": teltel,
+        "SignName": "123",
+        "TemplateCode": "123"
+      }
+
+      var requestOption = {
+        method: 'POST'
+      };
+
+      client.request('SendSms', params, requestOption).then((result) => {
+        console.log(JSON.stringify(result));
+      }, (ex) => {
+        console.log(ex);
+      })
+
+      this.realcode="xxx"
+      alert("已发送验证码至"+teltel.substring(0, 3)+"****"+teltel.substring(7));
+      this.codesent=true
+    },
     sendConfirmCode() {
-      // TODO: 发送验证码并提示发送成功
-      alert("发送成功！");
+      if(!(/\d{11}/.test(this.logonForm.phoneNumber))){
+        alert("请先输入合法手机号！")
+        return
+      }
+      const Core = require('@alicloud/pop-core');
+
+      var client = new Core({
+        accessKeyId: '<accessKeyId>',
+        accessKeySecret: '<accessSecret>',
+        endpoint: 'https://dysmsapi.aliyuncs.com',
+        apiVersion: '2017-05-25'
+      });
+
+      var params = {}
+
+      var requestOption = {
+        method: 'POST'
+      };
+
+      client.request('SendSms', params, requestOption).then((result) => {
+        console.log(JSON.stringify(result));
+      }, (ex) => {
+        console.log(ex);
+      })
+
+      this.realcode="xxx"
+      alert("已发送验证码至"+this.logonForm.phoneNumber.substring(0, 3)+"****"+this.logonForm.phoneNumber.substring(7));
+      this.codesent=true
     },
     clickChangePwd() {
       this._clickChangePwd(this);
     },
     _clickChangePwd(obj) {
-      // TODO: 检查验证码是否正确，如果正确则发送
+      if(obj.codesent==false){
+        alert("请先点击发送验证码验证手机！")
+        return
+      }
+      if(obj.realcode != obj.forgetPwdForm.confirmCode){
+        alert("验证码不正确！")
+        return
+      }
+      obj.codesent=false
+      obj.loginForm.confirmCode=""
+      this.$axios
+        .get(
+          "/do/addinfo/"+(obj.isDoctor?"doctor":"usr")+"?password="+this.forgetPwdForm.newPwd
+        )
+        .then((response) => {
+          // console.log(response)
+          if (response) {
+            console.log("success");
+            this.$message({
+              message: "密码修改成功",
+              type: "success",
+            });
+            // this.$router.push('/person/personal/info')
+          } else {
+            console.log("failed");
+            this.$message({
+              message: "密码修改失败",
+              type: "error",
+            });
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     clickLogin() {
       this._clickLogin(this);
@@ -297,12 +416,31 @@ export default {
       this._clickLogon(this);
     },
     _clickLogon(obj) {
-      if (!obj.agree) {
-        alert("请先阅读并同意协议内容！");
-        return;
+      if(obj.logonForm.username == ""){
+        alert("用户名不能为空！")
+        return
       }
+      // console.log(obj.logonForm.phoneNumber)
+      if(!(/\d{11}/.test(obj.logonForm.phoneNumber))){
+        alert("请输入合法的中国大陆11位手机号！")
+        return
+      }
+      if(obj.codesent==false){
+        alert("请先点击发送验证码验证手机！")
+        return
+      }
+      if(obj.realcode != obj.logonForm.confirmCode){
+        alert("验证码不正确！")
+        return
+      }
+      obj.codesent=false
+      obj.loginForm.confirmCode=""
       if (obj.logonForm.password !== obj.logonForm.confirmPassword) {
         alert("请确保两次输入的密码一致！");
+        return;
+      }
+      if (!obj.agree) {
+        alert("请先阅读并同意协议内容！");
         return;
       }
       axios({
@@ -326,18 +464,23 @@ export default {
           "?name=" +
           obj.logonForm.username +
           "&password=" +
-          obj.logonForm.password,
+          obj.logonForm.password +
+          "&tel=" +
+          obj.logonForm.phoneNumber,
       }).then(function (response) {
         if (response.data == true) {
           alert("注册成功！");
+          obj.showLogon = false;
           obj.$router.push("/login");
         }
       });
+      obj.codesent=false
     },
     clear() {
       this.showLogin = false;
       this.showLogon = false;
       this.showForgetpwd = false;
+      this.codesent=false;
       this.loginForm.username = "";
       this.loginForm.password = "";
       this.logonForm.username = "";
