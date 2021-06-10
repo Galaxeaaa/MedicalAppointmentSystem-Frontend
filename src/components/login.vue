@@ -3,10 +3,46 @@
     <div class="img">
       <div
         class="mask"
-        v-if="showLogin || showLogon || showDoctorLogin || showDoctorLogon"
+        v-if="showLogin || showLogon || showForgetpwd"
         @click="clear"
       ></div>
-      <div class="login_dialog" v-if="showLogin || showDoctorLogin">
+      <div class="forgetpwd" v-if="showForgetpwd">
+        <el-form ref="forgetPwdForm" :model="forgetPwdForm">
+          <el-form-item label="手机号">
+            <el-input
+              v-model="forgetPwdForm.phoneNumber"
+              placeholder="请输入您注册时使用的手机号"
+            ></el-input>
+          </el-form-item>
+          <el-button @click="sendConfirmCode">发送验证码</el-button>
+          <el-form-item label="验证码">
+            <el-input
+              v-model="forgetPwdForm.confirmCode"
+              placeholder="请输入收到的验证码"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="新密码">
+            <el-input
+              v-model="forgetPwdForm.newPwd"
+              placeholder="请输入新密码"
+              type="password"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="确认密码">
+            <el-input
+              v-model="forgetPwdForm.confirmNewPwd"
+              placeholder="请重复刚刚输入的新密码"
+              type="password"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="clickChangePwd" class="el-button--primary is-round"
+              >确认修改</el-button
+            >
+          </el-form-item>
+        </el-form>
+      </div>
+      <div class="login_dialog" v-if="showLogin">
         <el-form ref="loginForm" :model="loginForm">
           <el-form-item label="用户名">
             <el-input
@@ -21,6 +57,13 @@
               type="password"
             ></el-input>
           </el-form-item>
+          <el-button type="text" @click="forgetPassword">
+            忘记密码
+          </el-button>
+          <el-form-item>
+            <el-checkbox label="我已阅读并同意协议内容" v-model="agree">
+            </el-checkbox>
+          </el-form-item>
           <el-form-item>
             <el-button @click="clickLogin" class="el-button--primary is-round"
               >登录</el-button
@@ -28,7 +71,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="logon_dialog" v-if="showLogon || showDoctorLogon">
+      <div class="logon_dialog" v-if="showLogon">
         <el-form ref="logonForm" :model="logonForm" :rules="logonRules">
           <el-form-item label="用户名" prop="username">
             <el-input
@@ -63,21 +106,50 @@
       </div>
       <div class="welcome_content">
         <h1>欢迎！请确认您的身份</h1>
-        <div class="welcome_btn_back">
-          <el-button type="primary" @click="showLogin = true"
+        <div class="welcome_btn_back" v-show="!isDoctor">
+          <el-button
+            type="primary"
+            class="mybtn"
+            @click="showLogin = true"
+            style="margin-right: 70px"
+            v-show="!isDoctor"
             >患者登录</el-button
           >
-          <el-button type="success" @click="showLogon = true"
+          <el-button
+            type="success"
+            class="mybtn"
+            @click="showLogon = true"
+            v-show="!isDoctor"
             >患者注册</el-button
           >
-          <el-button type="primary" @click="showDoctorLogin = true"
+        </div>
+        <div class="welcome_btn_back" v-show="isDoctor">
+          <el-button
+            type="primary"
+            class="mybtn"
+            @click="showLogin = true"
+            style="margin-right: 70px"
+            v-show="isDoctor"
             >医生登录</el-button
           >
-          <el-button type="success" @click="showDoctorLogon = true"
+          <el-button
+            type="success"
+            class="mybtn"
+            @click="showLogon = true"
+            v-show="isDoctor"
             >医生注册</el-button
           >
-          <el-button type="success" @click="$router.push('/login_success')"
+          <!-- <el-button type="success" @click="$router.push('/login_success')"
             >测试入口</el-button
+          > -->
+        </div>
+        <div>
+          <el-button
+            ref="modebtn"
+            type="info" round
+            class="mybtn"
+            @click="changeMode"
+            >切换到医生</el-button
           >
         </div>
       </div>
@@ -96,11 +168,18 @@ export default {
         callback();
       }
     };
+    var checkPwdStrength = (rule, value, callback) => {
+      if (!((/\d/.test(value)) && ((/[a-z]/.test(value) || (/[A-Z]/.test(value)))))) {
+        callback(new Error("密码强度过低！请使用数字和字母的组合！"));
+      } else {
+        callback();
+      }
+    };
     return {
+      isDoctor: false,
+      showForgetpwd: false,
       showLogin: false,
       showLogon: false,
-      showDoctorLogin: false,
-      showDoctorLogon: false,
       agree: false,
       loginForm: {
         username: "",
@@ -110,6 +189,12 @@ export default {
         username: "",
         password: "",
         confirmPassword: "",
+      },
+      forgetPwdForm: {
+        phoneNumber: "",
+        confirmCode: "",
+        newPwd: "",
+        confirmNewPwd: "",
       },
       logonRules: {
         username: [
@@ -129,6 +214,7 @@ export default {
             message: "长度在 6 到 16 个字符",
             trigger: "blur",
           },
+          { validator: checkPwdStrength, trigger: "blur" },
         ],
         confirmPassword: [
           { required: true, message: "请确认密码", trigger: "blur" },
@@ -138,9 +224,31 @@ export default {
     };
   },
   methods: {
+    changeMode() {
+      this.isDoctor = !this.isDoctor;
+      if (this.isDoctor) {
+        this.$refs.modebtn.$el.innerText = "切换到患者";
+      } else {
+        this.$refs.modebtn.$el.innerText = "切换到医生";
+      }
+    },
     userLogin() {
       this.showLogin = true;
       this.$store.commit("setIsDoctor", false);
+    },
+    forgetPassword() {
+      this.showForgetpwd = true;
+      this.showLogin = false;
+    },
+    sendConfirmCode() {
+      // TODO: 发送验证码并提示发送成功
+      alert("发送成功！");
+    },
+    clickChangePwd() {
+      this._clickChangePwd(this);
+    },
+    _clickChangePwd(obj) {
+      // TODO: 检查验证码是否正确，如果正确则发送
     },
     clickLogin() {
       this._clickLogin(this);
@@ -149,7 +257,7 @@ export default {
       axios({
         method: "get",
         url:
-          (obj.showDoctorLogin ? "/login_doc" : "/login_usr") +
+          (obj.isDoctor ? "/login_doc" : "/login_usr") +
           "?id=" +
           obj.loginForm.username +
           "&password=" +
@@ -157,7 +265,7 @@ export default {
       }).then(function (response) {
         if (response.data == true) {
           obj.$store.commit("setUserId", obj.loginForm.username);
-          obj.$store.commit("setIsDoctor", obj.showDoctorLogin);
+          obj.$store.commit("setIsDoctor", obj.isDoctor);
           obj.$router.push("/login_success");
         } else {
           alert("登陆失败，账户名或密码有误！");
@@ -180,7 +288,7 @@ export default {
         method: "get",
         url:
           "/register_" +
-          (obj.showDoctorLogon ? "doc" : "usr") +
+          (obj.isDoctor ? "doc" : "usr") +
           "/checkname?name=" +
           obj.logonForm.username,
       }).then(function (response) {
@@ -193,7 +301,7 @@ export default {
         method: "get",
         url:
           "/register_" +
-          (obj.showDoctorLogon ? "doc" : "usr") +
+          (obj.isDoctor ? "doc" : "usr") +
           "?name=" +
           obj.logonForm.username +
           "&password=" +
@@ -208,8 +316,7 @@ export default {
     clear() {
       this.showLogin = false;
       this.showLogon = false;
-      this.showDoctorLogin = false;
-      this.showDoctorLogon = false;
+      this.showForgetpwd = false;
       this.loginForm.username = "";
       this.loginForm.password = "";
       this.logonForm.username = "";
@@ -232,6 +339,22 @@ export default {
     height: 100%;
     z-index: 1;
   }
+  .forgetpwd {
+    background-color: #ffffffbb;
+    padding-top: 50px;
+    padding-left: 100px;
+    padding-right: 100px;
+    position: fixed;
+    top: calc(50% - 270px);
+    left: calc(50% - 250px);
+    width: 300px;
+    height: 500px;
+    z-index: 2;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
   .login_dialog {
     background-color: #ffffffbb;
     padding-top: 50px;
@@ -241,7 +364,7 @@ export default {
     top: calc(50% - 180px);
     left: calc(50% - 250px);
     width: 300px;
-    height: 310px;
+    height: 390px;
     z-index: 2;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
@@ -279,8 +402,8 @@ export default {
   }
   .welcome_btn_back {
     margin-top: 66px;
-    margin-left: 40%;
-    margin-right: 40%;
+    margin-left: 35%;
+    margin-right: 35%;
     padding-top: 25px;
     padding-bottom: 25px;
     background-color: #ffffff66;
@@ -288,6 +411,10 @@ export default {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+  }
+  .mybtn {
+    width: 120px;
+    height: 50px;
   }
 }
 </style>
