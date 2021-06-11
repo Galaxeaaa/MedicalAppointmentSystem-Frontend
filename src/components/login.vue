@@ -72,6 +72,7 @@
         </el-form>
       </div>
       <div class="logon_dialog" v-if="showLogon">
+      <div style="margin-bottom: 50px">
         <el-form ref="logonForm" :model="logonForm" :rules="logonRules">
           <el-form-item label="用户名" prop="username">
             <el-input
@@ -106,6 +107,24 @@
               placeholder="请确保两次输入的密码一致"
             ></el-input>
           </el-form-item>
+          <el-form-item label="职位" prop="title" v-show="isDoctor">
+            <el-input
+              v-model="logonForm.title"
+              placeholder="请输入您的职位"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="科室" prop="department" v-show="isDoctor">
+            <el-input
+              v-model="logonForm.department"
+              placeholder="请输入您的科室"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="医院" prop="hospital" v-show="isDoctor">
+            <el-input
+              v-model="logonForm.hospital"
+              placeholder="请输入您的医院"
+            ></el-input>
+          </el-form-item>
           <el-form-item>
             <el-checkbox label="我已阅读并同意协议内容" v-model="agree">
             </el-checkbox>
@@ -116,6 +135,7 @@
             >
           </el-form-item>
         </el-form>
+      </div>
       </div>
       <div class="welcome_content">
         <h1>欢迎！请确认您的身份</h1>
@@ -213,6 +233,9 @@ export default {
         confirmCode: "",
         password: "",
         confirmPassword: "",
+        title: "",
+        department: "",
+        hospital: "",
       },
       forgetPwdForm: {
         username: "",
@@ -256,6 +279,15 @@ export default {
         confirmPassword: [
           { required: true, message: "请确认密码", trigger: "blur" },
           { validator: validateComfirmPwd, trigger: "blur" },
+        ],
+        title: [
+          { required: true, message: "请输入职位", trigger: "blur" },
+        ],
+        department: [
+          { required: true, message: "请输入科室", trigger: "blur" },
+        ],
+        hospital: [
+          { required: true, message: "请输入医院", trigger: "blur" },
         ],
       },
     };
@@ -458,7 +490,14 @@ export default {
           "&password=" +
           obj.logonForm.password +
           "&tel=" +
-          obj.logonForm.phoneNumber,
+          obj.logonForm.phoneNumber + 
+          "&title=" + 
+          obj.logonForm.title + 
+          "&department" + 
+          obj.logonForm.department + 
+          "&hospital" + 
+          obj.logonForm.hospital,
+
       }).then(function (response) {
         if (response.data == true) {
           alert("注册成功！");
@@ -539,10 +578,10 @@ export default {
     padding-left: 100px;
     padding-right: 100px;
     position: fixed;
-    top: calc(50% - 360px);
+    top: calc(50% - 410px);
     left: calc(50% - 250px);
     width: 300px;
-    height: 720px;
+
     z-index: 2;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
@@ -578,5 +617,8 @@ export default {
     width: 120px;
     height: 50px;
   }
+  .el-form-item{
+    margin-bottom: 0px;
+}
 }
 </style>
