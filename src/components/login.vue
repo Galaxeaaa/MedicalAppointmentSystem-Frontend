@@ -282,6 +282,21 @@ export default {
       // this.loginForm.confirmCode=""
       return true
     },
+    checkpswd(val){
+      if (!((/\d/.test(val)) && ((/[a-z]/.test(val) || (/[A-Z]/.test(val)))))) {
+        alert("密码强度过低！请使用数字和字母的组合！")
+        return false
+      }
+      if(val.length<6){
+        alert("密码长度不能低于6个字符！")
+        return false
+      }
+      if(val.length>16){
+        alert("密码长度不能多于16个字符！")
+        return false
+      }
+      return true
+    },
     forgetPassword() {
       this.showForgetpwd = true;
       this.showLogin = false;
@@ -295,14 +310,14 @@ export default {
       this.$axios
           .get("/do/getinfo/"+(this.isDoctor?"doctor":"usr")+"?id=" + this.forgetPwdForm.username)
           .then((res) => {
-            console.log(res.data)
+            // console.log(res.data)
             if(res.data.length != 1){
               teltel=""
               // console.log("000")
               alert("用户不存在！")
             }else{
               teltel=res.data[0].tel
-              console.log(res.data[0].tel)
+              // console.log(res.data[0].tel)
               if(!(/\d{11}/.test(teltel))){
                 alert("用户不存在！")
                 return
@@ -334,6 +349,12 @@ export default {
         return
       }
       if(!this.checkcode(obj.forgetPwdForm.confirmCode)) return
+      if (obj.forgetPwdForm.newPwd !== obj.forgetPwdForm.confirmNewPwd){
+        alert("请确保两次输入的密码一致！");
+        return;
+      }
+      console.log("skjdvjsndjc")
+      if(!this.checkpswd(obj.forgetPwdForm.newPwd)) return
       this.$axios
         .get(
           "/do/chpswd?isdoc="+(obj.isDoctor?"true":"false")+"&id="+this.forgetPwdForm.username+"&newpswd="+this.forgetPwdForm.newPwd
@@ -409,6 +430,7 @@ export default {
         alert("请确保两次输入的密码一致！");
         return;
       }
+      if(!this.checkpswd(this.logonForm.password)) return
       if (!obj.agree) {
         alert("请先阅读并同意协议内容！");
         return;
