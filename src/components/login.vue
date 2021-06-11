@@ -273,6 +273,15 @@ export default {
       this.showLogin = true;
       this.$store.commit("setIsDoctor", false);
     },
+    checkcode(entercode){
+      // if(this.realcode != entercode){
+      //   alert("验证码不正确！")
+      //   return false
+      // }
+      // this.codesent=false
+      // this.loginForm.confirmCode=""
+      return true
+    },
     forgetPassword() {
       this.showForgetpwd = true;
       this.showLogin = false;
@@ -282,71 +291,36 @@ export default {
         alert("请先输入用户名！")
         return
       }
-      var teltel
+      var teltel=new String("")
       this.$axios
           .get("/do/getinfo/"+(this.isDoctor?"doctor":"usr")+"?id=" + this.forgetPwdForm.username)
           .then((res) => {
-            teltel=res.data[0].tel
+            console.log(res.data)
+            if(res.data.length != 1){
+              teltel=""
+              // console.log("000")
+              alert("用户不存在！")
+            }else{
+              teltel=res.data[0].tel
+              console.log(res.data[0].tel)
+              if(!(/\d{11}/.test(teltel))){
+                alert("用户不存在！")
+                return
+              }
+              this.realcode="xxx"
+              alert("已发送验证码至"+teltel.substring(0, 3)+"****"+teltel.substring(7));
+              this.codesent=true
+            }
           })
           .catch(function (error) {
             console.log(error);
           });
-      
-      const Core = require('@alicloud/pop-core');
-
-      var client = new Core({
-        accessKeyId: '<accessKeyId>',
-        accessKeySecret: '<accessSecret>',
-        endpoint: 'https://dysmsapi.aliyuncs.com',
-        apiVersion: '2017-05-25'
-      });
-
-      var params = {
-        "PhoneNumbers": teltel,
-        "SignName": "123",
-        "TemplateCode": "123"
-      }
-
-      var requestOption = {
-        method: 'POST'
-      };
-
-      client.request('SendSms', params, requestOption).then((result) => {
-        console.log(JSON.stringify(result));
-      }, (ex) => {
-        console.log(ex);
-      })
-
-      this.realcode="xxx"
-      alert("已发送验证码至"+teltel.substring(0, 3)+"****"+teltel.substring(7));
-      this.codesent=true
     },
     sendConfirmCode() {
       if(!(/\d{11}/.test(this.logonForm.phoneNumber))){
         alert("请先输入合法手机号！")
         return
       }
-      const Core = require('@alicloud/pop-core');
-
-      var client = new Core({
-        accessKeyId: '<accessKeyId>',
-        accessKeySecret: '<accessSecret>',
-        endpoint: 'https://dysmsapi.aliyuncs.com',
-        apiVersion: '2017-05-25'
-      });
-
-      var params = {}
-
-      var requestOption = {
-        method: 'POST'
-      };
-
-      client.request('SendSms', params, requestOption).then((result) => {
-        console.log(JSON.stringify(result));
-      }, (ex) => {
-        console.log(ex);
-      })
-
       this.realcode="xxx"
       alert("已发送验证码至"+this.logonForm.phoneNumber.substring(0, 3)+"****"+this.logonForm.phoneNumber.substring(7));
       this.codesent=true
@@ -359,15 +333,10 @@ export default {
         alert("请先点击发送验证码验证手机！")
         return
       }
-      if(obj.realcode != obj.forgetPwdForm.confirmCode){
-        alert("验证码不正确！")
-        return
-      }
-      obj.codesent=false
-      obj.loginForm.confirmCode=""
+      if(!this.checkcode(obj.forgetPwdForm.confirmCode)) return
       this.$axios
         .get(
-          "/do/addinfo/"+(obj.isDoctor?"doctor":"usr")+"?password="+this.forgetPwdForm.newPwd
+          "/do/chpswd?isdoc="+(obj.isDoctor?"true":"false")+"&id="+this.forgetPwdForm.username+"&newpswd="+this.forgetPwdForm.newPwd
         )
         .then((response) => {
           // console.log(response)
@@ -378,6 +347,8 @@ export default {
               type: "success",
             });
             // this.$router.push('/person/personal/info')
+            this.clear();
+            this.$router.push("/login");
           } else {
             console.log("failed");
             this.$message({
@@ -394,6 +365,10 @@ export default {
       this._clickLogin(this);
     },
     _clickLogin(obj) {
+      if (!obj.agree) {
+        alert("请先阅读并同意协议内容！");
+        return;
+      }
       axios({
         method: "get",
         url:
@@ -429,12 +404,7 @@ export default {
         alert("请先点击发送验证码验证手机！")
         return
       }
-      if(obj.realcode != obj.logonForm.confirmCode){
-        alert("验证码不正确！")
-        return
-      }
-      obj.codesent=false
-      obj.loginForm.confirmCode=""
+      if(!this.checkcode(this.logonForm.confirmCode)) return
       if (obj.logonForm.password !== obj.logonForm.confirmPassword) {
         alert("请确保两次输入的密码一致！");
         return;
@@ -470,23 +440,29 @@ export default {
       }).then(function (response) {
         if (response.data == true) {
           alert("注册成功！");
-          obj.showLogon = false;
+          obj.clear();
           obj.$router.push("/login");
         }
       });
-      obj.codesent=false
     },
     clear() {
       this.showLogin = false;
       this.showLogon = false;
       this.showForgetpwd = false;
       this.codesent=false;
+      this.realcode=""
+      this.agree=false
       this.loginForm.username = "";
       this.loginForm.password = "";
       this.logonForm.username = "";
       this.logonForm.password = "";
       this.logonForm.confirmPassword = "";
-    },
+      this.logonForm.phoneNumber=""
+      this.forgetPwdForm.username=""
+      this.forgetPwdForm.confirmCode=""
+      this.forgetPwdForm.newPwd=""
+      this.forgetPwdForm.confirmNewPwd=""
+     },
   },
 };
 </script>
