@@ -493,9 +493,9 @@ export default {
           obj.logonForm.phoneNumber + 
           "&title=" + 
           obj.logonForm.title + 
-          "&department" + 
+          "&department=" + 
           obj.logonForm.department + 
-          "&hospital" + 
+          "&hospital=" + 
           obj.logonForm.hospital,
 
       }).then(function (response) {
