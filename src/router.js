@@ -181,7 +181,7 @@ export default new Router({
 					// redirect: '/homepage/doctor',
 				},
 				{
-					path: '/homepage/department/:departmentName',
+					path: '/homepage/department/:hospitalName/:departmentName',
 					name: 'DepartmentHomepage',
 					component: DepartmentHomepage,
 					// redirect: '/homepage/department',

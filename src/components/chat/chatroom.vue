@@ -92,26 +92,26 @@ export default {
         .then((res) => {
           res.data.forEach((msg, i) => {
             console.log(
-              "@@@" + this.$store.state.currentUser.id + "#" + msg.src_id
+              "@@@" + this.$store.state.currentUser.id + "#" + msg.src
             );
             if (
               !this.$store.state.sessions[
-                this.$store.state.currentUser.id + "#" + msg.src_id
+                this.$store.state.currentUser.id + "#" + msg.src
               ]
             ) {
               Vue.set(
                 this.$store.state.sessions,
-                this.$store.state.currentUser.id + "#" + msg.src_id,
+                this.$store.state.currentUser.id + "#" + msg.src,
                 []
               );
             }
             console.log("resv date: " + msg.time);
             console.log(msg);
             this.$store.state.sessions[
-              this.$store.state.currentUser.id + "#" + msg.src_id
+              this.$store.state.currentUser.id + "#" + msg.src
             ].push({
               content: msg.content,
-              date: msg.time,
+              date: msg.msg_time,
               fromNickname: msg.name,
               messageTypeId: msg.type,
               self: false,
@@ -163,7 +163,7 @@ export default {
   margin: 20px auto;
   width: 900px;
   height: 650px;
-  // overflow: hidden;
+  overflow: hidden;
   border-radius: 10px;
   .sidebar,
   .main,

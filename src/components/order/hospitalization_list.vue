@@ -173,11 +173,40 @@ export default {
       this.multipleSelection = val;
     },
 
+// 20210607 点击跳转逻辑
+    gotoHospital(hp_name) {
+      console.log("goto hospital", hp_name);
+      this.$router.push({
+          name: 'HospitalHomepage',
+          params: {
+            hospitalName: hp_name,
+          }
+        })
+    },
+    gotoDepartment(dp_name) {
+      console.log("goto department", dp_name);
+      this.$router.push({
+          name: 'DepartmentHomepage',
+          params: {
+            departmentName: dp_name,
+          }
+        })
+    },
+    gotoDoctor(dt_name) {
+      console.log("goto doctor", dt_name);
+      this.$router.push({
+          name: 'DoctorHomepage',
+          params: {
+            doctorName: dt_name,
+          }
+        })
+    },
+
     getHospitalList() {
       this.hospitalList = [
         {
           id: 1,
-          doctorname: "王医生",
+          doctorname: "冯磊",
           heading: "主治医师",
           birthday: "1976-05-23 00:00:00",
           comment: null,

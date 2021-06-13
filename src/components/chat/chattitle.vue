@@ -8,11 +8,11 @@
 <script>
   export default {
     name: "chattitle",
-    // methods:{
-    //   gotoComment() {
-    //     this.$router.replace('./comment')
-    //   }
-    // }
+    methods:{
+      gotoComment() {
+        this.$router.replace('./comment')
+      }
+    }
   }
 </script>
 
@@ -25,10 +25,10 @@
     justify-content: space-between;
     border-bottom: 0.5px solid #b0c7e4;
   }
-  .moreBtn{ 
+  .exitBtn{ 
     margin-top: 5px;
     margin-right: 10px;
-    background-color: rgb(214, 236, 243);
+    background-color: #eefbff;
     color: #42557b;
     border: 0;
     height: 40px;
