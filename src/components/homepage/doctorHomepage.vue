@@ -35,7 +35,7 @@
             <el-row :span="1">
               <el-link type="primary" @click="gotoHospital(detailForm.hospital)">{{detailForm.hospital}}</el-link>
               <span> - </span>
-              <el-link type="primary" @click="gotoDepartment(detailForm.department)">{{detailForm.department}}</el-link>
+              <el-link type="primary" @click="gotoDepartment(detailForm.hospital, detailForm.department)">{{detailForm.department}}</el-link>
             </el-row>
 
 
@@ -70,21 +70,27 @@
         <el-row :span="7">
           <h3 style="text-align: left;"> 病人评价 </h3>
           <el-table :data="evalue" border style="width: 100%">
-            <el-table-column
+           <el-table-column
               sortable
-              prop="time"
-              label="评价时间"
+              prop="id"
+              label="评价编号"
               width="180">
             </el-table-column>
             <el-table-column
+              sortable
+              prop="datetime"
+              label="评价时间"
+              width="180">
+            </el-table-column>
+            <!-- <el-table-column
               sortable
               prop="userId"
               label="用户姓名"
               width="180">
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column
               sortable
-              prop="comment"
+              prop="message"
               label="评价"
               width="500">
             </el-table-column>
@@ -96,13 +102,13 @@
           <el-table :data="billboard" border style="width: 100%">
             <el-table-column
               sortable
-              prop="time"
-              label="公告时间"
+              prop="id"
+              label="公告编号"
               width="180">
             </el-table-column>
             <el-table-column
               sortable
-              prop="content"
+              prop="evaluation"
               label="公告内容"
               width="500">
             </el-table-column>
@@ -118,19 +124,13 @@
 
 <script>
 const axios = require('axios');
+const default_url = "https://tva1.sinaimg.cn/large/008i3skNly1gr9pw3idhgj303w03wa9v.jpg";
 export default {
   data() {
     return {
-      hospitalUrl: "",
-      departmentUrl: "",
-      picUrl: this.$route.params.doctorName=="冯磊" ? "https://tva1.sinaimg.cn/large/008i3skNly1gr9pw3idhgj303w03wa9v.jpg" :
-                    (this.$route.params.doctorName=="赵柏惠" ? "https://tva1.sinaimg.cn/large/008i3skNly1gr9pvl4ie0j303w03wq2q.jpg" : 
-                      (this.$route.params.doctorName=="章庆松" ?  "https://tva1.sinaimg.cn/large/008i3skNly1gr9pw0jvn7j303w03wa9y.jpg" : 
-                        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-                      )
-                    ),
-      doctorName: "冯磊",   // 从上一个跳转界面获得的医生姓名
-      // detailForm 前端数据
+      ifExist: true,
+      picUrl: "https://tva1.sinaimg.cn/large/008i3skNly1gr9pw3idhgj303w03wa9v.jpg",
+      doctorName: "冯磊",
       detailForm: {
         name: "冯磊",
         title: "主任医师",
@@ -140,47 +140,60 @@ export default {
         introduction: "代谢性疾病的健康评估、营养干预和健康管理，尤其在糖尿病和肥胖人群的营养干预和体重管理方面造旨深厚。",
         score: 3.5,
 
-        // add
+        // new
         tel: "18811119999",
         registerSum: 122, // 总预约量
         project: "预约、挂号",
+        vx: null,
+        email: "default@example.com",
 
       },
-      // add
-      billboard: [
-        {
-          time: "2020-11-01",
-          content: "暂停预约。",
-        },
-        {
-          time: "2015-11-01",
-          content: "本人为特需营养咨询专家，欢迎咨询！",
-        },
-      ],
-      evalue: [
-        {
-          userId: "用户1",
-          time: "2020-11-01",
-          comment: "医生很敬业",
-        },
-        {
-          userId: "用户2",
-          time: "2020-05-01",
-          comment: "回复慢",
-        }
-      ],
+      // 后端
+      billboard: "",
+      evalue: "",
+      // 前端数据
+      // billboard: [
+      //   {
+      //     time: "2020-11-01",
+      //     content: "暂停预约。",
+      //   },
+      //   {
+      //     time: "2015-11-01",
+      //     content: "本人为特需营养咨询专家，欢迎咨询！",
+      //   },
+      // ],
+      // evalue: [
+      //   {
+      //     userId: "用户1",
+      //     time: "2020-11-01",
+      //     comment: "医生很敬业",
+      //   },
+      //   {
+      //     userId: "用户2",
+      //     time: "2020-05-01",
+      //     comment: "回复慢",
+      //   }
+      // ],
 
     };
   },
   mounted() {
+    // doctorName是用户想要看的医生姓名
+    // 从route获取params之后，需要通过axios获取
+    this.doctorName = this.$route.params.doctorName
     this.getDetail();
+    if(this.ifExist) {
+      this.getEvalue();
+      this.getBillboard();
+    }
   },
   methods: {
-    gotoDepartment(dp_name) {
+    gotoDepartment(hp_name, dp_name) {
       console.log("goto department", dp_name);
       this.$router.push({
           name: 'DepartmentHomepage',
           params: {
+            hospitalName: hp_name,
             departmentName: dp_name,
           }
         })
@@ -195,34 +208,65 @@ export default {
         })
     },
     getDetail() {
-      // doctorName是用户想要看的医生姓名
-      // 从route获取params之后，需要通过axios获取
-      this.doctorName = this.$route.params.doctorName
-      
-      // ---- a test -----
-      this.detailForm.name = this.doctorName
-      console.log("---a------------------")
-      
-      //////// TEST VERSION ///////
-      // 1. 获取医生基本信息
+      // 获取医生基本信息
       axios({
         method: 'post',
         url: 'http://121.196.221.194:8088/getDoctorInfo',
         data: { doctorName : this.doctorName}
       })
       .then((res) => {
-        console.log("下面是从axios中获取的data:")
-        console.log(res.data)
+        // console.log("axios-getDoctorInfo:")
+        // console.log(res.data)
         if(res.data.length==0) {
           var error_info = "抱歉，该医生(" + this.doctorName + ")不存在!"
+          this.ifExist = false;
           alert(error_info)
-          console.log("结果为空！")
         } else {
-          this.dbFrom = res.data
+          this.detailForm.name = res.data[0].name
+          this.detailForm.title = res.data[0].title
+          this.detailForm.hospital = res.data[0].hosp_name
+          this.detailForm.department = res.data[0].depart_name
+          this.detailForm.score = res.data[0].score * 5.0 / 100
+          this.detailForm.tel = res.data[0].tel
+          this.detailForm.medicine = res.data[0].medicine
+          this.detailForm.introduction = res.data[0].introduction
+          this.detailForm.project = res.data[0].project
+          this.detailForm.registerSum = res.data[0].registerSum
+          this.detailForm.vx = res.data[0].vx
+          this.detailForm.email = res.data[0].email
+          this.picUrl = (res.data[0].graph == null) ? default_url : res.data[0].graph
+          
+          // console.log("下面是detailForm")
+          // console.log(this.detailForm)
         }
       })
-      console.log("---b------------------")
-    }
+    },
+    getEvalue() {
+      // 获取医生评价
+      axios({
+        method: 'post',
+        url: 'http://121.196.221.194:8088/getDoctorEva',
+        data: { doctorName : this.doctorName}
+      })
+      .then((res) => {
+        console.log("billboard:")
+        this.billboard = res.data
+        console.log(this.billboard)
+      })
+    },
+    getBillboard() {
+      // 获取医生公告栏、
+      axios({
+        method: 'post',
+        url: 'http://121.196.221.194:8088/getDoctorAnno',
+        data: { doctorName : this.doctorName}
+      })
+      .then((res) => {
+        console.log("evalue:")
+        this.evalue = res.data
+        console.log(this.evalue)
+      })
+    },
   }
 };
 </script>

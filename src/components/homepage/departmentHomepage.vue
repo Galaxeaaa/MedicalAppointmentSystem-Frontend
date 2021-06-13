@@ -37,10 +37,10 @@
               <el-link type="primary" @click="gotoHospital(detailForm.hospital)">{{detailForm.hospital}}</el-link>
             </el-row>
 
-            <el-row :span="1">
+            <!-- <el-row :span="1">
               <span style="font-size: 14px;"> 简介： </span>
               <span> {{detailForm.introduction}} </span>
-            </el-row>
+            </el-row> -->
 
           </el-col>
         </el-row>
@@ -52,7 +52,7 @@
           <el-table :data="indoctors" border style="width: 100%">
             <el-table-column
               sortable
-              prop="doctorName"
+              prop="name"
               label="医生姓名"
               width="180">
             </el-table-column>
@@ -65,14 +65,20 @@
             <el-table-column
               sortable
               prop="medicine"
-              label="擅长项目"
-              width="400">
+              label="擅长领域"
+              width="200">
+            </el-table-column>
+            <el-table-column
+              sortable
+              prop="project"
+              label="开展项目"
+              width="200">
             </el-table-column>
             <el-table-column
               label="操作"
               width="100">
               <template slot-scope="scope">
-                <el-button @click="gotoDoctor(scope.row.doctorName)" type="text" size="small">查看更多</el-button>
+                <el-button @click="gotoDoctor(scope.row.name)" type="text" size="small">查看更多</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -81,27 +87,50 @@
         <el-row :span="7">
           <h3 style="text-align: left;"> 科室评价 </h3>
           <el-table :data="evalue" border style="width: 100%">
-            <el-table-column
+           <el-table-column
               sortable
-              prop="time"
-              label="评价时间"
+              prop="id"
+              label="评价编号"
               width="180">
             </el-table-column>
-            <el-table-column
+            <!-- <el-table-column
               sortable
               prop="userId"
               label="用户姓名"
               width="180">
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column
               sortable
-              prop="comment"
-              label="评价"
+              prop="evaluation"
+              label="评价内容"
               width="500">
             </el-table-column>
           </el-table>
         </el-row>
 
+        <el-row :span="7">
+          <h3 style="text-align: left;"> 公告栏 </h3>
+          <el-table :data="billboard" border style="width: 100%">
+            <el-table-column
+              sortable
+              prop="id"
+              label="公告编号"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              sortable
+              prop="datetime"
+              label="公告时间"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              sortable
+              prop="message"
+              label="公告内容"
+              width="500">
+            </el-table-column>
+          </el-table>
+        </el-row>
       </el-col>
       </el-main>
 
@@ -110,11 +139,11 @@
 </template>
 
 <script>
+const axios = require('axios');
 export default {
   data() {
     return {
-      hospitalUrl: "",
-      departmentUrl: "",
+      ifExist: true,
       picUrl: this.$route.params.departmentName=="特需营养咨询专家" ? "https://tva1.sinaimg.cn/large/008i3skNly1gr9py9ntpnj605003mmx202.jpg" :
                 (this.$route.params.departmentName=="产科专家" ?  "https://tva1.sinaimg.cn/large/008i3skNly1gr9py9ntpnj605003mmx202.jpg" : 
                   "https://tva1.sinaimg.cn/large/008i3skNly1gr9py5xpdij305005n3yj.jpg"
@@ -138,26 +167,38 @@ export default {
           medicine: "前置胎盘，宫颈机能不全，子宫肌瘤，盆腔脏器脱垂，等妇产科疾病",
         }
       ],
-      evalue: [
-        {
-          userId: "用户1",
-          time: "2020-11-01",
-          comment: "科室很不错",
-        },
-        {
-          userId: "用户2",
-          time: "2020-05-01",
-          comment: "效率低的科室",
-        }
-      ],
+      evalue: "",
+      billboard: "",
+      // evalue: [
+      //   {
+      //     userId: "用户1",
+      //     time: "2020-11-01",
+      //     comment: "科室很不错",
+      //   },
+      //   {
+      //     userId: "用户2",
+      //     time: "2020-05-01",
+      //     comment: "效率低的科室",
+      //   }
+      // ],
 
     };
   },
   mounted() {
+    // 接口：
+    // getDeptInfo
+    // getDeptDoctor
+    this.departmentName = this.$route.params.departmentName;
+    this.hospitalName = this.$route.params.hospitalName;
     this.getDetail();
+    if(this.ifExist) {
+      this.getInDoctors();
+      this.getEvalue();
+      this.getBillboard();
+    }
+
   },
   methods: {
-    // TODO：修改具体的跳转地址到 医院地址 科室地址
     gotoDoctor(dt_name) {
       console.log("goto doctor", dt_name);
       this.$router.push({
@@ -177,13 +218,74 @@ export default {
         })
     },
     getDetail() {
-      this.departmentName = this.$route.params.departmentName;
-      // TODO
-      this.detailForm.name = this.departmentName;
-      // 1.根据departmentName调用数据库接口获取detailForm
-      // 2.根据departmentName调用数据库接口获取indoctors
-      // 3.根据departmentName调用数据库接口获取evalue
-    }
+      axios({
+        method: 'post',
+        url: 'http://121.196.221.194:8088/getDeptInfo',
+        data: { 
+          deptName : this.departmentName,
+          hospName : this.hospitalName,
+        }
+      })
+      .then((res) => {
+        // console.log("下面是从axios中获取的data:")
+        // console.log(res.data)
+        if(res.data.length==0) {
+          var error_info = "抱歉，该科室(" + this.departmentName + ")不存在!"
+          alert(error_info)
+          this.ifExist = false
+        } else {
+          this.detailForm.name = res.data[0].name
+          this.detailForm.score = res.data[0].score * 5.0 / 100
+          this.detailForm.hospital = res.data[0].hosp_name
+          // console.log(this.detailForm)
+        }
+      })
+    },
+    getInDoctors() {
+      axios({
+        method: 'post',
+        url: 'http://121.196.221.194:8088/getDeptDoctor',
+        data: { 
+          deptName : this.departmentName,
+          hospName : this.hospitalName,
+        }
+      })
+      .then((res) => {
+        this.indoctors = res.data
+        console.log("下属医生:")
+        console.log(this.indoctors)
+      })
+    },
+    getEvalue() {
+      axios({
+        method: 'post',
+        url: 'http://121.196.221.194:8088/getDeptEva',
+        data: { 
+          deptName : this.departmentName,
+          hospName : this.hospitalName,
+        }
+      })
+      .then((res) => {
+        this.evalue = res.data
+        // console.log("评价:")
+        // console.log(this.evalue)
+      })
+    },
+    getBillboard() {
+      axios({
+        method: 'post',
+        url: 'http://121.196.221.194:8088/getDeptAnno',
+        data: { 
+          deptName : this.departmentName,
+          hospName : this.hospitalName,
+        }
+      })
+      .then((res) => {
+        this.billboard = res.data
+        // console.log("公告:")
+        // console.log(this.billboard)
+      })
+    },
   }
 };
 </script>
