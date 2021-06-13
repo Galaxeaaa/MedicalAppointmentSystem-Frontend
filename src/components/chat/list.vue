@@ -24,7 +24,7 @@
       :native="false"
     >
       <ul v-if="currentList == '私聊'">
-        <p style="padding: 2px 4px; height: 20px">医生列表</p>
+        <p style="padding: 2px 4px; height: 20px">预约列表</p>
         <li
           v-for="item in users"
           :class="{
@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import Vue from "vue";
 import { mapState } from "vuex";
 
 export default {
@@ -93,7 +94,38 @@ export default {
       //   false
       // );
       // //更新当前选中的用户
-      // state.currentSession = currentSession;
+      //this.$store.state.currentSession = currentSession;
+      if(!this.$store.state.sessions[this.$store.state.currentUser.id + "#" + currentSession.id]){
+        this.$axios.get("/chat/getHistoryMsg?selfid="+this.$store.state.currentUser.id+"&id="+currentSession.id).then((res) => {
+              res.data.forEach((msg,i) => {
+              if(msg.src==this.$store.state.currentUser.id){
+                if(!this.$store.state.sessions[this.$store.state.currentUser.id + "#" + msg.dest]){
+                    Vue.set(this.$store.state.sessions, this.$store.state.currentUser.id + "#" + msg.dest, []);
+                }
+                console.log(this.$store.state.currentUser.id + "#" + msg.dest)
+                this.$store.state.sessions[this.$store.state.currentUser.id + "#" + msg.dest].push({
+                  content: msg.content,
+                  date: msg.msg_time,
+                  fromNickname: this.$store.state.currentUser.name,
+                  messageTypeId: msg.type,
+                  self: true
+                  })
+              }
+              else{
+                if(!this.$store.state.sessions[this.$store.state.currentUser.id + "#" + msg.src]){
+                    Vue.set(this.$store.state.sessions, this.$store.state.currentUser.id + "#" + msg.src, []);
+                }
+                this.$store.state.sessions[this.$store.state.currentUser.id + "#" + msg.src].push({
+                  content: msg.content,
+                  date: msg.msg_time,
+                  fromNickname: msg.name,
+                  messageTypeId: msg.type,
+                  self: false
+                })
+              }
+              });
+        })
+      }
     },
   },
 };

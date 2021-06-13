@@ -7,7 +7,7 @@
             <span>{{ entry.date | time }}</span>
           </p>
           <div class="main" :class="{ self: entry.self }">
-            <p class="username">{{ entry.fromNickname }}</p>
+            <!-- <p class="username">{{ entry.fromNickname }}</p> -->
             <img
               class="avatar"
               :src="entry.self ? user.userProfile : currentSession.userProfile"
@@ -153,7 +153,7 @@ export default {
   height: 60%;
   max-height: 63%;
   overflow-y: scroll;
-  // overflow-x: hidden;
+  overflow-x: hidden;
   ul {
     list-style-type: none;
     padding-left: 0px;
@@ -174,6 +174,7 @@ export default {
     }
   }
   .main {
+    text-align: left;
     .avatar {
       float: left;
       margin: 0 10px 0 0;
@@ -195,17 +196,17 @@ export default {
       width: 100px;
       margin-top: 15px;
     }
-    .username {
-      position: relative;
-      left: 35px;
-      top: 11px;
-      margin: 0 0;
-      padding: 0 0;
-      border-radius: 4px;
-      line-height: 15px;
-      font-size: 10px;
-      color: grey;
-    }
+    // .username {
+    //   position: relative;
+    //   left: 35px;
+    //   top: 11px;
+    //   margin: 0 0;
+    //   padding: 0 0;
+    //   border-radius: 4px;
+    //   line-height: 15px;
+    //   font-size: 10px;
+    //   color: grey;
+    // }
   }
   .self {
     text-align: right;
@@ -230,18 +231,18 @@ export default {
       width: 100px;
       margin-top: 15px;
     }
-    .username {
-      //display: inline-block;
-      position: relative;
-      left: 310px;
-      top: 11px;
-      margin: 0 0;
-      padding: 0 0;
-      width: 200px;
-      line-height: 15px;
-      font-size: 10px;
-      color: grey;
-    }
+    // .username {
+    //   // display: inline-block;
+    //   position: relative;
+    //   left: 310px;
+    //   top: 11px;
+    //   margin: 0 0;
+    //   padding: 0 0;
+    //   width: 200px;
+    //   line-height: 15px;
+    //   font-size: 10px;
+    //   color: grey;
+    // }
   }
 }
 </style>

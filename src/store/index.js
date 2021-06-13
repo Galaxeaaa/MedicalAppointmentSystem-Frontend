@@ -46,7 +46,7 @@ const store = new Vuex.Store({
 		},
 		changeCurrentSession(state, currentSession) {
 			//切换到当前用户就标识消息已读
-			Vue.set(state.isDot, state.currentUser.username + "#" + currentSession.username, false);
+			Vue.set(state.isDot, state.currentUser.id + "#" + currentSession.id, false);
 			//更新当前选中的用户
 			state.currentSession = currentSession;
 		},
