@@ -1,6 +1,10 @@
 <template>
   <div id="hospitalizationList">
-    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+    <el-form
+      :inline="true"
+      :model="formInline"
+      class="demo-form-inline"
+    >
       <el-form-item>
         <el-input
           v-model="formInline.doctorame"
@@ -30,7 +34,10 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button icon="el-icon-search" circle></el-button>
+        <el-button
+          icon="el-icon-search"
+          circle
+        ></el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -39,7 +46,10 @@
       @selection-change="handleSelectionChange"
       ref="multipleTable"
     >
-      <el-table-column type="selection" width="55"> </el-table-column>
+      <el-table-column
+        type="selection"
+        width="55"
+      > </el-table-column>
       <el-table-column label="医生姓名">
         <template slot-scope="scope">
           <span>{{ scope.row.doctorname }}</span>
@@ -55,7 +65,10 @@
           <span>{{ scope.row.hospitalinfo.hospitalname }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="age" label="年龄">
+      <el-table-column
+        prop="age"
+        label="年龄"
+      >
         <template slot-scope="scope">
           <span>
             {{ new Date().getFullYear() - scope.row.birthday.split("-")[0] }}
@@ -73,7 +86,10 @@
           <span>{{ scope.row.heading }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="done" label="预约挂号">
+      <el-table-column
+        prop="done"
+        label="预约挂号"
+      >
         <template slot-scope="scope">
           <i
             class="el-icon-news"
@@ -86,29 +102,20 @@
           ></i>
         </template>
       </el-table-column>
-      <el-table-column prop="done" label="在线问诊">
+      <el-table-column
+        prop="done"
+        label="在线问诊"
+      >
         <template slot-scope="scope">
-          <i class="el-icon-service" @click="showModal = true"></i>
+          <div>
           <div class="mask" v-if="showModal" @click="showModal = false"></div>
           <div class="pop" v-if="showModal">
-            <img src="../../assets/img/qrcode.png" />
-            <button
-              @click="
-                $router.push({
-                  path: '/person/chat/chatroom', //跳转进入新的界面
-                })
-              "
-              class="btn"
-            >
-              预约成功！
-            </button>
+              <img src="../../assets/img/qrcode.png" />
+              <button @click="showModal = false" class="appoint_btn">取消预约X</button>
+              <button @click="$router.push({path: '/person/chat/chatroom'})" class="appoint_btn">预约成功!</button>
           </div>
-          <!-- <i class="el-icon-service"
-                       @click="
-              $router.push({
-                path: '/person/doctor/detail', //跳转进入新的界面
-              })
-            "></i> -->
+          <i @click="showModal=true" class="el-icon-service"></i>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -252,12 +259,12 @@ export default {
     z-index: 1;
   }
   .pop {
-    background-color: #fff;
-
+    background-color: #b0c7e4;
+    padding: 50px;
     position: fixed;
     top: 100px;
     left: 500px;
-    width: auto;
+    width: 350px;
     height: auto;
     z-index: 2;
   }
@@ -273,6 +280,15 @@ export default {
     position: absolute;
     bottom: 20px;
     left: 50px;
+  }
+
+  .appoint_btn {
+    margin: 20px;
+    background-color: #eefbff;
+    color: #42557b;
+    border: 0;
+    height: 40px;
+    width: 75px;
   }
 
   .el-form--inline .el-form-item,
