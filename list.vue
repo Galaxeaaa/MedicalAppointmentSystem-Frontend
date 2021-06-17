@@ -47,7 +47,8 @@
                 >
                   <div slot="error" class="image-slot">
                     <img src = "https://bkimg.cdn.bcebos.com/pic/8644ebf81a4c510fbcac0d126e59252dd42aa54a" width="30px">
-                    <!-- <i class="el-icon-picture-outline"></i> -->
+                    <!--i class="el-icon-picture-outline"></i-->
+
                   </div>
                 </el-image>
               </el-badge>

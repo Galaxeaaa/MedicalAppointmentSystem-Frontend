@@ -7,12 +7,12 @@
             <span>{{ entry.date | time }}</span>
           </p>
           <div class="main" :class="{ self: entry.self }">
-            <!-- <p class="username">{{ entry.fromNickname }}</p> -->
-            <img
+            <p class="username">{{ entry.fromNickname }}</p>
+            <!-- <img
               class="avatar"
               :src="entry.self ? user.userProfile : currentSession.userProfile"
               alt=""
-            />
+            /> -->
             <p v-if="entry.messageTypeId == 1" class="text">
               {{ entry.content }}
             </p>
@@ -21,6 +21,14 @@
               :src="entry.content"
               class="img"
             />
+            <!-- <audio controls autoplay id="audio">
+
+            </audio> -->
+            <audio v-if="entry.messageTypeId == 3"
+            controls>
+                <source :src="entry.content" />
+            </audio>
+
           </div>
         </li>
       </ul>
@@ -72,6 +80,7 @@ export default {
     return {
       // user:JSON.parse(window.sessionStorage.getItem('user'))
       user: this.$store.state.currentUser,
+    //   music_src: "http://test0517.oss-cn-hangzhou.aliyuncs.com/ChatPic/1623246890991_blob?Expires=1623250491&OSSAccessKeyId=LTAI5tEu1zShrbRJc2JeRSut&Signature=QS56nutXJBHyhbu46S7etOi85OQ%3D"
     };
   },
   computed: mapState(["sessions", "currentSession", "errorImgUrl"]),
