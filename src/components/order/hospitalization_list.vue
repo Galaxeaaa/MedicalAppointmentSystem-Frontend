@@ -266,21 +266,21 @@ export default {
     //       )
     //     );
     //   });
-     this.$axios.get("/do/getinfo/doctor",{
-        params:{
-          id: this.formInline.id,
-          department: this.formInline.department
-        }
-      })
-          .then((res) => {
+    //  this.$axios.get("/do/getinfo/doctor",{
+    //     params:{
+    //       id: this.formInline.id,
+    //       department: this.formInline.department
+    //     }
+    //   })
+    //       .then((res) => {
 
 
-              this.hospitalList = res;
-              this.$forceUpdate();
-              console.log("Current doctorname: " + this.formInline.id);
-              console.log(this.doctorData)
+    //           this.hospitalList = res;
+    //           this.$forceUpdate();
+    //           console.log("Current doctorname: " + this.formInline.id);
+    //           console.log(this.doctorData)
 
-          })
+    //       })
       return this.hospitalList;
 },
     // 根据查询条件过滤报告列表数据,

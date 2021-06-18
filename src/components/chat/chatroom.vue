@@ -127,10 +127,11 @@ export default {
 
     initUserList() {
       if (this.$store.state.currentUser.who == "p") {
+          console.log("parent success");
         this.$axios
           .get("/chat/getdoctorlist?pid=" + this.$store.state.currentUser.id)
           .then((res) => {
-            // console.log("res:"+res.data);
+            console.log("res:"+res.data);
             this.$store.state.users = res.data;
           });
       } else {
