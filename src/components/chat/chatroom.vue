@@ -12,14 +12,14 @@
       <message></message>
       <usertext></usertext>
     </div>
-    <div>
+    <!-- <div>
       <el-button @click="loginForTest('d')" class="toolBtn" size="small"
         >Doctor</el-button
       >
       <el-button @click="loginForTest('p')" class="toolBtn" size="small"
         >Patient</el-button
       >
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -45,8 +45,9 @@ export default {
     //this.$store.dispatch('initData');
     //连接WebSocket服务
     //this.$store.dispatch('connect');
+    this.loginForChat();
     this.chatConnect();
-    this.initUserList();
+    // this.initUserList();
   },
   created() {
     // //在页面加载时读取sessionStorage里的状态信息
@@ -141,18 +142,23 @@ export default {
       }
     },
 
-    loginForTest(who) {
-      if (who == "d") {
+    loginForChat() {
+    //   if (this.isdoctor) {
         this.$store.state.currentUser = {};
-        this.$store.state.currentUser.id = "001";
-        this.$store.state.currentUser.name = "汤正义";
-      } else if (who == "p") {
-        this.$store.state.currentUser = {};
-        this.$store.state.currentUser.id = "10000";
-        this.$store.state.currentUser.name = "王大强";
-      }
-      this.$store.state.currentUser.who = who;
-      this.initUserList();
+        this.$store.state.currentUser.id = this.$store.state.userid;
+        this.$store.state.currentUser.name = this.$store.state.username;
+    //   } else if (who == "p") {
+    //     this.$store.state.currentUser = {};
+    //     this.$store.state.currentUser.id = "10001";
+    //     this.$store.state.currentUser.name = "李小红";
+    //   }
+        if (this.$store.state.isdoctor) {
+            this.$store.state.currentUser.who = "d";
+        }else{
+            this.$store.state.currentUser.who = "p";
+        }
+        console.log("current user:"+this.$store.state.currentUser.who);
+        this.initUserList();
     },
   },
 };

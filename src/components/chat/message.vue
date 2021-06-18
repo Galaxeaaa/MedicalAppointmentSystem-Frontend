@@ -87,6 +87,7 @@ export default {
   filters: {
     time(date) {
       if (date) {
+        date = date.replace("xxx+8xxx", "xxx 8xxx")
         date = new Date(date);
       }
       //当前的时间

@@ -1,7 +1,7 @@
 <template>
   <div class="chatTitle">
     <span class="titleName">{{this.$store.state.currentSession.name?this.$store.state.currentSession.name:""}}</span>
-    <el-button class="exitBtn" @click="gotoComment" >结束问诊</el-button>
+    <el-button v-if="!this.$store.state.isdoctor" class="exitBtn" @click="gotoComment" >结束问诊</el-button>
   </div>
 </template>
 
