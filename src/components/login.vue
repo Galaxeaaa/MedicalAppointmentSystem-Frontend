@@ -98,18 +98,101 @@
       <div class="logon_dialog" v-if="showLogon">
         <div style="margin-bottom: 50px">
           <el-form ref="logonForm" :model="logonForm" :rules="logonRules">
-            <el-form-item label="用户名" prop="username">
-              <el-input
-                v-model="logonForm.username"
-                placeholder="用户名由英文、数字、下划线组成"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="手机号" prop="phoneNumber">
-              <el-input
-                v-model="logonForm.phoneNumber"
-                placeholder="请输入手机号"
-              ></el-input>
-            </el-form-item>
+            <table>
+              <tr>
+                <td>
+                  <el-form-item label="用户名" prop="username">
+                    <el-input
+                      v-model="logonForm.username"
+                      placeholder="用户名由英文、数字、下划线组成"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+                <td>
+                  <el-form-item label="手机号" prop="phoneNumber">
+                    <el-input
+                      v-model="logonForm.phoneNumber"
+                      placeholder="请输入手机号"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <el-form-item label="密码" prop="password">
+                    <el-input
+                      type="password"
+                      v-model="logonForm.password"
+                      placeholder="密码应尽可能使用大小写字母和数字的组合"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+                <td>
+                  <el-form-item label="确认密码" prop="confirmPassword">
+                    <el-input
+                      type="password"
+                      v-model="logonForm.confirmPassword"
+                      placeholder="请确保两次输入的密码一致"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+              </tr>
+                <td>
+                  <el-form-item label="安全问题1">
+                    <el-input
+                      v-model="logonForm.question1"
+                      placeholder="请输入"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+                <td>
+                  <el-form-item label="答案1">
+                    <el-input
+                      v-model="logonForm.answer1"
+                      placeholder="请输入"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+              <tr>
+                <td>
+                  <el-form-item label="安全问题2">
+                    <el-input
+                      v-model="logonForm.question2"
+                      placeholder="请输入"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+                <td>
+                  <el-form-item label="答案2">
+                    <el-input
+                      v-model="logonForm.answer2"
+                      placeholder="请输入"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <el-form-item label="安全问题3">
+                    <el-input
+                      v-model="logonForm.question3"
+                      placeholder="请输入"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+                <td>
+                  <el-form-item label="答案3">
+                    <el-input
+                      v-model="logonForm.answer3"
+                      placeholder="请输入"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+              </tr>
+              <tr>
+              </tr>
+              
+            </table>
             <!-- <el-button @click="sendConfirmCode">发送验证码</el-button>
             <el-form-item label="验证码" prop="confirmCode">
               <el-input
@@ -117,56 +200,7 @@
                 placeholder="请输入收到的验证码"
               ></el-input>
             </el-form-item> -->
-            <el-form-item label="密码" prop="password">
-              <el-input
-                type="password"
-                v-model="logonForm.password"
-                placeholder="密码应尽可能使用大小写字母和数字的组合"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="安全问题1">
-              <el-input
-                v-model="logonForm.question1"
-                placeholder="请输入"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="答案1">
-              <el-input
-                v-model="logonForm.answer1"
-                placeholder="请输入"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="安全问题2">
-              <el-input
-                v-model="logonForm.question2"
-                placeholder="请输入"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="答案2">
-              <el-input
-                v-model="logonForm.answer2"
-                placeholder="请输入"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="安全问题3">
-              <el-input
-                v-model="logonForm.question3"
-                placeholder="请输入"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="答案3">
-              <el-input
-                v-model="logonForm.answer3"
-                placeholder="请输入"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="确认密码" prop="confirmPassword">
-              <el-input
-                type="password"
-                v-model="logonForm.confirmPassword"
-                placeholder="请确保两次输入的密码一致"
-              ></el-input>
-            </el-form-item>
+            
             <el-form-item label="职位" prop="title" v-show="isDoctor">
               <el-input
                 v-model="logonForm.title"
@@ -704,9 +738,10 @@ export default {
     padding-top: 50px;
     padding-left: 100px;
     padding-right: 100px;
-    position: relative;
-    left: calc(50% - 250px);
-    width: 300px;
+    position: fixed;
+    top: 30px;
+    left: calc(50% - 300px);
+    width: 400px;
 
     z-index: 2;
     border-top-right-radius: 10px;
