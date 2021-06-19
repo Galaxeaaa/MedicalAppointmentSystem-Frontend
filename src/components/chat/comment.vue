@@ -91,6 +91,19 @@ export default {
       console.log(index);
       this.unitModel = index;
       this.unitName = item.value;
+      var str =
+        "/score/setscore?" +
+        "did=" +
+        this.$store.state.currentSession.id +
+        "&score=" +
+        item.value;
+      this.$axios.get(str).then((response) => {
+        if (response) {
+          console.log("scored");
+        } else {
+          console.log("score fail");
+        }
+      });
     },
   },
 };

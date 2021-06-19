@@ -87,8 +87,12 @@ export default {
   filters: {
     time(date) {
       if (date) {
-        date = date.replace("xxx+8xxx", "xxx 8xxx")
-        date = new Date(date);
+        if (typeof date == "string") {
+            // console.log("before:"+date);
+            date = date.replace("GMT 0800","GMT+0800")
+            date = new Date(date);
+            // console.log("date:"+date);
+        }
       }
       //当前的时间
       let currentDate = new Date();
