@@ -91,17 +91,28 @@ export default {
       console.log(index);
       this.unitModel = index;
       this.unitName = item.value;
-      var str =
+      var str1 =
         "/score/setscore?" +
         "did=" +
         this.$store.state.currentSession.id +
         "&score=" +
         item.value;
-      this.$axios.get(str).then((response) => {
+      this.$axios.get(str1).then((response) => {
         if (response) {
           console.log("scored");
         } else {
           console.log("score fail");
+        }
+      });
+      var str2 = 
+        "/appoint/remove?" + 
+        "pid=" + this.$store.state.userid + 
+        "&did=" + this.$store.state.currentSession.id;
+      this.$axios.get(str2).then((response) => {
+        if (response) {
+          console.log("deleted");
+        } else {
+          console.log("delete fail");
         }
       });
     },

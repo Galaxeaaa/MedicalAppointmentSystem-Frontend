@@ -47,7 +47,7 @@ export default {
     //this.$store.dispatch('connect');
     this.loginForChat();
     this.chatConnect();
-    // this.initUserList();
+    this.initUserList();
   },
   created() {
     // //在页面加载时读取sessionStorage里的状态信息
@@ -127,7 +127,7 @@ export default {
 
     initUserList() {
       if (this.$store.state.currentUser.who == "p") {
-          console.log("parent success");
+        //   console.log("parent success");
         this.$axios
           .get("/chat/getdoctorlist?pid=" + this.$store.state.currentUser.id)
           .then((res) => {

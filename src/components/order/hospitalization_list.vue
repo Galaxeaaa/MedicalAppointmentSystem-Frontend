@@ -101,31 +101,31 @@
         label="在线问诊"
       >
         <template slot-scope="scope">
-          <div>
-            <div
-              class="mask"
-              v-if="showModal"
-              @click="showModal = false"
-            ></div>
-            <div
-              class="pop"
-              v-if="showModal"
-            >
-              <img src="../../assets/img/qrcode.png" />
-              <button
+            <div>
+                <div
+                class="mask"
+                v-if="showModal"
                 @click="showModal = false"
-                class="appoint_btn"
-              >取消预约X</button>
-              <button
-                @click="$router.push({path: '/person/chat/chatroom'})"
-                class="appoint_btn"
-              >预约成功!</button>
+                ></div>
+                <div
+                class="pop"
+                v-if="showModal"
+                >
+                <img src="../../assets/img/qrcode.png" />
+                <button
+                    @click="showModal = false"
+                    class="appoint_btn"
+                >取消预约X</button>
+                    <button
+                        @click="appointSuccess()"
+                        class="appoint_btn"
+                    >预约成功!</button>
+                </div>
+                <i
+                @click="changeId(scope.row.id)"
+                class="el-icon-service"
+                ></i>
             </div>
-            <i
-              @click="showModal=true"
-              class="el-icon-service"
-            ></i>
-          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -154,12 +154,13 @@ import axios from "axios";
 export default {
   data() {
     return {
+      showModal: false,
+      appointid: "000",
       formInline: {
         id: "",
         department: "",
         hospital: "",
         date: "",
-        showModal: false,
       },
       //定义查询的表单元素
 
@@ -214,7 +215,20 @@ export default {
         });
       return this.hospitalList;
     },
-
+    changeId(did){
+        this.appointid = did;
+        this.showModal = true;
+    },
+    appointSuccess() {
+      //console.log(this.$store.state.userid);
+      var str = "/appoint/add?" 
+              + "pid=" + this.$store.state.userid
+              + "&did=" + this.appointid;
+      //console.log(str);
+      this.$axios
+          .get(str)
+      this.$router.push({path: '/person/chat/chatroom'});
+    },
     getHospitalList() {
       /*this.hospitalList = [
         {
@@ -283,8 +297,8 @@ export default {
           //   console.log("res:"+res.data);
           this.hospitalList = res.data;
           this.$forceUpdate();
-          console.log("Current doctorname: " + this.formInline.id);
-          console.log(this.doctorData);
+        //   console.log("Current doctorname: " + this.formInline.id);
+        //   console.log(this.doctorData);
         });
       return this.hospitalList;
     },
