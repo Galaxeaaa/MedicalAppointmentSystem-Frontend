@@ -9,8 +9,7 @@
         class="emoBox"
       >
         <el-button
-          id="emojiBtn"
-          class="emotionSelect"
+          class="function-btn"
           slot="reference"
         >
           😀
@@ -37,12 +36,12 @@
         accept=".jpg,.jpeg,.png,.JPG,JPEG,.PNG,.gif,.GIF"
       >
         <el-button
-          id="uploadImgBtn"         
+          class="function-btn"         
           icon="el-icon-picture-outline"
         ></el-button>
       </el-upload>
       <!-- 语音 -->
-      <i class="el-icon-microphone" @click="handleBtnClick"></i>
+      <el-button class="function-btn" icon="el-icon-microphone" @click="handleBtnClick"></el-button>
       <!-- <audio controls autoplay id="audio"></audio> -->
       <div v-show="news_img">
         <div class="in_vedio">
@@ -57,6 +56,12 @@
         </div>
           <el-button @click="send_voice">发送</el-button>
       </div>
+      <el-button
+          class="function-btn"
+          icon="el-icon-phone-outline"
+          v-show="!news_img && !send_vedio"
+          @click="makeVideoCall()"
+      ></el-button>
     </div>
     <!-- 按 Ctrl + Enter 发送 -->
     <textarea
@@ -100,6 +105,12 @@ export default {
   },
   computed: mapState(["sessions", "currentSession"]),
   methods: {
+      makeVideoCall() {
+      window.open(
+        "http://localhost:8090/",
+        "__blank"
+      );
+    },
     addMessageByClick() {
       var tmpContent = this.content;
       console.log("send date: " + new Date());
@@ -420,28 +431,46 @@ export default {
     float: right;
     margin-right: 10px;
   }
-  #uploadImgBtn {
-    border: none;
-    padding-bottom: 0px;
-    margin-bottom: 0px;
-    padding-left: 12px;
-  }
-  #uploadImgBtn:hover {
-    background-color: white;
-  }
-  #emojiBtn {
-    border: none;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    margin-bottom: 0px;
-  }
-  #emojiBtn:hover {
-    background-color: rgb(255, 255, 255);
-  }
+//   #uploadImgBtn {
+//     border: none;
+//     padding-bottom: 0px;
+//     margin-bottom: 0px;
+//     padding-left: 12px;
+//   }
+//   #uploadImgBtn:hover {
+//     background-color: white;
+//   }
+//   #videoBtn {
+//     border: none;
+//     padding-bottom: 0px;
+//     margin-bottom: 0px;
+//     padding-left: 12px;
+//   }
+//   #videoBtn:hover {
+//     background-color: white;
+//   }
+//   #emojiBtn {
+//     border: none;
+//     padding-right: 0px;
+//     padding-bottom: 0px;
+//     margin-bottom: 0px;
+//   }
+//   #emojiBtn:hover {
+//     background-color: rgb(255, 255, 255);
+//   }
   .upload-btn {
     display: inline-block;
   }
 }
+.function-btn {
+    border: none;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    padding-left: 12px;
+}
+.function-btn:hover {
+    background-color: white;
+  }
 .emotionList {
   display: flex;
   flex-wrap: wrap;
