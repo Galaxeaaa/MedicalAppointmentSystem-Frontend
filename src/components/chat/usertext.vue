@@ -36,31 +36,49 @@
         accept=".jpg,.jpeg,.png,.JPG,JPEG,.PNG,.gif,.GIF"
       >
         <el-button
-          class="function-btn"         
+          class="function-btn"
           icon="el-icon-picture-outline"
+        ></el-button>
+        <!-- 上传文件 -->
+      </el-upload>
+      <el-upload
+        class="upload-btn"
+        action="/chat/file"
+        :before-upload="beforeFileUpload"
+        :on-success="fileSuccess"
+        :on-error="fileError"
+        :show-file-list="false"
+      >
+        <el-button
+          class="function-btn"
+          icon="el-icon-document"
         ></el-button>
       </el-upload>
       <!-- 语音 -->
-      <el-button class="function-btn" icon="el-icon-microphone" @click="handleBtnClick"></el-button>
+      <el-button
+        class="function-btn"
+        icon="el-icon-microphone"
+        @click="handleBtnClick"
+      ></el-button>
       <!-- <audio controls autoplay id="audio"></audio> -->
       <div v-show="news_img">
         <div class="in_vedio">
-            <p>正在录音...</p> 
+          <p>正在录音...</p>
         </div>
         <el-button @click="cancel_mp3">完成</el-button>
         <el-button @click="cancel">取消</el-button>
       </div>
       <div v-show="send_vedio">
-          <div class="in_vedio">
-            <p>录音完成！</p> 
+        <div class="in_vedio">
+          <p>录音完成！</p>
         </div>
-          <el-button @click="send_voice">发送</el-button>
+        <el-button @click="send_voice">发送</el-button>
       </div>
       <el-button
-          class="function-btn"
-          icon="el-icon-phone-outline"
-          v-show="!news_img && !send_vedio"
-          @click="makeVideoCall()"
+        class="function-btn"
+        icon="el-icon-phone-outline"
+        v-show="!news_img && !send_vedio"
+        @click="makeVideoCall()"
       ></el-button>
     </div>
     <!-- 按 Ctrl + Enter 发送 -->
@@ -105,11 +123,8 @@ export default {
   },
   computed: mapState(["sessions", "currentSession"]),
   methods: {
-      makeVideoCall() {
-      window.open(
-        "http://localhost:8090/",
-        "__blank"
-      );
+    makeVideoCall() {
+      window.open("http://localhost:8090/", "__blank");
     },
     addMessageByClick() {
       var tmpContent = this.content;
@@ -161,31 +176,6 @@ export default {
             self: true,
           });
         });
-      // let msgObj=new Object();
-      // msgObj.content=this.content;
-      // msgObj.messageTypeId=1;
-      // //发送群聊消息
-      // if (this.currentSession.username=="群聊"){
-      //   console.log(this.content);
-      //   this.$store.state.stomp.send("/ws/groupChat",{},JSON.stringify(msgObj));
-      // }
-      // //给客服发送消息
-      // if (this.currentSession.username=="客服"){
-      //   msgObj.fromNickname=this.$store.state.currentUser.nickname;
-      //   msgObj.to='客服';
-      //   this.$store.state.stomp.send("/ws/robotChat",{},JSON.stringify(msgObj));
-      //   //保存该条记录到session
-      //   this.$store.commit('addMessage',msgObj);
-      // }
-      // //发送私聊消息
-      // else{
-      //   msgObj.from=this.$store.state.currentUser.username;
-      //   msgObj.fromNickname=this.$store.state.currentUser.nickname;
-      //   msgObj.to=this.currentSession.username;
-      //   this.$store.state.stomp.send("/ws/chat",{},JSON.stringify(msgObj));
-      //   //提交私聊消息记录
-      //   this.$store.commit('addMessage',msgObj);
-      // }
       //清空输入框;
       this.content = "";
     },
@@ -222,45 +212,126 @@ export default {
       }
       return isLt1M && isImg;
     },
+    beforeFileUpload(file) {
+      //判断文件大小
+      let isLt1M = file.size / 1024 / 1024 < 1;
+      console.log(file);
+      if (!isLt1M) {
+        this.$message.error("上传文件大小不能超过 1MB!");
+      }
+      //判断文件的格式
+      //   let fileType = file.name.substring(file.name.lastIndexOf(".") + 1);
+      //   fileType = fileType.toLowerCase();
+      //   let isImg =
+      //     fileType === "jpg" ||
+      //     fileType === "png" ||
+      //     fileType === "jpeg" ||
+      //     fileType === "gif";
+      //   if (!isImg) {
+      //     this.$message.error("上传图片格式不符合要求！");
+      //   }
+      return isLt1M;
+    },
     // 图片上传成功
     imgSuccess(response, file, fileList) {
-      console.log("FileName为："+response[0]);
-      console.log("图片url为："+response[1]);
-      // console.log("图片url为：" + response);
-      // let msgObj = new Object();
-      // msgObj.content = response;
-      // //设置消息类型为图片
-      // msgObj.messageTypeId = 2;
-      // if (this.currentSession.username == "群聊") {
-      //   this.$store.state.stomp.send(
-      //     "/ws/groupChat",
-      //     {},
-      //     JSON.stringify(msgObj)
-      //   );
-      // } else {
-      //   msgObj.from = this.$store.state.currentUser.username;
-      //   msgObj.fromNickname = this.$store.state.currentUser.nickname;
-      //   msgObj.to = this.currentSession.username;
-      //   this.$store.state.stomp.send("/ws/chat", {}, JSON.stringify(msgObj));
-      //   //提交私聊消息记录
-      //   this.$store.commit("addMessage", msgObj);
-      this.$axios.post("/chat/sendMessage?from="+this.$store.state.currentUser.id+"&name="+this.$store.state.currentUser.name+
-      "&dest="+this.currentSession.id+"&content="+response[0]+"&time="+new Date()+"&type=2")
-      .then((res) => {
-        if(!this.$store.state.sessions[this.$store.state.currentUser.id + "#" + this.$store.state.currentSession.id]){
-          Vue.set(this.$store.state.sessions, this.$store.state.currentUser.id + "#" + this.$store.state.currentSession.id, []);
-        }
-        this.$store.state.sessions[this.$store.state.currentUser.id + "#" + this.$store.state.currentSession.id].push({
-				  content: response[1],
-				  date: new Date(),
-				  fromNickname: this.$store.state.currentUser.name,
-				  messageTypeId: 2,
-				  self: true
-			  })
-      })
+      console.log("FileName为：" + response[0]);
+      console.log("图片url为：" + response[1]);
+      this.$axios
+        .post(
+          "/chat/sendMessage?from=" +
+            this.$store.state.currentUser.id +
+            "&name=" +
+            this.$store.state.currentUser.name +
+            "&dest=" +
+            this.currentSession.id +
+            "&content=" +
+            response[0] +
+            "&time=" +
+            new Date() +
+            "&type=2"
+        )
+        .then((res) => {
+          if (
+            !this.$store.state.sessions[
+              this.$store.state.currentUser.id +
+                "#" +
+                this.$store.state.currentSession.id
+            ]
+          ) {
+            Vue.set(
+              this.$store.state.sessions,
+              this.$store.state.currentUser.id +
+                "#" +
+                this.$store.state.currentSession.id,
+              []
+            );
+          }
+          this.$store.state.sessions[
+            this.$store.state.currentUser.id +
+              "#" +
+              this.$store.state.currentSession.id
+          ].push({
+            content: response[1],
+            date: new Date(),
+            fromNickname: this.$store.state.currentUser.name,
+            messageTypeId: 2,
+            self: true,
+          });
+        });
+    },
+    //文件上传成功
+    fileSuccess(response, file, fileList) {
+      console.log("FileName为：" + response[0]);
+      console.log("Fileurl为：" + response[1]);
+      this.$axios
+        .post(
+          "/chat/sendMessage?from=" +
+            this.$store.state.currentUser.id +
+            "&name=" +
+            this.$store.state.currentUser.name +
+            "&dest=" +
+            this.currentSession.id +
+            "&content=" +
+            response[0] +
+            "&time=" +
+            new Date() +
+            "&type=4"
+        )
+        .then((res) => {
+          if (
+            !this.$store.state.sessions[
+              this.$store.state.currentUser.id +
+                "#" +
+                this.$store.state.currentSession.id
+            ]
+          ) {
+            Vue.set(
+              this.$store.state.sessions,
+              this.$store.state.currentUser.id +
+                "#" +
+                this.$store.state.currentSession.id,
+              []
+            );
+          }
+          this.$store.state.sessions[
+            this.$store.state.currentUser.id +
+              "#" +
+              this.$store.state.currentSession.id
+          ].push({
+            content: response[1],
+            date: new Date(),
+            fromNickname: this.$store.state.currentUser.name,
+            messageTypeId: 4,
+            self: true,
+          });
+        });
     },
     // 图片上传失败
     imgError(err, file, fileList) {
+      this.$message.error("上传失败");
+    },
+    //文件上传失败
+    fileError(err, file, fileList) {
       this.$message.error("上传失败");
     },
     //获取Emoji
@@ -289,7 +360,7 @@ export default {
     //录制语音
     handleBtnClick: function () {
       let that = this;
-    //   that.news_img = !that.news_img
+      //   that.news_img = !that.news_img
       rc.start()
         .then(() => {
           that.news_img = !that.news_img;
@@ -308,7 +379,7 @@ export default {
       that.send_vedio = !that.send_vedio;
     },
     // 取消语音
-    cancel: function() {
+    cancel: function () {
       rc.pause();
       rc.clear();
       let that = this;
@@ -329,70 +400,97 @@ export default {
         encodeTo: ENCODE_TYPE.WAV,
         compressible: true,
       });
-    //   var uuid = this.$store.state.currentUser.id;
+      //   var uuid = this.$store.state.currentUser.id;
 
-    // a new try
-    // var file = wav.target.files[0];
-    var formdata = new FormData();
-    formdata.append("file",wav);//file
-    // console.log("文件",formdata,this.qs.stringify({'file':wav}));
-    this.$axios.post(
-          '/chat/file',
-          formdata,
-          {headers:{'Content-Type':'multipart/form-data'}}
-          ).then(function(res){
-            var response = res.data
-            console.log("FileName为："+response[0]);
-            console.log("语音url为："+response[1]);
-            // that.news_img = !that.news_img;
-            that.send_vedio = !that.send_vedio;
-            rc.clear();
+      // a new try
+      // var file = wav.target.files[0];
+      var formdata = new FormData();
+      formdata.append("file", wav); //file
+      // console.log("文件",formdata,this.qs.stringify({'file':wav}));
+      this.$axios
+        .post("/chat/file", formdata, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        .then(function (res) {
+          var response = res.data;
+          console.log("FileName为：" + response[0]);
+          console.log("语音url为：" + response[1]);
+          // that.news_img = !that.news_img;
+          that.send_vedio = !that.send_vedio;
+          rc.clear();
 
-            //===========================
-            that.$axios.post("/chat/sendMessage?from="+that.$store.state.currentUser.id+"&name="+that.$store.state.currentUser.name+
-            "&dest="+that.currentSession.id+"&content="+response[0]+"&time="+new Date()+"&type=3")
+          //===========================
+          that.$axios
+            .post(
+              "/chat/sendMessage?from=" +
+                that.$store.state.currentUser.id +
+                "&name=" +
+                that.$store.state.currentUser.name +
+                "&dest=" +
+                that.currentSession.id +
+                "&content=" +
+                response[0] +
+                "&time=" +
+                new Date() +
+                "&type=3"
+            )
             .then((res) => {
-                if(!that.$store.state.sessions[that.$store.state.currentUser.id + "#" + that.$store.state.currentSession.id]){
-                Vue.set(that.$store.state.sessions, that.$store.state.currentUser.id + "#" + that.$store.state.currentSession.id, []);
-                }
-                that.$store.state.sessions[that.$store.state.currentUser.id + "#" + that.$store.state.currentSession.id].push({
-                        content: response[1],
-                        date: new Date(),
-                        fromNickname: that.$store.state.currentUser.name,
-                        messageTypeId: 3,
-                        self: true
-                    })
-            })           
-
-
-          }).catch((err) => {
+              if (
+                !that.$store.state.sessions[
+                  that.$store.state.currentUser.id +
+                    "#" +
+                    that.$store.state.currentSession.id
+                ]
+              ) {
+                Vue.set(
+                  that.$store.state.sessions,
+                  that.$store.state.currentUser.id +
+                    "#" +
+                    that.$store.state.currentSession.id,
+                  []
+                );
+              }
+              that.$store.state.sessions[
+                that.$store.state.currentUser.id +
+                  "#" +
+                  that.$store.state.currentSession.id
+              ].push({
+                content: response[1],
+                date: new Date(),
+                fromNickname: that.$store.state.currentUser.name,
+                messageTypeId: 3,
+                self: true,
+              });
+            });
+        })
+        .catch((err) => {
           console.log(err);
         });
-    // a new try
+      // a new try
 
-    //   if (this.chatList != "") {
-    //     var end_time = this.chatList[this.chatList.length - 1].addtime;
-    //   }
-      
-    //   var formData = new FormData();
+      //   if (this.chatList != "") {
+      //     var end_time = this.chatList[this.chatList.length - 1].addtime;
+      //   }
+
+      //   var formData = new FormData();
       // formData.append('file',wav);
-    //   formData.append("topic_id", uuid);
-    //   formData.append("last_time", end_time);
-    //   formData.append("type", 4);
-    //   formData.append("file", wav, Date.parse(new Date()) + ".wav");
-    //   let headers = { headers: { "Content-Type": "multipart/form-data" } };
+      //   formData.append("topic_id", uuid);
+      //   formData.append("last_time", end_time);
+      //   formData.append("type", 4);
+      //   formData.append("file", wav, Date.parse(new Date()) + ".wav");
+      //   let headers = { headers: { "Content-Type": "multipart/form-data" } };
 
-    //   axios.defaults.withCredentials = true;
-    //   axios
-    //     .post(this.https + "/admin/api/send_reply", formData, headers)
-    //     .then((data) => {
-    //       that.news_img = !that.news_img;
-    //       // this.reload();
-    //       rc.clear();
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
+      //   axios.defaults.withCredentials = true;
+      //   axios
+      //     .post(this.https + "/admin/api/send_reply", formData, headers)
+      //     .then((data) => {
+      //       that.news_img = !that.news_img;
+      //       // this.reload();
+      //       rc.clear();
+      //     })
+      //     .catch((err) => {
+      //       console.log(err);
+      //     });
     },
   },
 };
@@ -431,46 +529,46 @@ export default {
     float: right;
     margin-right: 10px;
   }
-//   #uploadImgBtn {
-//     border: none;
-//     padding-bottom: 0px;
-//     margin-bottom: 0px;
-//     padding-left: 12px;
-//   }
-//   #uploadImgBtn:hover {
-//     background-color: white;
-//   }
-//   #videoBtn {
-//     border: none;
-//     padding-bottom: 0px;
-//     margin-bottom: 0px;
-//     padding-left: 12px;
-//   }
-//   #videoBtn:hover {
-//     background-color: white;
-//   }
-//   #emojiBtn {
-//     border: none;
-//     padding-right: 0px;
-//     padding-bottom: 0px;
-//     margin-bottom: 0px;
-//   }
-//   #emojiBtn:hover {
-//     background-color: rgb(255, 255, 255);
-//   }
+  //   #uploadImgBtn {
+  //     border: none;
+  //     padding-bottom: 0px;
+  //     margin-bottom: 0px;
+  //     padding-left: 12px;
+  //   }
+  //   #uploadImgBtn:hover {
+  //     background-color: white;
+  //   }
+  //   #videoBtn {
+  //     border: none;
+  //     padding-bottom: 0px;
+  //     margin-bottom: 0px;
+  //     padding-left: 12px;
+  //   }
+  //   #videoBtn:hover {
+  //     background-color: white;
+  //   }
+  //   #emojiBtn {
+  //     border: none;
+  //     padding-right: 0px;
+  //     padding-bottom: 0px;
+  //     margin-bottom: 0px;
+  //   }
+  //   #emojiBtn:hover {
+  //     background-color: rgb(255, 255, 255);
+  //   }
   .upload-btn {
     display: inline-block;
   }
 }
 .function-btn {
-    border: none;
-    padding-bottom: 0px;
-    margin-bottom: 0px;
-    padding-left: 12px;
+  border: none;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+  padding-left: 12px;
 }
 .function-btn:hover {
-    background-color: white;
-  }
+  background-color: white;
+}
 .emotionList {
   display: flex;
   flex-wrap: wrap;
