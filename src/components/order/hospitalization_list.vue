@@ -67,7 +67,7 @@
       </el-table-column>
       <el-table-column label="评分">
         <template slot-scope="scope">
-          <span>{{ scope.row.score }}</span>
+          <span>{{ scope.row.score}}</span>
         </template>
       </el-table-column>
       <el-table-column label="id">
@@ -80,11 +80,11 @@
           <span>{{ scope.row.registerTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="已预约">
+      <!-- <el-table-column label="已预约">
         <template slot-scope="scope">
           <span>{{ scope.row.registerSum }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         prop="done"
         label="预约挂号"

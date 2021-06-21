@@ -1,19 +1,28 @@
 <template>
-  <div id="message" v-scroll-bottom="sessions">
+  <div
+    id="message"
+    v-scroll-bottom="sessions"
+  >
     <div v-if="currentSession && currentSession.name != '群聊'">
       <ul>
         <li v-for="entry in sessions[user.id + '#' + currentSession.id]">
           <p class="time">
             <span>{{ entry.date | time }}</span>
           </p>
-          <div class="main" :class="{ self: entry.self }">
+          <div
+            class="main"
+            :class="{ self: entry.self }"
+          >
             <p class="username">{{ entry.fromNickname }}</p>
             <!-- <img
               class="avatar"
               :src="entry.self ? user.userProfile : currentSession.userProfile"
               alt=""
             /> -->
-            <p v-if="entry.messageTypeId == 1" class="text">
+            <p
+              v-if="entry.messageTypeId == 1"
+              class="text"
+            >
               {{ entry.content }}
             </p>
             <img
@@ -24,11 +33,22 @@
             <!-- <audio controls autoplay id="audio">
 
             </audio> -->
-            <audio v-if="entry.messageTypeId == 3"
-            controls>
-                <source :src="entry.content" />
+            <audio
+              v-if="entry.messageTypeId == 3"
+              controls
+            >
+              <source :src="entry.content" />
             </audio>
-
+            <!-- <div v-if="entry.messageTypeId == 4"> -->
+            <el-button
+              v-if="entry.messageTypeId == 4"
+              size="mini"
+              class="filter-item"
+              type="primary"
+              icon="el-icon-download"
+              @click="downloadFile(entry.content)"
+            >下载文件</el-button>
+            <!-- </div> -->
           </div>
         </li>
       </ul>
@@ -80,19 +100,19 @@ export default {
     return {
       // user:JSON.parse(window.sessionStorage.getItem('user'))
       user: this.$store.state.currentUser,
-    //   music_src: "http://test0517.oss-cn-hangzhou.aliyuncs.com/ChatPic/1623246890991_blob?Expires=1623250491&OSSAccessKeyId=LTAI5tEu1zShrbRJc2JeRSut&Signature=QS56nutXJBHyhbu46S7etOi85OQ%3D"
+      //   music_src: "http://test0517.oss-cn-hangzhou.aliyuncs.com/ChatPic/1623246890991_blob?Expires=1623250491&OSSAccessKeyId=LTAI5tEu1zShrbRJc2JeRSut&Signature=QS56nutXJBHyhbu46S7etOi85OQ%3D"
     };
   },
   computed: mapState(["sessions", "currentSession", "errorImgUrl"]),
   filters: {
     time(date) {
       if (date) {
-        if (typeof date == "string") {
-            // console.log("before:"+date);
-            date = date.replace("GMT 0800","GMT+0800")
-            date = new Date(date);
-            // console.log("date:"+date);
-        }
+        if (typeof date == "string") {
+          // console.log("before:"+date);
+          date = date.replace("GMT 0800", "GMT+0800");
+          date = new Date(date);
+          // console.log("date:"+date);
+        }
       }
       //当前的时间
       let currentDate = new Date();
@@ -156,6 +176,21 @@ export default {
     takeAShot(fromName, toName) {
       console.log("拍了一怕");
       let s = fromName + "拍了拍" + toName;
+    },
+    downloadFile(url) {
+      console.log("文件:" + url);
+      window.open(url)
+    //   fetch(url)
+    //     .then((res) => res.blob())
+    //     .then((blob) => {
+    //       // 将链接地址字符内容转变成blob地址
+    //       const a = document.createElement("a");
+    //       a.href = URL.createObjectURL(blob);
+    //       console.log(a.href);
+    //       a.download = ""; // 下载文件的名字
+    //       document.body.appendChild(a);
+    //       a.click();
+    //     });
     },
   },
 };

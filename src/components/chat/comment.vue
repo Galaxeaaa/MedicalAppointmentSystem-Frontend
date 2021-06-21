@@ -42,7 +42,8 @@
           </div>
         </div>
       </div>
-      <el-button
+      <el-button 
+        v-show="selected"
         @click="showModal = false"
         class="btn"
       >评分完成</el-button>
@@ -65,6 +66,7 @@ export default {
     return {
       showModal: true,
       isShowSelect: false,
+      selected: false,
       dataList: [
         { key: -1, value: "选择评分" },
         { key: 0, value: "1" },
@@ -87,6 +89,7 @@ export default {
     },
     select(item, index) {
       this.isShowSelect = false;
+      this.selected = true;
       console.log(item);
       console.log(index);
       this.unitModel = index;
