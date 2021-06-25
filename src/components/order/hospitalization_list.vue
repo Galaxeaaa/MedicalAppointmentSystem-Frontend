@@ -47,6 +47,11 @@
              @click="toDoctor(scope.row.name)"></i>
         </template>
       </el-table-column>
+      <el-table-column label="评分">
+        <template slot-scope="scope">
+          <span>{{ scope.row.score }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="科室" width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.department }}</span>
