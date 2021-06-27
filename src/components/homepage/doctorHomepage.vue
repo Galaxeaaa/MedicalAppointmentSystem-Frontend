@@ -129,51 +129,28 @@ export default {
   data() {
     return {
       ifExist: true,
-      picUrl: "https://tva1.sinaimg.cn/large/008i3skNly1gr9pw3idhgj303w03wa9v.jpg",
-      doctorName: "冯磊",
+      picUrl: "",
+      doctorName: "",
       detailForm: {
-        name: "冯磊",
-        title: "主任医师",
-        hospital: "浙江大学医学院附属妇产科医院",
-        department: "特需营养咨询专家",
-        medicine: "代谢性疾病 糖尿病 肥胖 营养 体重管理",
-        introduction: "代谢性疾病的健康评估、营养干预和健康管理，尤其在糖尿病和肥胖人群的营养干预和体重管理方面造旨深厚。",
-        score: 3.5,
+        name: "",
+        title: "",
+        hospital: "",
+        department: "",
+        medicine: "",
+        introduction: "",
+        score: 0,
 
         // new
-        tel: "18811119999",
-        registerSum: 122, // 总预约量
-        project: "预约、挂号",
+        tel: "",
+        registerSum: 0, // 总预约量
+        project: "",
         vx: null,
-        email: "default@example.com",
+        email: "",
 
       },
       // 后端
       billboard: "",
       evalue: "",
-      // 前端数据
-      // billboard: [
-      //   {
-      //     time: "2020-11-01",
-      //     content: "暂停预约。",
-      //   },
-      //   {
-      //     time: "2015-11-01",
-      //     content: "本人为特需营养咨询专家，欢迎咨询！",
-      //   },
-      // ],
-      // evalue: [
-      //   {
-      //     userId: "用户1",
-      //     time: "2020-11-01",
-      //     comment: "医生很敬业",
-      //   },
-      //   {
-      //     userId: "用户2",
-      //     time: "2020-05-01",
-      //     comment: "回复慢",
-      //   }
-      // ],
 
     };
   },
