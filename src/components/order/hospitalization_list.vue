@@ -307,7 +307,7 @@ export default {
             console.log("Current doctorname: " + this.formInline.id);
             console.log(this.doctorData)
           })
-      return this.hospitalList;
+      return this.hospitalList.slice(this.currentPage*10-10,this.currentPage*10);
     },
     // 根据查询条件过滤报告列表数据,
   },
