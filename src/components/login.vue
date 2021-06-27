@@ -9,16 +9,40 @@
       <div class="forgetpwd" v-if="showForgetpwd">
         <el-form ref="forgetPwdForm" :model="forgetPwdForm">
           <el-form-item label="用户名">
-            <el-input
-              v-model="forgetPwdForm.username"
-              placeholder="请输入您注册时的用户名"
-            ></el-input>
+            {{ forgetPwdForm.username }}
           </el-form-item>
-          <el-button @click="sendConfirmCodePwd">发送验证码</el-button>
+          <!-- <el-button @click="sendConfirmCodePwd">发送验证码</el-button>
           <el-form-item label="验证码">
             <el-input
               v-model="forgetPwdForm.confirmCode"
               placeholder="请输入收到的验证码"
+            ></el-input>
+          </el-form-item> -->
+          <el-form-item label="安全问题1">
+            {{ forgetPwdForm.question1 }}
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              v-model="forgetPwdForm.answer1"
+              placeholder="请输入答案"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="安全问题2">
+            {{ forgetPwdForm.question2 }}
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              v-model="forgetPwdForm.answer2"
+              placeholder="请输入答案"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="安全问题3">
+            {{ forgetPwdForm.question3 }}
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              v-model="forgetPwdForm.answer3"
+              placeholder="请输入答案"
             ></el-input>
           </el-form-item>
           <el-form-item label="新密码">
@@ -36,7 +60,9 @@
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button @click="clickChangePwd" class="el-button--primary is-round"
+            <el-button
+              @click="clickChangePwd"
+              class="el-button--primary is-round"
               >确认修改</el-button
             >
           </el-form-item>
@@ -57,9 +83,7 @@
               type="password"
             ></el-input>
           </el-form-item>
-          <el-button type="text" @click="forgetPassword">
-            忘记密码
-          </el-button>
+          <el-button type="text" @click="forgetPassword"> 忘记密码 </el-button>
           <el-form-item>
             <el-checkbox label="我已阅读并同意协议内容" v-model="agree">
             </el-checkbox>
@@ -72,70 +96,140 @@
         </el-form>
       </div>
       <div class="logon_dialog" v-if="showLogon">
-      <div style="margin-bottom: 50px">
-        <el-form ref="logonForm" :model="logonForm" :rules="logonRules">
-          <el-form-item label="用户名" prop="username">
-            <el-input
-              v-model="logonForm.username"
-              placeholder="用户名由英文、数字、下划线组成"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="手机号" prop="phoneNumber">
-            <el-input
-              v-model="logonForm.phoneNumber"
-              placeholder="请输入手机号"
-            ></el-input>
-          </el-form-item>
-          <el-button @click="sendConfirmCode">发送验证码</el-button>
-          <el-form-item label="验证码" prop="confirmCode">
-            <el-input
-              v-model="logonForm.confirmCode"
-              placeholder="请输入收到的验证码"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="密码" prop="password">
-            <el-input
-              type="password"
-              v-model="logonForm.password"
-              placeholder="密码应尽可能使用大小写字母和数字的组合"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="确认密码" prop="confirmPassword">
-            <el-input
-              type="password"
-              v-model="logonForm.confirmPassword"
-              placeholder="请确保两次输入的密码一致"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="职位" prop="title" v-show="isDoctor">
-            <el-input
-              v-model="logonForm.title"
-              placeholder="请输入您的职位"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="科室" prop="department" v-show="isDoctor">
-            <el-input
-              v-model="logonForm.department"
-              placeholder="请输入您的科室"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="医院" prop="hospital" v-show="isDoctor">
-            <el-input
-              v-model="logonForm.hospital"
-              placeholder="请输入您的医院"
-            ></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox label="我已阅读并同意协议内容" v-model="agree">
-            </el-checkbox>
-          </el-form-item>
-          <el-form-item>
-            <el-button @click="clickLogon" class="el-button--success is-round"
-              >注册</el-button
-            >
-          </el-form-item>
-        </el-form>
-      </div>
+        <div style="margin-bottom: 50px">
+          <el-form ref="logonForm" :model="logonForm" :rules="logonRules">
+            <table>
+              <tr>
+                <td>
+                  <el-form-item label="用户名" prop="username">
+                    <el-input
+                      v-model="logonForm.username"
+                      placeholder="用户名由英文、数字、下划线组成"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+                <td>
+                  <el-form-item label="手机号" prop="phoneNumber">
+                    <el-input
+                      v-model="logonForm.phoneNumber"
+                      placeholder="请输入手机号"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <el-form-item label="密码" prop="password">
+                    <el-input
+                      type="password"
+                      v-model="logonForm.password"
+                      placeholder="密码应尽可能使用大小写字母和数字的组合"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+                <td>
+                  <el-form-item label="确认密码" prop="confirmPassword">
+                    <el-input
+                      type="password"
+                      v-model="logonForm.confirmPassword"
+                      placeholder="请确保两次输入的密码一致"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+              </tr>
+                <td>
+                  <el-form-item label="安全问题1">
+                    <el-input
+                      v-model="logonForm.question1"
+                      placeholder="请输入"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+                <td>
+                  <el-form-item label="答案1">
+                    <el-input
+                      v-model="logonForm.answer1"
+                      placeholder="请输入"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+              <tr>
+                <td>
+                  <el-form-item label="安全问题2">
+                    <el-input
+                      v-model="logonForm.question2"
+                      placeholder="请输入"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+                <td>
+                  <el-form-item label="答案2">
+                    <el-input
+                      v-model="logonForm.answer2"
+                      placeholder="请输入"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <el-form-item label="安全问题3">
+                    <el-input
+                      v-model="logonForm.question3"
+                      placeholder="请输入"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+                <td>
+                  <el-form-item label="答案3">
+                    <el-input
+                      v-model="logonForm.answer3"
+                      placeholder="请输入"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+              </tr>
+              <tr>
+              </tr>
+              
+            </table>
+            <!-- <el-button @click="sendConfirmCode">发送验证码</el-button>
+            <el-form-item label="验证码" prop="confirmCode">
+              <el-input
+                v-model="logonForm.confirmCode"
+                placeholder="请输入收到的验证码"
+              ></el-input>
+            </el-form-item> -->
+            
+            <el-form-item label="职位" prop="title" v-show="isDoctor">
+              <el-input
+                v-model="logonForm.title"
+                placeholder="请输入您的职位"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="科室" prop="department" v-show="isDoctor">
+              <el-input
+                v-model="logonForm.department"
+                placeholder="请输入您的科室"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="医院" prop="hospital" v-show="isDoctor">
+              <el-input
+                v-model="logonForm.hospital"
+                placeholder="请输入您的医院"
+              ></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-checkbox label="我已阅读并同意协议内容" v-model="agree">
+              </el-checkbox>
+            </el-form-item>
+            <el-form-item>
+              <el-button @click="clickLogon" class="el-button--success is-round"
+                >注册</el-button
+              >
+            </el-form-item>
+          </el-form>
+        </div>
       </div>
       <div class="welcome_content">
         <h1>欢迎！请确认您的身份</h1>
@@ -179,7 +273,8 @@
         <div>
           <el-button
             ref="modebtn"
-            type="info" round
+            type="info"
+            round
             class="mybtn"
             @click="changeMode"
             >切换到医生</el-button
@@ -202,26 +297,26 @@ export default {
       }
     };
     var checkPwdStrength = (rule, value, callback) => {
-      if (!((/\d/.test(value)) && ((/[a-z]/.test(value) || (/[A-Z]/.test(value)))))) {
+      if (!(/\d/.test(value) && (/[a-z]/.test(value) || /[A-Z]/.test(value)))) {
         callback(new Error("密码强度过低！请使用数字和字母的组合！"));
       } else {
         callback();
       }
     };
     var checkPhoneNumber = (rule, value, callback) => {
-      if(/\d{11}/.test(value)){
-        callback()
-      }else{
-        callback(new Error("请输入合法的中国大陆11位手机号！"))
+      if (/\d{11}/.test(value)) {
+        callback();
+      } else {
+        callback(new Error("请输入合法的中国大陆11位手机号！"));
       }
-    }
+    };
     return {
       isDoctor: false,
       showForgetpwd: false,
       showLogin: false,
       showLogon: false,
       agree: false,
-      codesent:false,
+      codesent: false,
       realcode: "",
       loginForm: {
         username: "",
@@ -231,6 +326,12 @@ export default {
         username: "",
         phoneNumber: "",
         confirmCode: "",
+		question1: "",
+        answer1: "",
+        question2: "",
+        answer2: "",
+        question3: "",
+        answer3: "",
         password: "",
         confirmPassword: "",
         title: "",
@@ -239,7 +340,16 @@ export default {
       },
       forgetPwdForm: {
         username: "",
-        confirmCode: "",
+        confirmCode: "", // deprecated
+        question1: "",
+        answer1: "",
+        ranswer1: "",
+        question2: "",
+        answer2: "",
+        ranswer2: "",
+        question3: "",
+        answer3: "",
+        ranswer3: "",
         newPwd: "",
         confirmNewPwd: "",
       },
@@ -280,15 +390,11 @@ export default {
           { required: true, message: "请确认密码", trigger: "blur" },
           { validator: validateComfirmPwd, trigger: "blur" },
         ],
-        title: [
-          { required: true, message: "请输入职位", trigger: "blur" },
-        ],
+        title: [{ required: true, message: "请输入职位", trigger: "blur" }],
         department: [
           { required: true, message: "请输入科室", trigger: "blur" },
         ],
-        hospital: [
-          { required: true, message: "请输入医院", trigger: "blur" },
-        ],
+        hospital: [{ required: true, message: "请输入医院", trigger: "blur" }],
       },
     };
   },
@@ -305,91 +411,133 @@ export default {
       this.showLogin = true;
       this.$store.commit("setIsDoctor", false);
     },
-    checkcode(entercode){
+    checkcode(entercode) {
       // if(this.realcode != entercode){
       //   alert("验证码不正确！")
       //   return false
       // }
       // this.codesent=false
       // this.loginForm.confirmCode=""
-      return true
+      return true;
     },
-    checkpswd(val){
-      if (!((/\d/.test(val)) && ((/[a-z]/.test(val) || (/[A-Z]/.test(val)))))) {
-        alert("密码强度过低！请使用数字和字母的组合！")
-        return false
+    checkpswd(val) {
+      if (!(/\d/.test(val) && (/[a-z]/.test(val) || /[A-Z]/.test(val)))) {
+        alert("密码强度过低！请使用数字和字母的组合！");
+        return false;
       }
-      if(val.length<6){
-        alert("密码长度不能低于6个字符！")
-        return false
+      if (val.length < 6) {
+        alert("密码长度不能低于6个字符！");
+        return false;
       }
-      if(val.length>16){
-        alert("密码长度不能多于16个字符！")
-        return false
+      if (val.length > 16) {
+        alert("密码长度不能多于16个字符！");
+        return false;
       }
-      return true
+      return true;
     },
     forgetPassword() {
+      this.forgetPwdForm.username = this.loginForm.username;
+      this.$axios
+        .get(
+          "/getq_" +
+            (this.isDoctor ? "doctor" : "usr") +
+            "?id=" +
+            this.forgetPwdForm.username
+        )
+        .then((res) => {
+			console.log(res)
+			this.forgetPwdForm.question1 = res.data[0].question1;
+			this.forgetPwdForm.ranswer1= res.data[0].answer1;
+			this.forgetPwdForm.question2 = res.data[0].question2;
+			this.forgetPwdForm.ranswer2= res.data[0].answer2;
+			this.forgetPwdForm.question3 = res.data[0].question3;
+			this.forgetPwdForm.ranswer3= res.data[0].answer3;
+		})
+
       this.showForgetpwd = true;
       this.showLogin = false;
     },
-    sendConfirmCodePwd(){
-      if(this.forgetPwdForm.username == ""){
-        alert("请先输入用户名！")
-        return
+    sendConfirmCodePwd() {
+      if (this.forgetPwdForm.username == "") {
+        alert("请先输入用户名！");
+        return;
       }
-      var teltel=new String("")
+      var teltel = new String("");
       this.$axios
-          .get("/do/getinfo/"+(this.isDoctor?"doctor":"usr")+"?id=" + this.forgetPwdForm.username)
-          .then((res) => {
-            // console.log(res.data)
-            if(res.data.length != 1){
-              teltel=""
-              // console.log("000")
-              alert("用户不存在！")
-            }else{
-              teltel=res.data[0].tel
-              // console.log(res.data[0].tel)
-              if(!(/\d{11}/.test(teltel))){
-                alert("用户不存在！")
-                return
-              }
-              this.realcode="xxx"
-              alert("已发送验证码至"+teltel.substring(0, 3)+"****"+teltel.substring(7));
-              this.codesent=true
+        .get(
+          "/do/getinfo/" +
+            (this.isDoctor ? "doctor" : "usr") +
+            "?id=" +
+            this.forgetPwdForm.username
+        )
+        .then((res) => {
+          // console.log(res.data)
+          if (res.data.length != 1) {
+            teltel = "";
+            // console.log("000")
+            alert("用户不存在！");
+          } else {
+            teltel = res.data[0].tel;
+            // console.log(res.data[0].tel)
+            if (!/\d{11}/.test(teltel)) {
+              alert("用户不存在！");
+              return;
             }
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+            this.realcode = "xxx";
+            alert(
+              "已发送验证码至" +
+                teltel.substring(0, 3) +
+                "****" +
+                teltel.substring(7)
+            );
+            this.codesent = true;
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     sendConfirmCode() {
-      if(!(/\d{11}/.test(this.logonForm.phoneNumber))){
-        alert("请先输入合法手机号！")
-        return
+      if (!/\d{11}/.test(this.logonForm.phoneNumber)) {
+        alert("请先输入合法手机号！");
+        return;
       }
-      this.realcode="xxx"
-      alert("已发送验证码至"+this.logonForm.phoneNumber.substring(0, 3)+"****"+this.logonForm.phoneNumber.substring(7));
-      this.codesent=true
+      this.realcode = "xxx";
+      alert(
+        "已发送验证码至" +
+          this.logonForm.phoneNumber.substring(0, 3) +
+          "****" +
+          this.logonForm.phoneNumber.substring(7)
+      );
+      this.codesent = true;
     },
     clickChangePwd() {
       this._clickChangePwd(this);
     },
     _clickChangePwd(obj) {
-      if(obj.codesent==false){
-        alert("请先点击发送验证码验证手机！")
-        return
-      }
-      if(!this.checkcode(obj.forgetPwdForm.confirmCode)) return
-      if (obj.forgetPwdForm.newPwd !== obj.forgetPwdForm.confirmNewPwd){
+    //   if (obj.codesent == false) {
+    //     alert("请先点击发送验证码验证手机！");
+    //     return;
+    //   }
+    //   if (!this.checkcode(obj.forgetPwdForm.confirmCode)) return;
+	if (obj.forgetPwdForm.answer1 !== obj.forgetPwdForm.ranswer1 || obj.forgetPwdForm.answer2 !== obj.forgetPwdForm.ranswer2 || obj.forgetPwdForm.answer3 !== obj.forgetPwdForm.ranswer3){
+		alert("错误的安全问题回答。")
+		return;
+	}
+      if (obj.forgetPwdForm.newPwd !== obj.forgetPwdForm.confirmNewPwd) {
         alert("请确保两次输入的密码一致！");
         return;
       }
-      console.log("skjdvjsndjc")
-      if(!this.checkpswd(obj.forgetPwdForm.newPwd)) return
+      console.log("skjdvjsndjc");
+      if (!this.checkpswd(obj.forgetPwdForm.newPwd)) return;
       this.$axios
         .get(
-          "/do/chpswd?isdoc="+(obj.isDoctor?"true":"false")+"&id="+this.forgetPwdForm.username+"&newpswd="+this.forgetPwdForm.newPwd
+          "/chpswd_" +
+            (obj.isDoctor ? "doctor" : "usr") +
+            "?id=" +
+            this.forgetPwdForm.username +
+            "&newpswd=" +
+            this.forgetPwdForm.newPwd
         )
         .then((response) => {
           // console.log(response)
@@ -444,25 +592,25 @@ export default {
       this._clickLogon(this);
     },
     _clickLogon(obj) {
-      if(obj.logonForm.username == ""){
-        alert("用户名不能为空！")
-        return
+      if (obj.logonForm.username == "") {
+        alert("用户名不能为空！");
+        return;
       }
       // console.log(obj.logonForm.phoneNumber)
-      if(!(/\d{11}/.test(obj.logonForm.phoneNumber))){
-        alert("请输入合法的中国大陆11位手机号！")
-        return
+      if (!/\d{11}/.test(obj.logonForm.phoneNumber)) {
+        alert("请输入合法的中国大陆11位手机号！");
+        return;
       }
-      if(obj.codesent==false){
-        alert("请先点击发送验证码验证手机！")
-        return
-      }
-      if(!this.checkcode(this.logonForm.confirmCode)) return
+    //   if (obj.codesent == false) {
+    //     alert("请先点击发送验证码验证手机！");
+    //     return;
+    //   }
+    //   if (!this.checkcode(this.logonForm.confirmCode)) return;
       if (obj.logonForm.password !== obj.logonForm.confirmPassword) {
         alert("请确保两次输入的密码一致！");
         return;
       }
-      if(!this.checkpswd(this.logonForm.password)) return
+      if (!this.checkpswd(this.logonForm.password)) return;
       if (!obj.agree) {
         alert("请先阅读并同意协议内容！");
         return;
@@ -490,14 +638,27 @@ export default {
           "&password=" +
           obj.logonForm.password +
           "&tel=" +
-          obj.logonForm.phoneNumber + 
-          "&title=" + 
-          obj.logonForm.title + 
-          "&department=" + 
-          obj.logonForm.department + 
-          "&hospital=" + 
-          obj.logonForm.hospital,
-
+          obj.logonForm.phoneNumber +
+		  "&question1=" +
+		  obj.logonForm.question1 +
+		  "&answer1=" +
+		  obj.logonForm.answer1 +
+		  "&question2=" +
+		  obj.logonForm.question2 +
+		  "&answer2=" +
+		  obj.logonForm.answer2 +
+		  "&question3=" +
+		  obj.logonForm.question3 +
+		  "&answer3=" +
+		  obj.logonForm.answer3 +
+		  (obj.isDoctor ? "&title=" +
+          obj.logonForm.title +
+          "&department=" +
+          obj.logonForm.department +
+          "&hospital=" +
+          obj.logonForm.hospital :
+		  "")
+          
       }).then(function (response) {
         if (response.data == true) {
           alert("注册成功！");
@@ -510,20 +671,20 @@ export default {
       this.showLogin = false;
       this.showLogon = false;
       this.showForgetpwd = false;
-      this.codesent=false;
-      this.realcode=""
-      this.agree=false
+      this.codesent = false;
+      this.realcode = "";
+      this.agree = false;
       this.loginForm.username = "";
       this.loginForm.password = "";
       this.logonForm.username = "";
       this.logonForm.password = "";
       this.logonForm.confirmPassword = "";
-      this.logonForm.phoneNumber=""
-      this.forgetPwdForm.username=""
-      this.forgetPwdForm.confirmCode=""
-      this.forgetPwdForm.newPwd=""
-      this.forgetPwdForm.confirmNewPwd=""
-     },
+      this.logonForm.phoneNumber = "";
+      this.forgetPwdForm.username = "";
+      this.forgetPwdForm.confirmCode = "";
+      this.forgetPwdForm.newPwd = "";
+      this.forgetPwdForm.confirmNewPwd = "";
+    },
   },
 };
 </script>
@@ -578,9 +739,9 @@ export default {
     padding-left: 100px;
     padding-right: 100px;
     position: fixed;
-    top: calc(50% - 410px);
-    left: calc(50% - 250px);
-    width: 300px;
+    top: 30px;
+    left: calc(50% - 300px);
+    width: 400px;
 
     z-index: 2;
     border-top-right-radius: 10px;
@@ -617,8 +778,8 @@ export default {
     width: 120px;
     height: 50px;
   }
-  .el-form-item{
+  .el-form-item {
     margin-bottom: 0px;
-}
+  }
 }
 </style>

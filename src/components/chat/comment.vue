@@ -1,14 +1,31 @@
 <template>
   <div>
-    <div class="mask" v-if="showModal" @click="showModal = false"></div>
-    <div class="pop" v-if="showModal">
+    <div
+      class="mask"
+      v-if="showModal"
+      @click="showModal = false"
+    ></div>
+    <div
+      class="pop"
+      v-if="showModal"
+    >
       <p>本次问诊已结束！请给您的医生评分</p>
       <div class="por">
-        <div class="selectBox" style="width: 400px">
-          <div class="selectBox_show" v-on:click.stop="arrowDown">
+        <div
+          class="selectBox"
+          style="width: 400px"
+        >
+          <div
+            class="selectBox_show"
+            v-on:click.stop="arrowDown"
+          >
             <i class="icon icon_arrowDown"></i>
             <p title="请选择">{{ unitName }}</p>
-            <input type="hidden" name="unit" v-model="unitModel" />
+            <input
+              type="hidden"
+              name="unit"
+              v-model="unitModel"
+            />
           </div>
           <div
             class="selectBox_list"
@@ -25,18 +42,20 @@
           </div>
         </div>
       </div>
-      <button @click="showModal = false" class="btn">评分完成</button>
+      <el-button 
+        v-show="selected"
+        @click="showModal = false"
+        class="btn"
+      >评分完成</el-button>
     </div>
-    <button
+    <el-button
       @click="
         $router.push({
           path: '/person/chat/chatroom', //跳转进入聊天界面
         })
       "
       class="btn"
-    >
-      确认结束
-    </button>
+    >确认结束</el-button>
   </div>
 </template>
 
@@ -47,8 +66,9 @@ export default {
     return {
       showModal: true,
       isShowSelect: false,
+      selected: false,
       dataList: [
-        { key: -1, value: "请选择" },
+        { key: -1, value: "选择评分" },
         { key: 0, value: "1" },
         { key: 1, value: "2" },
         { key: 2, value: "3" },
@@ -69,10 +89,35 @@ export default {
     },
     select(item, index) {
       this.isShowSelect = false;
+      this.selected = true;
       console.log(item);
       console.log(index);
       this.unitModel = index;
       this.unitName = item.value;
+      var str1 =
+        "/score/setscore?" +
+        "did=" +
+        this.$store.state.currentSession.id +
+        "&score=" +
+        item.value;
+      this.$axios.get(str1).then((response) => {
+        if (response) {
+          console.log("scored");
+        } else {
+          console.log("score fail");
+        }
+      });
+      var str2 = 
+        "/appoint/remove?" + 
+        "pid=" + this.$store.state.userid + 
+        "&did=" + this.$store.state.currentSession.id;
+      this.$axios.get(str2).then((response) => {
+        if (response) {
+          console.log("deleted");
+        } else {
+          console.log("delete fail");
+        }
+      });
     },
   },
 };
@@ -92,18 +137,21 @@ export default {
 }
 .pop {
   background-color: #fff;
-
-  position: fixed;
-  top: 100px;
-  left: 300px;
+  padding: 10px;
+  position: relative;
+  top: 10%;
+  left: 30%;
   width: calc(100% - 600px);
   height: calc(100% - 200px);
   z-index: 2;
 }
 .btn {
-  background-color: #fff;
-  border-radius: 4px;
-  border: 1px solid blue;
-  padding: 4px 12px;
+  margin-top: 5px;
+  margin-right: 10px;
+  background-color: #eefbff;
+  color: #42557b;
+  border: 0;
+  height: 40px;
+  width: 100px;
 }
 </style>

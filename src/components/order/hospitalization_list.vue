@@ -1,36 +1,31 @@
 <template>
   <div id="hospitalizationList">
-    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+    <el-form
+      :inline="true"
+      :model="formInline"
+      class="demo-form-inline"
+    >
       <el-form-item>
-        <el-input
-          v-model="formInline.doctorame"
-          placeholder="请输入医生姓名"
-        ></el-input>
+        <el-input v-model="formInline.name"
+                  placeholder="请输入医生姓名"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-date-picker
-          v-model="formInline.date"
-          type="date"
-          :value="null ? '' : formInline.date"
-          placeholder="选择入院时间"
-          value-format="yyyy-MM-dd"
-        >
-        </el-date-picker>
+        <el-input v-model="formInline.date"
+                  placeholder="请输入挂号时间"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input
-          v-model="formInline.departmentname"
-          placeholder="请输入科室"
-        ></el-input>
+        <el-input v-model="formInline.department"
+                  placeholder="请输入科室"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input
-          v-model="formInline.hospitalname"
-          placeholder="请输入医院"
-        ></el-input>
+        <el-input v-model="formInline.hospital"
+                  placeholder="请输入医院">
+        </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button icon="el-icon-search" circle></el-button>
+
+        <i class="el-icon-search"
+           @click="update0(formInline.department,formInline.name,formInline.date,formInline.hospital)"></i>
       </el-form-item>
     </el-form>
     <el-table
@@ -40,75 +35,99 @@
       ref="multipleTable"
     >
       <el-table-column type="selection" width="55"> </el-table-column>
-      <el-table-column label="医生姓名">
+      <el-table-column label="医生姓名" width="80">
         <template slot-scope="scope">
-          <span>{{ scope.row.doctorname }}</span>
+          <span>{{ scope.row.name }}</span>
+          <i class="el-icon-info"
+             key="scope.row.name"
+             @click="toDoctor(scope.row.name)"></i>
         </template>
       </el-table-column>
-      <el-table-column label="科室">
-        <template slot-scope="scope">
-          <span>{{ scope.row.departmentinfo.departmentname }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="医院">
-        <template slot-scope="scope">
-          <span>{{ scope.row.hospitalinfo.hospitalname }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="age" label="年龄">
-        <template slot-scope="scope">
-          <span>
-            {{ new Date().getFullYear() - scope.row.birthday.split("-")[0] }}
-          </span>
-        </template>
-      </el-table-column>
-
       <el-table-column label="评分">
         <template slot-scope="scope">
-          <span>{{ scope.row.star }}</span>
+          <span>{{ scope.row.score }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="科室" width="80">
+        <template slot-scope="scope">
+          <span>{{ scope.row.department }}</span>
+          <i class="el-icon-arrow-right"
+             key="scope.row.department"
+             @click="toDepartment(scope.row.department,scope.row.hospital)"></i>
+        </template>
+      </el-table-column>
+      <el-table-column label="医院" width="150">
+        <template slot-scope="scope">
+          <span>{{ scope.row.hospital }}</span>
+          <i class="el-icon-arrow-right"
+             key="scope.row.hospital"
+             @click="toHospital(scope.row.hospital)"></i>
         </template>
       </el-table-column>
       <el-table-column label="职称">
         <template slot-scope="scope">
-          <span>{{ scope.row.heading }}</span>
+          <span>{{ scope.row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="done" label="预约挂号">
+      <el-table-column label="主治">
         <template slot-scope="scope">
-          <i
-            class="el-icon-news"
-            @click="
-              $router.push({
-                path: '/person/doctor/detail', //跳转进入新的界面/doctor/appointment
-                query: { id: scope.row.id }, //查询id以进入对应的操作界面
-              })
-            "
-          ></i>
+          <span>{{ scope.row.medicine }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="done" label="在线问诊">
+      <el-table-column label="时间" width="100">
         <template slot-scope="scope">
-          <i class="el-icon-service" @click="showModal = true"></i>
-          <div class="mask" v-if="showModal" @click="showModal = false"></div>
-          <div class="pop" v-if="showModal">
-            <img src="../../assets/img/qrcode.png" />
-            <button
-              @click="
-                $router.push({
-                  path: '/person/chat/chatroom', //跳转进入新的界面
-                })
-              "
-              class="btn"
-            >
-              预约成功！
-            </button>
-          </div>
-          <!-- <i class="el-icon-service"
-                       @click="
-              $router.push({
-                path: '/person/doctor/detail', //跳转进入新的界面
-              })
-            "></i> -->
+          <span>{{ scope.row.registerTime }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="已预约/总量" width="100">
+        <template slot-scope="scope">
+          <span>{{ scope.row.registerSum }}</span>
+          <span>{{ '/30' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="号型" width="70">
+        <template slot-scope="scope">
+          <span>普通号</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="done" label="预约挂号" width="50">
+        <template slot-scope="scope">
+          <i class="el-icon-news"
+             @click="register(scope.row.id,scope.row.registerTime,scope.row.name)"></i>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        prop="done"
+        label="在线问诊"
+        width="50"
+      >
+        <template slot-scope="scope">
+            <div>
+                <div
+                class="mask"
+                v-if="showModal"
+                @click="showModal = false"
+                ></div>
+                <div
+                class="pop"
+                v-if="showModal"
+                >
+                <img src="../../assets/img/qrcode.png" />
+                <button
+                    @click="showModal = false"
+                    class="appoint_btn"
+                >取消预约X</button>
+                    <button
+                        @click="appointSuccess()"
+                        class="appoint_btn"
+                    >预约成功!</button>
+                </div>
+                <i
+                @click="changeId(scope.row.id)"
+                class="el-icon-service"
+                ></i>
+            </div>
         </template>
       </el-table-column>
     </el-table>
@@ -132,17 +151,28 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
       showModal: false,
+      appointid: "000",
       formInline: {
-        doctorname: "",
-        departmentname: "",
-        hospitalname: "",
+        id: "",
+        name:"",
+        department: "",
+        hospital: "",
         date: "",
       },
       //定义查询的表单元素
+      formInline0: {
+        id: "",
+        name:"",
+        department: "",
+        hospital: "",
+        date: "",
+      },
 
       currentPage: 1,
       //当前点击页码数
@@ -153,6 +183,8 @@ export default {
       // 被选中的列表数据
 
       hospitalList: [],
+
+      doctorData: [],
     };
   },
   mounted() {
@@ -172,60 +204,84 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-
-// 20210607 点击跳转逻辑
-    gotoHospital(hp_name) {
-      console.log("goto hospital", hp_name);
+    toDoctor(val){
       this.$router.push({
-          name: 'HospitalHomepage',
-          params: {
-            hospitalName: hp_name,
-          }
-        })
+        name:'DoctorHomepage',
+        params:{
+          doctorName:val
+        }
+      })
     },
-    gotoDepartment(dp_name) {
-      console.log("goto department", dp_name);
+    toDepartment(d,h){
       this.$router.push({
-          name: 'DepartmentHomepage',
-          params: {
-            departmentName: dp_name,
-          }
-        })
+        name:'DepartmentHomepage',
+        params:{
+          hospitalName:h,
+          departmentName:d
+        }
+      })
     },
-    gotoDoctor(dt_name) {
-      console.log("goto doctor", dt_name);
+    toHospital(h){
       this.$router.push({
-          name: 'DoctorHomepage',
-          params: {
-            doctorName: dt_name,
-          }
-        })
+        name:'HospitalHomepage',
+        params:{
+          hospitalName:h
+        }
+      })
     },
-
+    update0(department,name,date,hospital){
+      this.formInline0.department=department;
+      this.formInline0.name=name;
+      this.formInline0.date=date;
+      this.formInline0.hospital=hospital;
+      this.$forceUpdate();
+    },
+    register(val,t,d){
+      this.$axios.get("/do/getinfo/isregister",{
+        params:{
+          id: val
+        }
+      })
+          .then(function (response) {
+            if (response.data < 30) {
+              axios.get("/do/addinfo/setregister",{
+                params:{
+                  id: val
+                }
+              });
+              alert("挂号成功！"+"挂号时间为："+t+",医生为："+d);
+            } else {
+              alert("挂号失败！");
+            }
+          })
+      return this.hospitalList;
+    },
+    changeId(did){
+        this.appointid = did;
+        this.showModal = true;
+    },
+    appointSuccess() {
+      //console.log(this.$store.state.userid);
+      var str = "/appoint/add?" 
+              + "pid=" + this.$store.state.userid
+              + "&did=" + this.appointid;
+      //console.log(str);
+      this.$axios
+          .get(str)
+      this.$router.push({path: '/person/chat/chatroom'});
+    },
     getHospitalList() {
-      this.hospitalList = [
-        {
-          id: 1,
-          doctorname: "冯磊",
-          heading: "主治医师",
-          birthday: "1976-05-23 00:00:00",
-          comment: null,
-          star: 4,
-          total: 5,
-          state: 2,
-          date: "2021-05-24 00:00:00",
-          departmentinfo: {
-            id: 34,
-            departmentname: "眼科",
-            comment: null,
-          },
-          hospitalinfo: {
-            id: 35,
-            hospitalname: "杭州第一医院",
-            comment: null,
-          },
-        },
-      ];
+      this.$axios
+        //.get("/do/getinfo/doctor?id=" + this.formInline.id)
+        .get("/do/getinfo/doctorall")
+        .then((res) => {
+          this.hospitalList = res.data;
+          console.log("Current doctorname: " + this.formInline.id);
+          console.log(this.doctorData);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
 
       // this.$http("/medicalrecord/list", "post", {
       //   pageNo: this.currentPage,
@@ -237,27 +293,21 @@ export default {
   },
   computed: {
     tables() {
-      return this.hospitalList.filter((item) => {
-        console.log(item);
-        /*var result = item.date.some(item1 => {
-          if(item1==this.fromInline.date)
-            return true;
-        });*/
-        return (
-          item.doctorname.includes(this.formInline.doctorname) &&
-          item.departmentinfo.departmentname.includes(
-            this.formInline.departmentname
-          ) &&
-          item.hospitalinfo.hospitalname.includes(
-            this.formInline.hospitalname
-          ) &&
-          //result
-          //item.star.includes(this.formInline.star) &&
-          item.date.includes(
-            this.formInline.date == null ? "" : this.formInline.date
-          )
-        );
-      });
+      this.$axios.get("/do/getinfo/doctor",{
+        params:{
+          name: this.formInline0.name,
+          department: this.formInline0.department,
+          registerTime: this.formInline0.date,
+          hospital: this.formInline0.hospital
+        }
+      })
+          .then((res) => {
+            this.hospitalList = res.data;
+            this.$forceUpdate();
+            console.log("Current doctorname: " + this.formInline.id);
+            console.log(this.doctorData)
+          })
+      return this.hospitalList;
     },
     // 根据查询条件过滤报告列表数据,
   },
@@ -281,12 +331,12 @@ export default {
     z-index: 1;
   }
   .pop {
-    background-color: #fff;
-
+    background-color: #b0c7e4;
+    padding: 50px;
     position: fixed;
     top: 100px;
     left: 500px;
-    width: auto;
+    width: 350px;
     height: auto;
     z-index: 2;
   }
@@ -302,6 +352,15 @@ export default {
     position: absolute;
     bottom: 20px;
     left: 50px;
+  }
+
+  .appoint_btn {
+    margin: 20px;
+    background-color: #eefbff;
+    color: #42557b;
+    border: 0;
+    height: 40px;
+    width: 75px;
   }
 
   .el-form--inline .el-form-item,
