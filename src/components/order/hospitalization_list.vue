@@ -10,12 +10,8 @@
                   placeholder="请输入医生姓名"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-date-picker v-model="formInline.date"
-                        type="date"
-                        :value="null ? '' : formInline.date"
-                        placeholder="选择入院时间"
-                        value-format="yyyy-MM-dd">
-        </el-date-picker>
+        <el-input v-model="formInline.date"
+                  placeholder="请输入挂号时间"></el-input>
       </el-form-item>
       <el-form-item>
         <el-input v-model="formInline.department"
@@ -29,7 +25,7 @@
       <el-form-item>
 
         <i class="el-icon-search"
-           @click="update(formInline.department,formInline.name,formInline.date)"></i>
+           @click="update0(formInline.department,formInline.name,formInline.date,formInline.hospital)"></i>
       </el-form-item>
     </el-form>
     <el-table
@@ -78,18 +74,23 @@
           <span>{{ scope.row.medicine }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="时间">
+      <el-table-column label="时间" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.registerTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="已预约/总量">
+      <el-table-column label="已预约/总量" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.registerSum }}</span>
           <span>{{ '/30' }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="!this.$store.state.isdoctor" prop="done" label="预约挂号" width="50">
+      <el-table-column label="号型" width="70">
+        <template slot-scope="scope">
+          <span>普通号</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="done" label="预约挂号" width="50">
         <template slot-scope="scope">
           <i class="el-icon-news"
              @click="register(scope.row.id,scope.row.registerTime,scope.row.name)"></i>
@@ -99,6 +100,7 @@
       <el-table-column
         prop="done"
         label="在线问诊"
+        width="50"
       >
         <template slot-scope="scope">
             <div>
@@ -227,10 +229,12 @@ export default {
         }
       })
     },
-    update(department,name,date){
+    update0(department,name,date,hospital){
       this.formInline0.department=department;
       this.formInline0.name=name;
       this.formInline0.date=date;
+      this.formInline0.hospital=hospital;
+      this.$forceUpdate();
     },
     register(val,t,d){
       this.$axios.get("/do/getinfo/isregister",{
@@ -239,7 +243,7 @@ export default {
         }
       })
           .then(function (response) {
-            if (response.data >= 0) {
+            if (response.data < 30) {
               axios.get("/do/addinfo/setregister",{
                 params:{
                   id: val
@@ -247,7 +251,7 @@ export default {
               });
               alert("挂号成功！"+"挂号时间为："+t+",医生为："+d);
             } else {
-              alert("挂号失败，时间冲突！");
+              alert("挂号失败！");
             }
           })
       return this.hospitalList;
@@ -293,7 +297,8 @@ export default {
         params:{
           name: this.formInline0.name,
           department: this.formInline0.department,
-          registerTime: this.formInline0.date
+          registerTime: this.formInline0.date,
+          hospital: this.formInline0.hospital
         }
       })
           .then((res) => {
