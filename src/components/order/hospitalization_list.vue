@@ -89,7 +89,7 @@
           <span>{{ '/30' }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="done" label="预约挂号" width="50">
+      <el-table-column v-if="!this.$store.state.isdoctor" prop="done" label="预约挂号" width="50">
         <template slot-scope="scope">
           <i class="el-icon-news"
              @click="register(scope.row.id,scope.row.registerTime,scope.row.name)"></i>
