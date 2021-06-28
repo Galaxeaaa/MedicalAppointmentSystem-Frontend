@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 import Login from './components/login'
 
-import LoginSuccess from './components/login_success'
+// import LoginSuccess from './components/login_success'
 
 //组件模块
 import Doctor from './components/doctorSystem'
@@ -52,10 +52,10 @@ export default new Router({
 			path: '/login',
 			component: Login,
 		},
-		{
-			path: '/login_success',
-			component: LoginSuccess,
-		},
+		// {
+		// 	path: '/login_success',
+		// 	component: LoginSuccess,
+		// },
 		{
 			path: '/person',
 			component: Doctor,

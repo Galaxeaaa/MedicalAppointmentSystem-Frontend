@@ -46,7 +46,7 @@
               class="filter-item"
               type="primary"
               icon="el-icon-download"
-              @click="downloadFile(entry.content)"
+              @click="downloadFile(entry)"
             >下载文件</el-button>
             <!-- </div> -->
           </div>
@@ -177,9 +177,9 @@ export default {
       console.log("拍了一怕");
       let s = fromName + "拍了拍" + toName;
     },
-    downloadFile(url) {
-      console.log("文件:" + url);
-      window.open(url)
+    downloadFile(entry) {
+      console.log("entry:" + entry.content);
+      window.open(entry.content);
     //   fetch(url)
     //     .then((res) => res.blob())
     //     .then((blob) => {

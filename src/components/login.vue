@@ -582,7 +582,7 @@ export default {
         if (response.data == true) {
           obj.$store.commit("setUserId", obj.loginForm.username);
           obj.$store.commit("setIsDoctor", obj.isDoctor);
-          obj.$router.push("/login_success");
+          obj.$router.push("/person/personal/info");
         } else {
           alert("登陆失败，账户名或密码有误！");
         }
