@@ -144,43 +144,28 @@ export default {
   data() {
     return {
       ifExist: true,
-      picUrl: this.$route.params.departmentName=="特需营养咨询专家" ? "https://tva1.sinaimg.cn/large/008i3skNly1gr9py9ntpnj605003mmx202.jpg" :
-                (this.$route.params.departmentName=="产科专家" ?  "https://tva1.sinaimg.cn/large/008i3skNly1gr9py9ntpnj605003mmx202.jpg" : 
-                  "https://tva1.sinaimg.cn/large/008i3skNly1gr9py5xpdij305005n3yj.jpg"
-                ),
-      departmentName: "特需营养咨询专家",   // 从上一个跳转界面获得的科室名
+      picUrl: "",
+      departmentName: "",   // 从上一个跳转界面获得的科室名
       detailForm: {     // 从数据库API获得的科室信息
-        name: "特需营养咨询专家",
-        hospital: "浙江大学医学院附属妇产科医院",
-        introduction: "主要针对妊娠期糖尿病（GDM）、妊娠期肥胖以及妊娠期体重增加过快孕妇等进行一对一营养指导",
-        score: 3.5,
+        name: "",
+        hospital: "",
+        introduction: "",
+        score: 0,
       },
       indoctors: [
         {
-          doctorName: "冯磊",
-          title: "主任医师",
-          medicine: "代谢性疾病的健康评估、营养干预和健康管理",
+          doctorName: "",
+          title: "",
+          medicine: "",
         },
         {
-          doctorName: "赵柏惠",
-          title: "副主任医师",
-          medicine: "前置胎盘，宫颈机能不全，子宫肌瘤，盆腔脏器脱垂，等妇产科疾病",
+          doctorName: "",
+          title: "",
+          medicine: "",
         }
       ],
       evalue: "",
       billboard: "",
-      // evalue: [
-      //   {
-      //     userId: "用户1",
-      //     time: "2020-11-01",
-      //     comment: "科室很不错",
-      //   },
-      //   {
-      //     userId: "用户2",
-      //     time: "2020-05-01",
-      //     comment: "效率低的科室",
-      //   }
-      // ],
 
     };
   },
@@ -235,7 +220,8 @@ export default {
           this.ifExist = false
         } else {
           this.detailForm.name = res.data[0].name
-          this.detailForm.score = res.data[0].score * 5.0 / 100
+          this.detailForm.score = res.data[0].scoreAvg / 2.0
+          // this.detailForm.score = res.data[0].score * 5.0 / 100
           this.detailForm.hospital = res.data[0].hosp_name
           // console.log(this.detailForm)
         }
