@@ -203,7 +203,8 @@ export default {
           this.detailForm.title = res.data[0].title
           this.detailForm.hospital = res.data[0].hosp_name
           this.detailForm.department = res.data[0].depart_name
-          this.detailForm.score = res.data[0].score * 5.0 / 100
+          // this.detailForm.score = res.data[0].score * 5.0 / 100
+          this.detailForm.score = res.data[0].scoreAvg / 2.0
           this.detailForm.tel = res.data[0].tel
           this.detailForm.medicine = res.data[0].medicine
           this.detailForm.introduction = res.data[0].introduction

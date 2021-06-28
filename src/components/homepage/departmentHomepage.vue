@@ -220,7 +220,8 @@ export default {
           this.ifExist = false
         } else {
           this.detailForm.name = res.data[0].name
-          this.detailForm.score = res.data[0].score * 5.0 / 100
+          this.detailForm.score = res.data[0].scoreAvg / 2.0
+          // this.detailForm.score = res.data[0].score * 5.0 / 100
           this.detailForm.hospital = res.data[0].hosp_name
           // console.log(this.detailForm)
         }

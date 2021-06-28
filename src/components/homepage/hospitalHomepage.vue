@@ -250,7 +250,8 @@ export default {
           this.detailForm.rank = res.data[0].rank;
           this.detailForm.address = res.data[0].address;
           this.detailForm.introduction = res.data[0].introduct;
-          this.detailForm.score = (res.data[0].score * 5.0) / 100;
+          this.detailForm.score = res.data[0].scoreAvg / 2.0;
+          // this.detailForm.score = (res.data[0].score * 5.0) / 100;
           this.detailForm.timeperiod = res.data[0].time;
           this.detailForm.insur = res.data[0].mediacl_insur;
           this.picUrl = res.data[0].graph;
